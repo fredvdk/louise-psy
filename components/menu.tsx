@@ -4,18 +4,17 @@ import Link from "next/link";
 
 import { useEffect, useState } from "react";
 
-function menuItems() {
-    return [
-        { name: "Over Mij", href: "/" },
-        { name: "Therapie", href: "/" },
-        { name: "Tarieven", href: "/" },
-        { name: "Contact", href: "/" },
-        { name: "Reservaties", href: "/protected/reservaties" },
-    ];
-}
+const menuItems = [
+    { name: "Over Mij", href: "/" },
+    { name: "Therapie", href: "/" },
+    { name: "Tarieven", href: "/" },
+    { name: "Contact", href: "/" },
+    { name: "Reservaties", href: "/protected/reservaties" },
+];
 
-export function Menu() {
+export function Menu({ selected }: { selected: string }) {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [selectedItem, setSelectedItem] = useState(selected);
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
@@ -39,8 +38,10 @@ export function Menu() {
         <div className="">
             <div className="hidden md:flex">
                 <ul className="flex gap-6">
-                    {menuItems().map((item) => (
-                        <li key={item.name}>
+                    {menuItems.map((item) => (
+                        <li key={item.name}
+                            className={selectedItem === item.name ? "font-bold" : ""}
+                            onClick={() => setSelectedItem(item.name)}>
                             <Link href={item.href}>{item.name}</Link>
                         </li>
                     ))}
@@ -51,8 +52,8 @@ export function Menu() {
             {menuOpen && (
                 <div className="absolute top-16 right-4 bg-background border border-gray-300 rounded-md p-4">
                     <ul className="flex flex-col gap-4">
-                        {menuItems().map((item) => (
-                            <li key={item.name}>
+                        {menuItems.map((item) => (
+                            <li key={item.name} className="font-bold">
                                 <Link href={item.href}>{item.name}</Link>
                             </li>
                         ))}

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Lato } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
@@ -13,10 +13,11 @@ export const metadata: Metadata = {
   description: "The fastest way to build apps with Next.js and Supabase",
 };
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const lato = Lato({
+  variable: "--font-lato",
   display: "swap",
   subsets: ["latin"],
+  weight: "400"
 });
 
 export default function RootLayout({
@@ -26,14 +27,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.className} antialiased`}>
+      <body className={`${lato.className} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <div className="bg-background h-screen flex flex-col m-4">
+            {children}
+          </div>
         </ThemeProvider>
       </body>
     </html>
