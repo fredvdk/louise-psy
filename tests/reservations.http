@@ -1,0 +1,17 @@
+@supabaseUrl = http://localhost:3000/api
+
+//Admin can see all reservations
+//User can only see their own reservations
+GET {{supabaseUrl}}/reservations
+Content-Type: application/json
+###
+
+//Admin can create a reservation
+POST {{supabaseUrl}}/reservations
+Content-Type: application/json
+
+{
+  "date": "2024-07-01",
+  "time": "10:00"
+}
+

@@ -9,8 +9,8 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "Psycholoog Louise",
+  description: "Welkom bij Psycholoog Louise, waar we streven naar het verbeteren van jouw mentale welzijn. Met jarenlange ervaring en een passie voor het helpen van mensen, biedt Louise professionele psychologische diensten aan die zijn afgestemd op jouw unieke behoeften. Of je nu worstelt met stress, angst, depressie of andere uitdagingen, Louise staat klaar om je te ondersteunen op jouw reis naar een gezonder en gelukkiger leven. Neem vandaag nog contact op en ontdek hoe we samen kunnen werken aan jouw mentale gezondheid.",
 };
 
 const lato = Lato({

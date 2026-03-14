@@ -1,0 +1,35 @@
+@supabaseUrl = http://localhost:3000/api
+
+//Login as admin
+POST {{supabaseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "frederick.vdkerckhove@telenet.be",
+  "password": "kinkhoorn"
+}
+###
+
+//Login as user
+POST {{supabaseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@telenet.be",
+  "password": "password"
+}
+###
+
+//Logout
+POST {{supabaseUrl}}/auth/logout
+###
+
+POST {{supabaseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "user1@telenet.be",
+  "password": "password"
+}
+###
+

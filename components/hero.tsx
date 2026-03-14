@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 const Hero = () => {
     return (
-        <section className="bg-background mx-20">
+        <section className="">
             {/* Decorative Background Element */}
             <div className="absolute top-0 right-0 -translate-y-12 translate-x-12 blur-3xl opacity-20">
                 <div className="h-96 w-96 rounded-full bg-primary"></div>
@@ -49,7 +49,7 @@ const Hero = () => {
                     <div className="w-full lg:w-1/2">
                         <div className="relative">
                             {/* Using a placeholder - swap for a high-quality photo of your office or yourself */}
-                            <div className="aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl shadow-slate-200 m-6">
+                            <div className="aspect-[4/5] rounded-xl overflow-hidden shadow-2xl shadow-foreground/20 m-6">
                                 <Image
                                     src="/images/hero.jpg"
                                     alt="Therapist's Office"
@@ -57,20 +57,6 @@ const Hero = () => {
                                     width={600}
                                     height={750}
                                 />
-                            </div>
-                            {/* Floating Credential Card */}
-                            <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-xl hidden md:block">
-                                <div className="flex items-center gap-4">
-                                    <div className="h-12 w-12 rounded-full bg-teal-100 flex items-center justify-center">
-                                        <svg className="w-6 h-6 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <p className="font-bold text-slate-800">Licensed Specialist</p>
-                                        <p className="text-sm text-slate-500">10+ Years Experience</p>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
