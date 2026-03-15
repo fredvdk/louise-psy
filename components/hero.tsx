@@ -27,13 +27,13 @@ const Hero = () => {
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                             <Link
-                                href="/reservaties"
+                                href="/protected/reservaties"
                                 className="px-8 py-4 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 shadow-lg shadow-primary/20"
                             >
                                 Boek een afspraak
                             </Link>
                             <Link
-                                href="/about"
+                                href="/therapie"
                                 className="px-8 py-4 border border-primary text-primary rounded-lg font-medium hover:bg-primary/20 shadow-lg shadow-primary/20"
                             >
                                 Leer meer over therapie
@@ -41,7 +41,7 @@ const Hero = () => {
                         </div>
 
                         <p className="text-sm text-slate-400 italic">
-                            Currently accepting new clients for in-person and telehealth sessions.
+                            Ik ontvang cliënten in mijn praktijk in Rumbeke, maar bied ook online sessies aan voor wie liever vanuit huis werkt.
                         </p>
                     </div>
 

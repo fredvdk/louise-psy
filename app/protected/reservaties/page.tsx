@@ -1,15 +1,16 @@
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
-import UserData from "@/components/userData";
+import ReservationsList from "@/components/reservaties";
 import { Suspense } from "react";
 
 export default function ProtectedPage() {
   return (
     <>
-      <Navbar selected="Reservaties"/>
-      <div className="h-full flex items-center justify-center">
-        <Suspense fallback={<div>Loading user data...</div>}>
-          <UserData />
+      <Navbar />
+      <div className="h-full flex items-center justify-center flex-col">
+        <h1 className="text-2xl font-bold">Mijn reservaties</h1>
+        <Suspense fallback={<p>Loading reservations...</p>}>
+          <ReservationsList />
         </Suspense>
       </div>
       <Footer />

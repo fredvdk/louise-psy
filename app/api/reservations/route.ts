@@ -14,7 +14,7 @@ export async function GET() {
 	}
 
     // Fetch reservations for the authenticated user
-	const reservations = await supabase.from('Reservations').select('*').eq('updated_by', user.id);
+	const reservations = await supabase.from('reservations').select('*').eq('updated_by', user.id);
 
 	return new Response(JSON.stringify(reservations), {
 		headers: {
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
 		});
 	}
 	const { data, error } = await supabase
-		.from('Reservations')
+		.from('reservations')
 		.insert({ date: date, time: time, updated_by: user.id })
 		.select('*')
 		.single();

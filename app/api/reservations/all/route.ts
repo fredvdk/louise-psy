@@ -14,7 +14,7 @@ export async function GET() {
 	}
 
 	const { data: profile, error: profileError } = await supabase
-		.from('Profiles')
+		.from('profiles')
 		.select('role')
 		.eq('id', user.id)
 		.single();
@@ -28,7 +28,7 @@ export async function GET() {
 	}
 
 	const { data: reservations, error } = await supabase
-		.from('Reservations')
+		.from('reservations')
 		.select('*');
 
 	if (error) {

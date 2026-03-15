@@ -6,7 +6,7 @@ import { Navbar } from "@/components/navbar";
 export default function Home() {
   return (
     <>
-      <Navbar selected="" />
+      <Navbar />
       <main className="bg-background mx-auto md:mx-20">
         <Hero />
         <Credentials />

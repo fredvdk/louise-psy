@@ -1,25 +1,31 @@
 'use client';
+
 import { Menu as MenuIcon } from "lucide-react";
 import Link from "next/link";
-
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 const menuItems = [
-    { name: "Over Mij", href: "/" },
-    { name: "Therapie", href: "/" },
-    { name: "Tarieven", href: "/" },
-    { name: "Contact", href: "/" },
+    { name: "Home", href: "/" },
+    { name: "Therapie", href: "/therapie" },
+    { name: "Tarieven", href: "/tarieven" },
+    { name: "Contact", href: "/contact" },
     { name: "Reservaties", href: "/protected/reservaties" },
 ];
 
-export function Menu({ selected }: { selected: string }) {
+export function Menu() {
     const [menuOpen, setMenuOpen] = useState(false);
-    const [selectedItem, setSelectedItem] = useState(selected);
+    const pathname = usePathname();
 
     const toggleMenu = () => {
-        setMenuOpen(!menuOpen);
-    }
+        setMenuOpen((prev) => !prev);
+    };
 
+    const closeMenu = () => {
+        setMenuOpen(false);
+    };
+
+    // close mobile menu when resizing to desktop
     useEffect(() => {
         const handleResize = () => {
             if (window.innerWidth >= 768) {
@@ -28,37 +34,51 @@ export function Menu({ selected }: { selected: string }) {
         };
 
         window.addEventListener("resize", handleResize);
-
-        return () => {
-            window.removeEventListener("resize", handleResize);
-        };
+        return () => window.removeEventListener("resize", handleResize);
     }, []);
 
     return (
-        <div className="">
-            <div className="hidden md:flex">
+        <div className="relative">
+            {/* Desktop menu */}
+            <nav className="hidden md:flex">
                 <ul className="flex gap-6">
                     {menuItems.map((item) => (
-                        <li key={item.name}
-                            className={selectedItem === item.name ? "font-bold" : ""}
-                            onClick={() => setSelectedItem(item.name)}>
+                        <li
+                            key={item.name}
+                            className={pathname === item.href ? "font-bold" : ""}
+                        >
                             <Link href={item.href}>{item.name}</Link>
                         </li>
                     ))}
                 </ul>
-            </div>
-            <MenuIcon className="md:hidden" onClick={toggleMenu} />
+            </nav>
 
+            {/* Mobile button */}
+            <button
+                onClick={toggleMenu}
+                className="md:hidden"
+                aria-label="Open menu"
+            >
+                <MenuIcon />
+            </button>
+
+            {/* Mobile menu */}
             {menuOpen && (
-                <div className="absolute top-16 right-4 bg-background border border-gray-300 rounded-md p-4">
+                <div className="absolute right-0 top-12 w-48 bg-background border border-gray-300 rounded-md shadow-md p-4 md:hidden">
                     <ul className="flex flex-col gap-4">
                         {menuItems.map((item) => (
-                            <li key={item.name} className="font-bold">
-                                <Link href={item.href}>{item.name}</Link>
+                            <li
+                                key={item.name}
+                                className={pathname === item.href ? "font-bold" : ""}
+                            >
+                                <Link href={item.href} onClick={closeMenu}>
+                                    {item.name}
+                                </Link>
                             </li>
                         ))}
                     </ul>
                 </div>
             )}
-        </div>)
+        </div>
+    );
 }
