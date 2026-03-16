@@ -7,7 +7,14 @@ export default function ReservationCard({ reservatie }: { reservatie: Reservatio
             {/* Header */}
             <div className="flex items-center justify-between mb-3">
                 <div className="text-lg font-semibold">
-                    {new Date(reservatie.date).toLocaleDateString()}
+                    {new Date(reservatie.date).toLocaleDateString("nl-NL", {
+                        weekday: "long",
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",})}
+                </div>
+                <div className="text-lg font-semibold mb-3">
+                    ⏰ {reservatie.time.slice(0, 5)}
                 </div>
 
                 <span
@@ -23,20 +30,15 @@ export default function ReservationCard({ reservatie }: { reservatie: Reservatio
                 </span>
             </div>
 
-            {/* Time */}
-            <div className="text-sm text-muted-foreground mb-3">
-                ⏰ {reservatie.time}
-            </div>
-
             {/* Details */}
-            <div className="space-y-1 text-sm">
+            <div className="text-sm flex">
                 <div>
                     <span className="text-muted-foreground">Reserved for:</span>{" "}
                     {reservatie.reserved_for}
                 </div>
 
-                <div className="text-xs text-muted-foreground">
-                    Updated {new Date(reservatie.updated_at).toLocaleString()}
+                <div className="text-sm text-muted-foreground ml-5">
+                    Updated: {new Date(reservatie.updated_at).toLocaleString()}
                 </div>
             </div>
 
