@@ -26,13 +26,13 @@ function makeRequest(body: unknown) {
 beforeEach(() => vi.clearAllMocks());
 
 describe('POST /api/auth/register', () => {
-    it('returns 200 with user data on success', async () => {
+    it('returns 201 with user data on success', async () => {
         const data = { user: mockUser, session: null };
         makeSupabase({ data, error: null });
 
         const res = await POST(makeRequest({ email: 'new@example.com', password: 'pass' }));
 
-        expect(res.status).toBe(200);
+        expect(res.status).toBe(201);
         expect(await res.json()).toEqual(data);
     });
 
@@ -47,12 +47,12 @@ describe('POST /api/auth/register', () => {
         });
     });
 
-    it('returns 500 with error message on failure', async () => {
+    it('returns 400 with error message on failure', async () => {
         makeSupabase({ data: null, error: { message: 'User already registered' } });
 
         const res = await POST(makeRequest({ email: 'existing@example.com', password: 'pass' }));
 
-        expect(res.status).toBe(500);
+        expect(res.status).toBe(400);
         expect(await res.json()).toEqual({ error: 'User already registered' });
     });
 });

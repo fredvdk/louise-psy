@@ -1,24 +1,30 @@
 import { createClient } from '@/lib/supabase/server';
+import { jsonResponse } from '@/lib/utils';
 
 export async function POST(request: Request) {
-	const { email, password } = await request.json();
-	const supabase = await createClient();
-	const { data, error } = await supabase.auth.signInWithPassword({
-		email,
-		password,
-	});
+	try {
+		const body = await request.json();
+		const { email, password } = body;
 
-	if (error) {
-		return new Response(JSON.stringify({ error: error.message }), {
-			status: 401,
-			headers: {
-				'Content-Type': 'application/json',
-			},
+		if (!email || !password) {
+			return jsonResponse({ error: 'Email and password are required' }, 400);
+		}
+
+		const supabase = await createClient();
+		const { data, error } = await supabase.auth.signInWithPassword({
+			email,
+			password,
 		});
+
+		if (error) {
+			return jsonResponse({ error: error.message }, 401);
+		}
+
+		return jsonResponse(data, 200);
+	} catch (err) {
+		return jsonResponse(
+			{ error: err instanceof Error ? err.message : 'Invalid request' },
+			400
+		);
 	}
-	return new Response(JSON.stringify(data), {
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	});
 }

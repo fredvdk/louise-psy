@@ -96,13 +96,13 @@ describe('POST /api/reservations', () => {
         expect(await res.json()).toEqual({ error: 'Unauthorized' });
     });
 
-    it('returns 200 with the new reservation on success', async () => {
+    it('returns 201 with the new reservation on success', async () => {
         const newReservation = { id: 'res-new', date: '2026-05-10', time: '10:00:00' };
         makeSupabase({ reservationsResult: { data: newReservation, error: null } });
 
         const res = await POST(makeRequest({ date: '2026-05-10', time: '10:00:00' }));
 
-        expect(res.status).toBe(200);
+        expect(res.status).toBe(201);
         expect(await res.json()).toEqual(newReservation);
     });
 
@@ -121,12 +121,12 @@ describe('POST /api/reservations', () => {
         });
     });
 
-    it('returns 500 when the insert fails', async () => {
+    it('returns 400 when the insert fails', async () => {
         makeSupabase({ reservationsResult: { data: null, error: { message: 'Insert failed' } } });
 
         const res = await POST(makeRequest({ date: '2026-05-10', time: '10:00:00' }));
 
-        expect(res.status).toBe(500);
+        expect(res.status).toBe(400);
         expect(await res.json()).toEqual({ error: 'Insert failed' });
     });
 });
