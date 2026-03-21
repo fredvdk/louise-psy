@@ -7,13 +7,16 @@ export async function CalendarSection() {
 
     const { data, error } = await supabase
         .from("reservations")
-        .select("*");
+        .select("*")
+        .eq("status", "free")
+
     if (error) {
         return <p>Failed to load calendar events. {error.message}</p>;
     }
     const reservations: Reservation[] = data ?? [];
 
     const calendarEvents: CalendarEvent[] = reservations.map(reservation => ({
+        id: reservation.id,
         date: reservation.date,
         start: reservation.date + 'T' + reservation.time,
         duration: "01:00",
@@ -21,7 +24,7 @@ export async function CalendarSection() {
         backgroundColor: reservation.status === "free" ? "green" : "orange",
         url: reservation.status === 'free' ? "/" : "/protected/reservaties",
     }));
-    console.log("Calendar Events:", calendarEvents);
+    //console.log("Calendar Events:", calendarEvents);
 
     return (
         <CalendarComponent

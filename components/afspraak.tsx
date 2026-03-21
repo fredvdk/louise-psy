@@ -1,6 +1,35 @@
-import { Reservation } from "@/types/reservatie"
+'use client'
 
-export default function ReservationCard({ reservatie }: { reservatie: Reservation }) {
+import { Reservation } from "@/types/reservatie"
+import { Button } from "./ui/button"
+import { useState } from "react";
+import { deleteAfspraak } from "@/lib/afspraken";
+import { isWithin14Days } from "@/lib/utils";
+
+
+export default function AfspraakCard({ reservatie }: { reservatie: Reservation }) {
+    const [loading, setLoading] = useState(false);
+    const [cancelled, setCancelled] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const isButtonDisabled = loading || isWithin14Days(new Date(reservatie.date));
+
+    const handleDelete = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            await deleteAfspraak(reservatie.id);
+            setCancelled(true);
+        } catch (err) {
+            console.error("Error deleting reservation:", err);
+            setError("Annuleren mislukt. Probeer het opnieuw.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (cancelled) return null;
+
     return (
         <div className="border rounded-xl p-5 shadow-sm bg-background hover:shadow-md transition">
 
@@ -11,7 +40,8 @@ export default function ReservationCard({ reservatie }: { reservatie: Reservatio
                         weekday: "long",
                         day: "numeric",
                         month: "long",
-                        year: "numeric",})}
+                        year: "numeric",
+                    })}
                 </div>
                 <div className="text-lg font-semibold mb-3">
                     ⏰ {reservatie.time.slice(0, 5)}
@@ -30,15 +60,13 @@ export default function ReservationCard({ reservatie }: { reservatie: Reservatio
                 </span>
             </div>
 
-            {/* Details */}
-            <div className="text-sm flex">
-                <div>
-                    <span className="text-muted-foreground">Reserved for:</span>{" "}
-                    {reservatie.reserved_for}
-                </div>
-
-                <div className="text-sm text-muted-foreground ml-5">
-                    Updated: {new Date(reservatie.updated_at).toLocaleString()}
+            {/* Actions */}
+            <div className="text-sm flex justify-between items-center">
+                {error && <p className="text-red-500 text-xs">{error}</p>}
+                <div className="ml-auto">
+                    <Button variant="destructive" disabled={isButtonDisabled} onClick={handleDelete}>
+                        {loading ? "Bezig..." : "Annuleer"}
+                    </Button>
                 </div>
             </div>
 
@@ -50,5 +78,5 @@ export default function ReservationCard({ reservatie }: { reservatie: Reservatio
             )}
 
         </div>
-    )
+    );
 }

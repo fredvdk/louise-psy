@@ -1,8 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
-import ReservationCard from "./reservatie";
+import AfspraakCard from "./afspraak";
 import { Reservation } from "@/types/reservatie";
 
-export default async function ReservatieLijst({hasStatus}: {hasStatus?: string}) {
+export default async function ReservatieLijst() {
     const supabase = await createClient();
 
     const {
@@ -15,9 +15,9 @@ export default async function ReservatieLijst({hasStatus}: {hasStatus?: string})
 
     const { data, error } = await supabase
         .from("reservations")
-        .select("*")
-        .eq("updated_by", user.id)
-        .eq("status", hasStatus)
+        .select(`*, client_email: profiles!reservations_reserved_for_fkey(email)`)
+        .eq("reserved_for", user.id)
+        .in("status", ["pending", "confirmed"])
         .order("date", { ascending: true });
 
     if (error) {
@@ -25,6 +25,7 @@ export default async function ReservatieLijst({hasStatus}: {hasStatus?: string})
     }
 
     const reservations = data as Reservation[] | null;
+    console.log(reservations);
 
     if (!reservations || reservations.length === 0) {
         return (
@@ -37,7 +38,7 @@ export default async function ReservatieLijst({hasStatus}: {hasStatus?: string})
     return (
         <div className="space-y-4">
             {reservations.map((reservatie) => (
-                <ReservationCard reservatie={reservatie} key={reservatie.id} />
+                <AfspraakCard reservatie={reservatie} key={reservatie.id} />
             ))}
         </div>
     );

@@ -36,7 +36,6 @@ export default function CalendarComponent({ events }: { events: CalendarEvent[] 
 
                     return `${weekday} ${day} ${month}`;
                 }}
-                
                 eventTimeFormat = {{
                     hour: '2-digit',
                     minute: '2-digit',

@@ -5,7 +5,8 @@ import { Navbar } from "./navbar";
 async function UserData() {
     const client = await createClient();
     const user = await client.auth.getUser();
-    const role = await client.from("Profiles").select("role").eq("id", user.data.user?.id).single();
+    const role = await client.from("profiles").select("role").eq("id", user.data.user?.id).single();
+    console.log("Role is " + role.data?.role);
 
     if (role.data?.role !== "admin") {
         return (

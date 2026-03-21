@@ -10,14 +10,14 @@ export default async function ReservationsPage() {
     <div className="flex flex-col">
       <Navbar />
       <div className="m-10">
+        <h1 className="text-4xl text-center mb-5">Mijn afspraken</h1>
         <Suspense>
-          <ReservationsList hasStatus="confirmed" />
+          <ReservationsList  />
         </Suspense>
-        <div className="flex-1 justify-start items-start">
-          <Suspense fallback={<p>Loading calendar...</p>}>
-            <CalendarSection />
-          </Suspense>
-        </div>
+        <h1 className="text-4xl text-center my-5">Nieuwe afspraak maken</h1>
+        <Suspense fallback={<p>Loading calendar...</p>}>
+          <CalendarSection />
+        </Suspense>
       </div>
       <Footer />
     </div>

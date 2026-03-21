@@ -14,4 +14,13 @@ Content-Type: application/json
   "date": "2024-07-01",
   "time": "10:00"
 }
+###
+
+//set the status to free, only possible for own 
+POST {{supabaseUrl}}/reservations/cancel
+
+{
+  "reservationId" : 5
+}
+###
 

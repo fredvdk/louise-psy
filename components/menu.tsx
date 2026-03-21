@@ -10,7 +10,7 @@ const menuItems = [
     { name: "Therapie", href: "/therapie" },
     { name: "Tarieven", href: "/tarieven" },
     { name: "Contact", href: "/contact" },
-    { name: "Reservaties", href: "/protected/reservaties" },
+    { name: "Afspraken", href: "/protected/afspraken" },
 ];
 
 export function Menu() {

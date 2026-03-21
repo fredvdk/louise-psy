@@ -10,3 +10,9 @@ export const hasEnvVars =
   process.env.NEXT_PUBLIC_SUPABASE_URL &&
   process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
+export function isWithin14Days(targetDate: Date): boolean {
+    const today = new Date();
+    const fourteenDaysFromNow = new Date(today);
+    fourteenDaysFromNow.setDate(today.getDate() + 14);
+    return targetDate <= fourteenDaysFromNow;
+}
