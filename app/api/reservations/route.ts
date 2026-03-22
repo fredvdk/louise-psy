@@ -5,24 +5,33 @@ import { jsonResponse } from '@/lib/utils';
 export async function GET() {
 	const supabase = await createClient();
 
-    // Check the authenticated user
-    const {
-		data: { user }
+	const {
+		data: { user },
 	} = await supabase.auth.getUser();
 
 	if (!user) {
 		return jsonResponse({ error: 'Unauthorized' }, 401);
 	}
 
-    // Fetch reservations for the authenticated user
-	const reservations = await supabase.from('reservations').select('*').eq('updated_by', user.id);
+	const result = await supabase
+		.from('reservations')
+		.select('*')
+		.eq('reserved_for', user.id);
 
-	return jsonResponse(reservations);
+	return jsonResponse(result);
 }
 
 export async function POST(request: Request) {
 	try {
 		const { date, time } = await request.json();
+
+		if (!date || !time) {
+			return jsonResponse(
+				{ error: 'Missing required fields: date and time' },
+				400
+			);
+		}
+
 		const supabase = await createClient();
 
 		const {
@@ -36,7 +45,7 @@ export async function POST(request: Request) {
 
 		const { data, error } = await supabase
 			.from('reservations')
-			.insert({ date: date, time: time, updated_by: user.id })
+			.insert({ date, time, updated_by: user.id })
 			.select('*')
 			.single();
 

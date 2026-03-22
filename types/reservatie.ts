@@ -16,5 +16,21 @@ export type CalendarEvent = {
 	end?: string;
 	duration: string;
 	title: string;
-}
+};
+
+type ProfileData = {
+	full_name: string;
+	mobile: string;
+	avatar_url: string;
+};
+
+type MockError = {
+	message: string;
+} | null;
+
+export type SetupProps = {
+	profileData?: ProfileData;
+	profileError?: MockError;
+	upsertError?: MockError;
+};
 
