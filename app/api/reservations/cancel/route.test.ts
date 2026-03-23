@@ -10,57 +10,58 @@ vi.mock('@/lib/supabase/server');
 const mockUser = { id: 'user-abc' };
 
 const mockReservation = {
-    id: 'res-123',
-    status: 'free',
-    reserved_for: null,
-    notes: null,
+	id: 'res-123',
+	status: 'free',
+	reserved_for: null,
+	notes: null,
 };
 
-function makeChain(result: { data: unknown; error: unknown }) {
-    const chain = {
-        select: vi.fn().mockReturnThis(),
-        update: vi.fn().mockReturnThis(),
-        eq: vi.fn().mockReturnThis(),
-        single: vi.fn().mockResolvedValue(result),
-    };
-    return chain;
+type DbResult = { data: unknown; error: unknown };
+
+function makeQueryChain(result: DbResult) {
+	return {
+		select: vi.fn().mockReturnThis(),
+		update: vi.fn().mockReturnThis(),
+		eq: vi.fn().mockReturnThis(),
+		single: vi.fn().mockResolvedValue(result),
+	};
 }
 
 interface MockOptions {
-    user?: typeof mockUser | null;
-    authError?: object | null;
-    profileResult?: { data: unknown; error: unknown };
-    reservationResult?: { data: unknown; error: unknown };
+	user?: typeof mockUser | null;
+	authError?: unknown;
+	profileResult?: DbResult;
+	reservationResult?: DbResult;
 }
 
 function makeSupabase({
-    user = mockUser,
-    authError = null,
-    profileResult = { data: { role: 'user' }, error: null },
-    reservationResult = { data: mockReservation, error: null },
+	user = mockUser,
+	authError = null,
+	profileResult = { data: { role: 'user' }, error: null },
+	reservationResult = { data: mockReservation, error: null },
 }: MockOptions = {}) {
-    const supabase = {
-        auth: {
-            getUser: vi.fn().mockResolvedValue({
-                data: { user: authError ? null : user },
-                error: authError,
-            }),
-        },
-        from: vi.fn().mockImplementation((table: string) => {
-            if (table === 'profiles') return makeChain(profileResult);
-            if (table === 'reservations') return makeChain(reservationResult);
-        }),
-    };
-    vi.mocked(supabaseServer.createClient).mockResolvedValue(supabase as never);
-    return supabase;
+	const supabase = {
+		auth: {
+			getUser: vi.fn().mockResolvedValue({
+				data: { user: authError ? null : user },
+				error: authError,
+			}),
+		},
+		from: vi.fn().mockImplementation((table: string) => {
+			if (table === 'profiles') return makeQueryChain(profileResult);
+			if (table === 'reservations') return makeQueryChain(reservationResult);
+		}),
+	};
+	vi.mocked(supabaseServer.createClient).mockResolvedValue(supabase as never);
+	return supabase;
 }
 
 function makeRequest(body: unknown) {
-    return new Request('http://localhost/api/reservations/cancel', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-    });
+	return new Request('http://localhost/api/reservations/cancel', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify(body),
+	});
 }
 
 // ---- tests ------------------------------------------------------------------
@@ -71,16 +72,17 @@ beforeEach(() => {
 
 describe('POST /api/reservations/cancel', () => {
     describe('input validation', () => {
-        it('returns 400 for malformed JSON', async () => {
-            const req = new Request('http://localhost/api/reservations/cancel', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: 'not json{{{',
-            });
-            const res = await POST(req);
-            expect(res.status).toBe(400);
-            expect(await res.json()).toEqual({ error: 'Invalid request body' });
-        });
+		it('returns 400 for malformed JSON', async () => {
+			const req = new Request('http://localhost/api/reservations/cancel', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: 'not json{{{',
+			});
+			const res = await POST(req);
+			expect(res.status).toBe(400);
+			const body = await res.json();
+			expect(body.error).toContain('Invalid input');
+		});
 
         it('returns 400 when reservationId is missing', async () => {
             makeSupabase();
@@ -176,31 +178,33 @@ describe('POST /api/reservations/cancel', () => {
         });
     });
 
-    describe('cancellation — admin', () => {
-        it('does NOT filter by reserved_for', async () => {
-            const supabase = makeSupabase({
-                profileResult: { data: { role: 'admin' }, error: null },
-            });
-            await POST(makeRequest({ reservationId: 'res-123' }));
+	describe('cancellation — admin', () => {
+		it('does NOT filter by reserved_for', async () => {
+			const supabase = makeSupabase({
+				profileResult: { data: { role: 'admin' }, error: null },
+			});
+			await POST(makeRequest({ reservationId: 'res-123' }));
 
-            const reservationsChain = supabase.from.mock.results
-                .find((_, i) => supabase.from.mock.calls[i][0] === 'reservations')?.value;
+			const reservationsChain = supabase.from.mock.results.find(
+				(_, i) => supabase.from.mock.calls[i][0] === 'reservations',
+			)?.value;
 
-            const eqCalls: [string, unknown][] = reservationsChain.eq.mock.calls;
-            expect(eqCalls.map(([field]) => field)).not.toContain('reserved_for');
-        });
+			const eqCalls: [string, unknown][] = reservationsChain.eq.mock.calls;
+			expect(eqCalls.map(([field]) => field)).not.toContain('reserved_for');
+		});
 
-        it('sets notes to "Cancelled by admin (<userId>)"', async () => {
-            const supabase = makeSupabase({
-                profileResult: { data: { role: 'admin' }, error: null },
-            });
-            await POST(makeRequest({ reservationId: 'res-123' }));
+		it('sets notes to "Cancelled by admin (<userId>)"', async () => {
+			const supabase = makeSupabase({
+				profileResult: { data: { role: 'admin' }, error: null },
+			});
+			await POST(makeRequest({ reservationId: 'res-123' }));
 
-            const reservationsChain = supabase.from.mock.results
-                .find((_, i) => supabase.from.mock.calls[i][0] === 'reservations')?.value;
+			const reservationsChain = supabase.from.mock.results.find(
+				(_, i) => supabase.from.mock.calls[i][0] === 'reservations',
+			)?.value;
 
-            const updateArg = reservationsChain.update.mock.calls[0][0];
-            expect(updateArg.notes).toBe(`Cancelled by admin (${mockUser.id})`);
-        });
-    });
+			const updateArg = reservationsChain.update.mock.calls[0][0];
+			expect(updateArg.notes).toBe(`Cancelled by admin (${mockUser.id})`);
+		});
+	});
 });

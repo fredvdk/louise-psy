@@ -7,12 +7,19 @@ export async function POST(request: Request) {
 	try {
 		const body = await request.json();
 		reservationId = body?.reservationId;
-	} catch {
-		return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
+	} catch (error: unknown) {
+		const message = error instanceof Error ? error.message : 'Unknown error';
+		return NextResponse.json(
+			{ error: 'Invalid input ' + message },
+			{ status: 400 },
+		);
 	}
 
 	if (!reservationId || typeof reservationId !== 'string') {
-		return NextResponse.json({ error: 'Missing or invalid reservationId' }, { status: 400 });
+		return NextResponse.json(
+			{ error: 'Missing or invalid reservationId' },
+			{ status: 400 },
+		);
 	}
 
 	const supabase = await createClient();
@@ -62,7 +69,10 @@ export async function POST(request: Request) {
 	if (error) {
 		// PGRST116 = no rows matched — reservation not found or user doesn't own it
 		const status = error.code === 'PGRST116' ? 404 : 500;
-		const message = status === 404 ? 'Reservation not found or not allowed' : 'Database error';
+		const message =
+			status === 404
+				? 'Reservation not found or not allowed'
+				: 'Database error';
 		return NextResponse.json({ error: message }, { status });
 	}
 
