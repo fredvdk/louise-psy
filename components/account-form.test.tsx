@@ -133,10 +133,11 @@ describe("AccountForm", () => {
 
   it("shows error message on submission failure", async () => {
     const user = userEvent.setup();
+    const { queryBuilder } = setupMockSupabase();
 
-    setupMockSupabase({
-      upsertError: { message: "Database error" },
-    });
+    // Make upsert throw an error
+    const error = new Error("Database error");
+    queryBuilder.upsert = vi.fn().mockRejectedValue(error);
 
     await renderForm();
 
