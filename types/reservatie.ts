@@ -34,3 +34,9 @@ export type SetupProps = {
 	upsertError?: MockError;
 };
 
+export type User = {
+	id: string;
+	email?: string;
+	full_name?: string
+}
+

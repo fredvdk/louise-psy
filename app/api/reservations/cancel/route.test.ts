@@ -1,13 +1,14 @@
 // @vitest-environment node
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { POST } from './route';
-import * as supabaseServer from '@/lib/supabase/server';
+import {createClient} from '@/lib/supabase/server';
+import { User } from '@/types/reservatie';
 
 vi.mock('@/lib/supabase/server');
 
 // ---- helpers ----------------------------------------------------------------
 
-const mockUser = { id: 'user-abc' };
+const mockUser: User = { id: 'user-abc' };
 
 const mockReservation = {
 	id: 'res-123',
@@ -52,7 +53,7 @@ function makeSupabase({
 			if (table === 'reservations') return makeQueryChain(reservationResult);
 		}),
 	};
-	vi.mocked(supabaseServer.createClient).mockResolvedValue(supabase as never);
+	vi.mocked(createClient).mockResolvedValue(supabase as never);
 	return supabase;
 }
 
