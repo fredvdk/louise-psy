@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "./navbar";
+import ReservatieLijst from "./reservatielijst";
 
 
 async function UserData() {
@@ -21,8 +22,9 @@ async function UserData() {
     return (
         <>
             <Navbar />
-            <div className="h-full flex items-center justify-center">
-                <h1 className="text-2xl font-bold">Admin data - manage users and reservations.</h1>
+            <div className="h-full flex flex-col items-center justify-center">
+                <h1 className="text-2xl font-bold m-5">Admin data - Pending to be comfirmed</h1>
+                <ReservatieLijst props={{ statusList: ['pending'], buttonText: "Confirm", isAdmin: true }} />
             </div>
         </>
     );

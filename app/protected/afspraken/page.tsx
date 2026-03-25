@@ -12,7 +12,7 @@ export default async function ReservationsPage() {
       <div className="m-10">
         <h1 className="text-4xl text-center mb-5">Mijn afspraken</h1>
         <Suspense>
-          <ReservationsList  />
+          <ReservationsList props={{ statusList: ['confirmed', 'pending'], buttonText: "Annuleer" }} />
         </Suspense>
         <h1 className="text-4xl text-center my-5">Nieuwe afspraak maken</h1>
         <Suspense fallback={<p>Loading calendar...</p>}>
