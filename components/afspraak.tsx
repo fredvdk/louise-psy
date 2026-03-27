@@ -1,6 +1,7 @@
 import { deleteReservatie, confirmReservatie } from "@/actions/reservations"
 import { Reservation } from "@/types/reservatie"
 import { Button } from "./ui/button"
+import { isWithin14Days } from "@/lib/utils"
 
 type AfspraakCardProps = {
     reservatie: Reservation,
@@ -8,7 +9,7 @@ type AfspraakCardProps = {
 }
 
 export default function AfspraakCard({ card }: { card: AfspraakCardProps }) {
-    //    const isButtonDisabled = loading || isWithin14Days(new Date(card.reservatie.date));
+    const isButtonDisabled = isWithin14Days(new Date(card.reservatie.date));
 
     const handleClick = (card.buttonText == "Annuleer") ? deleteReservatie : confirmReservatie;
 
@@ -48,7 +49,7 @@ export default function AfspraakCard({ card }: { card: AfspraakCardProps }) {
                 <div className="ml-auto">
                     <form action={handleClick}>
                         <input type='hidden' name='reservatieId' value={card.reservatie.id} />
-                        <Button variant="destructive" type="submit">
+                        <Button variant="destructive" type="submit" disabled={isButtonDisabled}>
                             {card.buttonText}
                         </Button>
                     </form>

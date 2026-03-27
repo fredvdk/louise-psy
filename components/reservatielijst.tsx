@@ -16,13 +16,15 @@ export default async function ReservatieLijst({ props }: { props: ReservatieLijs
         data: { user },
     } = await supabase.auth.getUser();
 
+    const { data: profile } = await supabase.from("profiles").select("role").eq("id", user?.id).single();
+
     if (!user) {
         return <p>You must be logged in to view reservations.</p>;
     }
 
     let data, error;
 
-    if (isAdmin) {
+    if (isAdmin && (profile?.role == 'admin')) {
         const result = await supabase
             .from("reservations")
             .select(`*, client_email: profiles!reservations_reserved_for_fkey(email)`)

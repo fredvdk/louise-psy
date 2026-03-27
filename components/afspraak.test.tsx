@@ -1,7 +1,6 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import AfspraakCard from './afspraak';
-import * as afspraken from '@/lib/afspraken';
 import * as utils from '@/lib/utils';
 
 vi.mock('@/lib/afspraken');
@@ -17,8 +16,17 @@ const mockReservatie = {
     status: 'confirmed' as const,
     updated_at: '2026-03-01T00:00:00Z',
     reserved_for: 'user-1',
-    notes: null,
+    notes: null
 };
+
+const createCard = (overrides = {}) => ({
+    reservatie: {
+        ...mockReservatie,
+        ...overrides
+    },
+    buttonText: "Annuleer"
+});
+
 
 beforeEach(() => {
     vi.clearAllMocks();
@@ -27,80 +35,52 @@ beforeEach(() => {
 
 describe('AfspraakCard', () => {
     it('renders the date, time and status', () => {
-        render(<AfspraakCard reservatie={mockReservatie} />);
-
-      //  expect(screen.getByText(/10 mei 2026/i)).toBeInTheDocument();
+        render(<AfspraakCard card={createCard()} />);
+        vi.setSystemTime(new Date('2026-05-09'));
+        expect(screen.getByText(/9 mei 2026/i)).toBeInTheDocument();
         expect(screen.getByText('⏰ 10:30')).toBeInTheDocument();
         expect(screen.getByText('confirmed')).toBeInTheDocument();
     });
 
     it('renders notes when present', () => {
-        render(<AfspraakCard reservatie={{ ...mockReservatie, notes: 'Eerste sessie' }} />);
+        const cardWithNotes = createCard({notes: "Eerste sessie"})
+        render(<AfspraakCard card={cardWithNotes} />);
         expect(screen.getByText('Eerste sessie')).toBeInTheDocument();
     });
 
     it('does not render notes section when notes is null', () => {
-        render(<AfspraakCard reservatie={mockReservatie} />);
+        render(<AfspraakCard card = {createCard()} />);
         expect(screen.queryByText('Eerste sessie')).not.toBeInTheDocument();
     });
 
     it('cancel button is enabled when appointment is more than 14 days away', () => {
         vi.mocked(utils.isWithin14Days).mockReturnValue(false);
-        render(<AfspraakCard reservatie={mockReservatie} />);
+        vi.setSystemTime(new Date('2026-04-01'));
+        render(<AfspraakCard card={createCard()} />);
         expect(screen.getByRole('button', { name: 'Annuleer' })).not.toBeDisabled();
     });
 
     it('cancel button is disabled when appointment is within 14 days', () => {
         vi.mocked(utils.isWithin14Days).mockReturnValue(true);
-        render(<AfspraakCard reservatie={mockReservatie} />);
+        vi.setSystemTime(new Date('2026-05-01'));
+        render(<AfspraakCard card={createCard()} />);
         expect(screen.getByRole('button', { name: 'Annuleer' })).toBeDisabled();
     });
 
     it('applies correct status badge style for confirmed', () => {
-        render(<AfspraakCard reservatie={mockReservatie} />);
+        render(<AfspraakCard card={createCard()} />);
         const badge = screen.getByText('confirmed');
         expect(badge.className).toMatch(/green/);
     });
 
     it('applies correct status badge style for pending', () => {
-        render(<AfspraakCard reservatie={{ ...mockReservatie, status: 'pending' }} />);
+        render(<AfspraakCard card={createCard({status: 'pending'})} />);
         const badge = screen.getByText('pending');
         expect(badge.className).toMatch(/yellow/);
     });
-
-    it('shows loading state while deleting', async () => {
-        vi.mocked(afspraken.deleteAfspraak).mockImplementation(
-            () => new Promise((resolve) => setTimeout(resolve, 500))
-        );
-
-        render(<AfspraakCard reservatie={mockReservatie} />);
-        fireEvent.click(screen.getByRole('button', { name: 'Annuleer' }));
-
-        expect(await screen.findByText('Bezig...')).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: 'Bezig...' })).toBeDisabled();
-    });
-
-    it('disappears after successful deletion', async () => {
-        vi.mocked(afspraken.deleteAfspraak).mockResolvedValue(undefined);
-
-        const { container } = render(<AfspraakCard reservatie={mockReservatie} />);
-        fireEvent.click(screen.getByRole('button', { name: 'Annuleer' }));
-
-        await waitFor(() => expect(container).toBeEmptyDOMElement());
-    });
-
-    it('shows error message when deletion fails', async () => {
-        vi.mocked(afspraken.deleteAfspraak).mockRejectedValue(new Error('Server error'));
-
-        render(<AfspraakCard reservatie={mockReservatie} />);
-        fireEvent.click(screen.getByRole('button', { name: 'Annuleer' }));
-
-        expect(await screen.findByText('Annuleren mislukt. Probeer het opnieuw.')).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: 'Annuleer' })).not.toBeDisabled();
-    });
-
+    
     it('trims seconds from displayed time', () => {
-        render(<AfspraakCard reservatie={{ ...mockReservatie, time: '09:00:00' }} />);
+        render(<AfspraakCard card={createCard({ time: '09:00:00' })} />);
         expect(screen.getByText('⏰ 09:00')).toBeInTheDocument();
     });
 });
