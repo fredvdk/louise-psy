@@ -1,0 +1,35 @@
+import AfspraakCard from "./afspraak";
+import { Reservation } from "@/types/reservatie";
+import { getAlleAfsprakenVoorUser } from "@/lib/supabase/afsprakenQueries";
+
+
+export default async function AfsprakenLijst() {
+    const { success, data, error } = await getAlleAfsprakenVoorUser();
+
+    if (!success) {
+        return <p>Probleem om afspraken op te halen. {error}</p>;
+    }
+
+    const afspraken = data as Reservation[] | null;
+    // console.log("reservations : ", reservations);
+
+    if (!afspraken || afspraken.length === 0) {
+        return (
+            <div className="text-center py-10 text-muted-foreground">
+                Geen afspraken gevonden.
+            </div>
+        );
+    }
+
+    return (
+        <div className="space-y-4">
+            {afspraken.map((afspraak) => (
+                <AfspraakCard
+                    key={afspraak.id}
+                    reservatie={afspraak}
+                    purpose = 'delete'
+                />
+            ))}
+        </div>
+    );
+}

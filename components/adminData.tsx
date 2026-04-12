@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "./navbar";
-import ReservatieLijst from "./reservatielijst";
+import ReservatieLijst from "./afsprakenlijst";
 
 
 async function UserData() {

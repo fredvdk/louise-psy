@@ -11,11 +11,11 @@ export default function CalendarComponent({ events }: { events: CalendarEvent[] 
         <div className="p-4">
             <FullCalendar
                 plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
-                initialView="listWeek"
+                initialView="dayGridMonth"
                 headerToolbar={{
                     left: "prev,next today",
                     center: "title",
-                    right: "listWeek,dayGridWeek",
+                    right: "dayGridMonth,dayGridWeek",
                 }}
                 height="auto"
                 buttonText={{
@@ -27,15 +27,6 @@ export default function CalendarComponent({ events }: { events: CalendarEvent[] 
                 }}
                 eventClick={() => alert("clicked")}
                 noEventsContent="Nothing available"
-                dayHeaderContent={(args) => {
-                    const date = args.date;
-
-                    const weekday = date.toLocaleDateString("nl-NL", { weekday: "short" });
-                    const day = date.getDate();
-                    const month = date.toLocaleDateString("nl-NL", { month: "short" });
-
-                    return `${weekday} ${day} ${month}`;
-                }}
                 eventTimeFormat = {{
                     hour: '2-digit',
                     minute: '2-digit',

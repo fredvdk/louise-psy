@@ -1,7 +1,7 @@
 import { CalendarSection } from "@/components/calendarsection";
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
-import ReservationsList from "@/components/reservatielijst";
+import ReservationsList from "@/components/afsprakenlijst";
 import { Suspense } from "react";
 
 export default async function ReservationsPage() {
@@ -12,12 +12,15 @@ export default async function ReservationsPage() {
       <div className="m-10">
         <h1 className="text-4xl text-center mb-5">Mijn afspraken</h1>
         <Suspense>
-          <ReservationsList props={{ statusList: ['confirmed', 'pending'], buttonText: "Annuleer" }} />
+          <ReservationsList />
         </Suspense>
-        <h1 className="text-4xl text-center my-5">Nieuwe afspraak maken</h1>
-        <Suspense fallback={<p>Loading calendar...</p>}>
-          <CalendarSection />
-        </Suspense>
+        <div className="w-1/2">
+          <h2 className="text-2xl text-center my-5">Free slots</h2>
+          <Suspense fallback={<p>Loading calendar...</p>}>
+            <CalendarSection />
+          </Suspense>
+        </div>
+
       </div>
       <Footer />
     </div>

@@ -10,7 +10,7 @@ export async function AuthButton() {
   const { data } = await supabase.auth.getClaims();
 
   const user = data?.claims;
-  console.log(user)
+  //console.log(user)
 
   return user ? (
     <div className="flex items-center gap-4 text-xs">
