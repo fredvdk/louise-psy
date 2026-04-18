@@ -8,7 +8,7 @@ function Credentials() {
                 {/* Image Section */}
                 <Container>
                     <PageImage
-                        src="/images/louise_lilly.jpg"
+                        src="/images/Louise_Lilly.jpg"
                         alt="Louise"
                         width={350}
                         height={350}
