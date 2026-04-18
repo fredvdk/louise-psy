@@ -24,7 +24,7 @@ async function UserData() {
             <Navbar />
             <div className="h-full flex flex-col items-center justify-center">
                 <h1 className="text-2xl font-bold m-5">Admin data - Pending to be comfirmed</h1>
-                <ReservatieLijst props={{ statusList: ['pending'], buttonText: "Confirm", isAdmin: true }} />
+                <ReservatieLijst  />
             </div>
         </>
     );

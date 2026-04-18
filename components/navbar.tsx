@@ -3,6 +3,7 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import Link from "next/link";
 import { Suspense } from "react";
 import { Menu } from "./menu";
+import  Image  from "next/image";
 
 export function Navbar() {
   return (
@@ -12,9 +13,17 @@ export function Navbar() {
         {/* Logo */}
         <Link
           href="/"
-          className="text-2xl font-bold font-serif tracking-tight hover:opacity-80 transition-opacity"
+          className="flex items-center"
         >
-          Louise Psy
+          <Image
+            src="/logo.png"
+            alt="logo"
+            width={50}
+            height={50}
+          />
+          <h2 className="text-xl font-bold">
+            Psycholoog Louise
+          </h2>
         </Link>
 
         {/* Desktop navigation */}
