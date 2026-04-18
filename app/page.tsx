@@ -6,14 +6,12 @@ import { Decoration } from "@/components/pageElements";
 
 export default function Home() {
   return (
-    <div className="container mx-auto">
+    <div className="w-auto mx-auto">
       <Navbar />
-      <main className="bg-background">
-        <Decoration />
-        <Hero />
-        <hr />
-        <Credentials />
-      </main>
+      <Decoration />
+      <Hero />
+      <hr />
+      <Credentials />
       <Footer />
     </div>
   );

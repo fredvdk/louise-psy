@@ -1,24 +1,17 @@
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
+import { Container, Decoration, Paragraph, Title } from "@/components/pageElements";
 
 export default function PraktischPage() {
     return (
-        <>
+        <div className="container mx-auto">
             <Navbar />
             <main className="bg-background">
-                {/* Hero Section */}
-                <section className="border-b border-border/40">
-                    <div className="container mx-auto px-6 py-20 lg:py-32">
-                        <div className="max-w-3xl">
-                            <h1 className="text-5xl lg:text-6xl font-serif text-foreground mb-6 leading-tight">
-                                Praktische informatie
-                            </h1>
-                            <p className="text-xl text-foreground/80 leading-relaxed">
-                                Alles wat je moet weten over locatie, tarief, betaling en afspraken.
-                            </p>
-                        </div>
-                    </div>
-                </section>
+                <Decoration />
+                <Container>
+                    <Title text="Praktische informatie" />
+                    <Paragraph text="Alles wat je moet weten over locatie, tarief, betaling en afspraken." />
+                </Container>
 
                 {/* Location Section */}
                 <section className="border-b border-border/40">
@@ -179,6 +172,5 @@ export default function PraktischPage() {
                 </section>
             </main>
             <Footer />
-        </>
-    );
+        </div>)
 }

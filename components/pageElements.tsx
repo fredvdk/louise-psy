@@ -2,9 +2,10 @@ import Link from 'next/link';
 import { ReactNode } from 'react';
 import Image from 'next/image'
 
-export function Title({ text }: { text: string }) {
+export function Title({ text, level = 1 }: { text: string, level?: number }) {
     return (
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif text-foreground leading-tight">{text}</h1>
+        level === 1 ? <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif text-foreground leading-tight">{text}</h1> :
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-foreground leading-tight">{text}</h2>
     )
 }
 
@@ -18,7 +19,7 @@ export function Paragraph({ text }: { text: string }) {
 
 export function Container({ children }: { children: ReactNode }) {
     return (
-        <div className="w-full space-y-8 text-center lg:text-left m-10">
+        <div className="w-full space-y-8 text-left m-10">
             {children}
         </div>
     )
@@ -35,8 +36,8 @@ export function Button({ link, text, level }: ButtonProps) {
         <Link
             href={link}
             className={level == "primary"
-                ? "px-8 py-4 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 shadow-lg shadow-primary/20"
-                : "px-8 py-4 border border-primary text-primary rounded-lg font-medium hover:bg-primary/20 shadow-lg shadow-primary/20"
+                ? "inline-block px-8 py-4 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 shadow-lg shadow-primary/20"
+                : "inline-block px-8 py-4 border border-primary text-primary rounded-lg font-medium hover:bg-primary/20 shadow-lg shadow-primary/20"
             }
         >
             {text}

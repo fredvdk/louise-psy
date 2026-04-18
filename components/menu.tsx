@@ -6,10 +6,10 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
 const menuItems = [
-    { name: "Home", href: "/" },
-    { name: "Therapie", href: "/therapie" },
-    { name: "Praktisch", href: "/praktisch" },
-    { name: "Afspraken", href: "/protected/afspraken" },
+    { id: 1, name: "Home", href: "/" },
+    { id: 2, name: "Therapie", href: "/therapie" },
+    { id: 3, name: "Praktisch", href: "/praktisch" },
+    { id: 4, name: "Afspraken", href: "/protected/afspraken" }
 ];
 
 export function Menu() {
@@ -43,7 +43,7 @@ export function Menu() {
                 <ul className="flex gap-6">
                     {menuItems.map((item) => (
                         <li
-                            key={item.name}
+                            key={item.id}
                             className={pathname === item.href ? "font-bold" : ""}
                         >
                             <Link href={item.href}>{item.name}</Link>
