@@ -22,30 +22,42 @@ interface BulletProps {
 
 function Title({ text, level = 1 }: { text: string, level?: number }) {
     return (
-        level === 1 ? <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif leading-tight text-foreground">{text}</h1> :
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-secondary-foreground leading-tight">{text}</h2>
+        level === 1 ? <h1 className="text-3xl md:text-4xl lg:text-5xl font-lato leading-tight text-foreground
+        relative inline-block
+        after:content-['']
+        after:absolute
+        after:left-0
+        after:-bottom-1
+        after:h-[1px]
+        after:w-full
+        after:bg-gray-400
+        after:origin-left
+        after:scale-x-0
+        after:animate-[draw-line_2.5s_ease_forwards]">{text}</h1> :
+            < h2 className="text-2xl md:text-3xl lg:text-4xl font-lato text-secondary-foreground leading-tight" > {text}</h2 >
     )
 }
 
-function Paragraph({ text }: { text: string }) {
+function Paragraph({ children }: { children: ReactNode }) {
     return (
-        <p className="text-lg md:text-xl text-foreground max-w-xl mx-auto lg:mx-0 leading-relaxed">
-            {text}
+        <p className="text-lg md:text-xl text-foreground mx-auto lg:mx-0 leading-relaxed">
+            {children}
         </p>
     )
 }
 
-function Container({ children }: { children: ReactNode }) {
+function Container({ children, className }: { children: ReactNode, className?: string }) {
     return (
-        <div className="w-full space-y-8 text-left p-10 border">
+        <div className={`space-y-8 text-left p-10 ${className || ''}`}>
             {children}
         </div>
     )
 }
 
 function ColumnLayout({ children }: { children: ReactNode }) {
+
     return (
-        <div className="flex flex-col lg:flex-row gap-12 border w-full">
+        <div className="flex flex-col lg:flex-row gap-12">
             {children}
         </div>
     )
@@ -75,7 +87,7 @@ function Decoration() {
 
 function PageImage({ src, alt, width, height }: PageImageProps) {
     return (
-        <div className="border rounded overflow-hidden shadow-lg m-20">
+        <div className="border rounded overflow-hidden shadow-lg">
             <Image
                 src={src}
                 alt={alt}
@@ -90,14 +102,12 @@ function PageImage({ src, alt, width, height }: PageImageProps) {
 function Bullet({ name, description }: BulletProps) {
     return (
         <div className="flex items-start gap-5 p-5 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
-            <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center flex-shrink-0 mt-0.5">
-                <svg className="w-5 h-5 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+            <div className="h-5 w-5 rounded-full bg-primary flex items-center justify-center flex-shrink-0 mt-0.5 text-white">
+                -
             </div>
             <div className="space-y-1">
                 <p className="font-semibold text-foreground text-lg">{name}</p>
-                <p className="text-foreground/70 text-sm leading-relaxed">{description}</p>
+                <p className="text-foreground/70 leading-relaxed">{description}</p>
             </div>
         </div>
     );

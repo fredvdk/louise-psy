@@ -34,6 +34,7 @@ export async function updateSession(request: NextRequest) {
 		!request.nextUrl.pathname.startsWith('/auth') &&
 		!request.nextUrl.pathname.startsWith('/api') &&
 		!request.nextUrl.pathname.startsWith('/praktisch') &&
+		!request.nextUrl.pathname.startsWith('/overmij') &&
 		!request.nextUrl.pathname.startsWith('/therapie') &&
 		!request.nextUrl.pathname.startsWith('/privacy-policy')
 	) {

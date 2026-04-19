@@ -7,9 +7,11 @@ import { usePathname } from "next/navigation";
 
 const menuItems = [
     { id: 1, name: "Home", href: "/" },
-    { id: 2, name: "Therapie", href: "/therapie" },
-    { id: 3, name: "Praktisch", href: "/praktisch" },
-    { id: 4, name: "Afspraken", href: "/protected/afspraken" }
+    { id: 2, name: "Over Mij", href: "/overmij" },
+    { id: 3, name: "Therapie", href: "/therapie" },
+    { id: 4, name: "Praktisch", href: "/praktisch" },
+    { id: 5, name: "Afspraken", href: "/protected/afspraken" },
+   
 ];
 
 export function Menu() {

@@ -41,7 +41,6 @@
 		--ring: 150 25% 35%;
 
 		--radius: 0.5rem;
-
 	}
 
 	.dark {
@@ -85,5 +84,14 @@
 		font-feature-settings:
 			'rlig' 1,
 			'calt' 1;
+	}
+}
+
+@keyframes draw-line {
+	from {
+		transform: scaleX(0);
+	}
+	to {
+		transform: scaleX(1);
 	}
 }
