@@ -1,14 +1,16 @@
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
+import { Decoration, Title, TwoColumn } from "@/components/pageElements";
 
 export default function PrivacyPolicyPage() {
     return (
-        <>
+        <div className="container mx-auto">
             <Navbar />
-            <div className="h-full flex items-center justify-center mt-10 mb-10">
-                <h1 className="text-2xl font-bold">Privacy Policy</h1>
-            </div>
+            <Decoration />
+            <TwoColumn>
+                <Title text="Hier komt de privacy policy" />
+            </TwoColumn>
             <Footer />
-        </>
+        </div>
     )
 }

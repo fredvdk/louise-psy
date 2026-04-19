@@ -1,14 +1,14 @@
-import { Bullet } from "@/components/bullets";
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
-import { Button, Container, Decoration, Paragraph, Title } from "@/components/pageElements";
+import { Bullet, Button, Container, Decoration, Paragraph, Title, TwoColumn } from "@/components/pageElements";
 
 export default function PraktischPage() {
     return (
         <div className="container mx-auto">
             <Navbar />
             <Decoration />
-            <div className="flex flex-col lg:flex-row items-center gap-12">
+
+            <TwoColumn>
                 <Container>
                     <Title text="Praktische informatie" />
                     <Paragraph text="Alles wat je moet weten over locatie, tarief, betaling en afspraken." />
@@ -21,14 +21,16 @@ export default function PraktischPage() {
                     <Bullet name="In beweging" description="Wanneer gewenst en als de weersomstandigheden het toelaten, kunnen sessies ook al wandelend plaatsvinden.Wandelend door Rumbeke" />
                     <Bullet name="Online" description="Voor mensen met mobiliteitsproblemen of praktische omstandigheden is online therapie mogelijk. De voorkeur gaat uit naar sessies in de praktijk." />
                 </Container>
-            </div>
+            </TwoColumn>
 
-            <div className="flex flex-col lg:flex-row items-center gap-12">
+            <TwoColumn>
 
                 <Container>
                     <Title text="Tarief en duur" level={2} />
                     <Paragraph text=" In een therapeutisch proces is continuïteit belangrijk. Regelmatige afspraken helpen om het proces op te bouwen en te verdiepen." />
-                    <div className="lg:w-1/3 md:w-1/2 p-8 rounded-lg bg-primary/5 border border-primary/20">
+                </Container>
+                <Container>
+                    <div className="w-full p-8 rounded-lg bg-primary/5 border border-primary/20">
                         <div className="text-5xl font-serif text-primary mb-2">€75</div>
                         <p className="text-foreground/70">per sessie van 50 minuten</p>
                     </div>
@@ -36,9 +38,9 @@ export default function PraktischPage() {
                 <Container>
                     <Button link="/protected/afspraken" text="Boek een afspraak" level="primary" />
                 </Container>
-            </div>
+            </TwoColumn>
 
-            <div className="flex flex-col lg:flex-row items-center gap-12">
+            <TwoColumn>
                 <Container>
                     <Title text="Betaling" />
                     <Bullet name="Mobiele betaling" description="Alleen Payconiq" />
@@ -54,11 +56,7 @@ export default function PraktischPage() {
                         </p>
                     </div>
                 </Container>
-            </div>
-
-
-
-
+            </TwoColumn>
 
             <Footer />
         </div>);

@@ -21,7 +21,7 @@ export function Navbar({showMenu = true}) {
             width={50}
             height={50}
           />
-          <h2 className="text-xl font-bold">
+          <h2 className="lg:text-xl font-bold">
             Psycholoog Louise
           </h2>
         </Link>
