@@ -22,8 +22,8 @@ interface BulletProps {
 
 function Title({ text, level = 1 }: { text: string, level?: number }) {
     return (
-        level === 1 ? <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif text-foreground leading-tight">{text}</h1> :
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-foreground leading-tight">{text}</h2>
+        level === 1 ? <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif leading-tight text-foreground">{text}</h1> :
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-secondary-foreground leading-tight">{text}</h2>
     )
 }
 
@@ -45,7 +45,7 @@ function Container({ children }: { children: ReactNode }) {
 
 function ColumnLayout({ children }: { children: ReactNode }) {
     return (
-        <div className="flex flex-col lg:flex-row gap-12 border">
+        <div className="flex flex-col lg:flex-row gap-12 border w-full">
             {children}
         </div>
     )
@@ -56,8 +56,8 @@ function Button({ link, text, level }: ButtonProps) {
         <Link
             href={link}
             className={level == "primary"
-                ? "inline-block px-8 py-4 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 shadow-lg shadow-primary/20"
-                : "inline-block px-8 py-4 border border-primary text-primary rounded-lg font-medium hover:bg-primary/20 shadow-lg shadow-primary/20"
+                ? "inline-block px-8 py-4 text-center bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 shadow-lg shadow-primary/20"
+                : "inline-block px-8 py-4 text-center border border-primary text-primary rounded-lg font-medium hover:bg-primary/20 shadow-lg shadow-primary/20"
             }
         >
             {text}
