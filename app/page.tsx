@@ -1,11 +1,30 @@
 import { Footer } from "@/components/footer";
+import { Message } from "@/components/messageLine";
 import { Navbar } from "@/components/navbar";
 import { Button, Container, Decoration, PageImage, Paragraph, Title, TwoColumn } from "@/components/pageElements";
 
 export default function Home() {
+  //TODO: implementatie in database
+  const msgArray = [
+    {
+      id: 1,
+      date: new Date("04/05/2026"),
+      text: "Dit is een test bericht"
+    },
+    {
+      id: 2,
+      date: new Date("06/03/2026"),
+      text: "Dit is een tweede actief bericht"
+    }
+  ]
+
+
   return (
     <div className="w-full mx-auto">
       <Navbar />
+      {msgArray.map(
+        (msg) => <Message key={msg.id} date={msg.date} text={msg.text} />
+      )}
       <Decoration />
 
       <TwoColumn>
