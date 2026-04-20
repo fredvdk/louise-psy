@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function PraktischPage() {
     return (
-        <div className="container mx-auto">
+        <div className="w-full mx-auto">
             <Navbar />
             <Decoration />
 
