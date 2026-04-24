@@ -16,6 +16,9 @@ Content-Type: application/json
 }
 ###
 
+POST {{supabaseUrl}}/reservations/seed
+Content-Type: application/json
+
 //set the status to free, only possible for own 
 POST {{supabaseUrl}}/reservations/cancel
 

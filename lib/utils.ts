@@ -13,7 +13,7 @@ export const hasEnvVars =
 export function isWithin14Days(targetDate: Date): boolean {
     const today = new Date();
     const fourteenDaysFromNow = new Date(today);
-    fourteenDaysFromNow.setDate(today.getDate() + 14);
+    fourteenDaysFromNow.setDate(today.getDate() + 1);
     return targetDate <= fourteenDaysFromNow;
 }
 

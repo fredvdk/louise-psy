@@ -57,3 +57,34 @@ export async function deleteAfspraak(id: string) {
 		console.log('Error while deleting : ', error);
 	}
 }
+
+export async function updateReservationToPending(
+	reservationId: string,
+	hulpvraag: string
+) {
+	try {
+		const { client, userId } = await getAuthenticatedClient();
+
+		const { error } = await client
+			.from('reservations')
+			.update({
+				status: 'pending',
+				reserved_for: userId,
+				notes: hulpvraag,
+				updated_at: new Date().toISOString(),
+			})
+			.eq('id', reservationId);
+
+		if (error) throw error;
+
+		return { success: true, error: null };
+	} catch (error) {
+		console.log(error);
+		return {
+			success: false,
+			error:
+				error instanceof Error ? error.message : 'An unknown error occurred',
+		};
+	}
+}
+

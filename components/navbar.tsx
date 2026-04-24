@@ -5,7 +5,9 @@ import { Suspense } from "react";
 import { Menu } from "./menu";
 import  Image  from "next/image";
 
+
 export function Navbar({showMenu = true}) {
+
   return (
     <nav className="w-full border-b border-b-foreground/10 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
       <div className="relative flex items-center justify-between h-16 px-4 max-w-7xl mx-auto">

@@ -21,7 +21,7 @@ export function AccountForm({
   const [email, setEmail] = useState("");
   const [naam, setNaam] = useState("");
   const [mobile, setMobile] = useState("");
-  const [avatar, setAvatar] = useState("");
+  const [address, setAddress] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -43,7 +43,7 @@ export function AccountForm({
 
         const { data, error: profileError } = await supabase
           .from("profiles")
-          .select("full_name, mobile, avatar_url")
+          .select("full_name, mobile, address")
           .eq("id", user.id)
           .single();
 
@@ -54,7 +54,7 @@ export function AccountForm({
         if (data) {
           setNaam(data.full_name || "");
           setMobile(data.mobile || "");
-          setAvatar(data.avatar_url || "");
+          setAddress(data.address || "");
         }
       } catch (error: unknown) {
         setError(
@@ -90,7 +90,7 @@ export function AccountForm({
           id: user.id,
           full_name: naam,
           mobile : mobile,
-          avatar_url: avatar
+          address: address
         //  updated_at: new Date().toISOString(),
         });
 
@@ -119,8 +119,8 @@ export function AccountForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Account Settings</CardTitle>
-          <CardDescription>Update your profile information</CardDescription>
+          <CardTitle className="text-2xl">Account gegevens</CardTitle>
+          <CardDescription>Update je profiel</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleUpdate}>
@@ -135,40 +135,41 @@ export function AccountForm({
                   className="bg-gray-100 text-gray-600 cursor-not-allowed"
                 />
                 <p className="text-xs text-gray-500">
-                  Email cannot be changed
+                  Email kan niet gewijzigd worden
                 </p>
               </div>
 
               <div className="grid gap-2">
-                <Label htmlFor="naam">Name</Label>
+                <Label htmlFor="naam">Naam <span className="text-red-500">*</span></Label>
                 <Input
                   id="naam"
                   type="text"
-                  placeholder="Enter your full name"
+                  placeholder="Geef je volledige naam"
                   value={naam}
                   onChange={(e) => setNaam(e.target.value)}
+                  required
                 />
               </div>
 
               <div className="grid gap-2">
-                <Label htmlFor="mobile">Mobile</Label>
+                <Label htmlFor="mobile">Telefoon <span className="text-red-500">*</span></Label>
                 <Input
                   id="mobile"
                   type="tel"
-                  placeholder="Enter your mobile number"
+                  placeholder="Voer je telefoon of gsm nummer in"
                   value={mobile}
                   onChange={(e) => setMobile(e.target.value)}
+                  required
                 />
               </div>
 
               <div className="grid gap-2">
-                <Label htmlFor="avatar">Avatar URL</Label>
+                <Label htmlFor="address">Adres</Label>
                 <Input
-                  id="avatar"
-                  type="url"
-                  placeholder="https://example.com/avatar.jpg"
-                  value={avatar}
-                  onChange={(e) => setAvatar(e.target.value)}
+                  id="address"
+                  type="text"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
                 />
               </div>
 
@@ -176,7 +177,7 @@ export function AccountForm({
               {success && <p className="text-sm text-green-600">{success}</p>}
 
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Saving..." : "Save Changes"}
+                {isLoading ? "Opslaan..." : "Opslaan"}
               </Button>
             </div>
           </form>

@@ -1,30 +1,18 @@
 import { Footer } from "@/components/footer";
-import { Message } from "@/components/messageLine";
+import MessageList from "@/components/messageList";
 import { Navbar } from "@/components/navbar";
 import { Button, Container, Decoration, PageImage, Paragraph, Title, TwoColumn } from "@/components/pageElements";
+import { Suspense } from "react";
 
 export default function Home() {
-  //TODO: implementatie in database
-  const msgArray = [
-    {
-      id: 1,
-      date: new Date("04/05/2026"),
-      text: "Dit is een test bericht"
-    },
-    {
-      id: 2,
-      date: new Date("06/03/2026"),
-      text: "Dit is een tweede actief bericht"
-    }
-  ]
-
 
   return (
     <div className="w-full mx-auto">
       <Navbar />
-      {msgArray.map(
-        (msg) => <Message key={msg.id} date={msg.date} text={msg.text} />
-      )}
+      <Suspense fallback={<div className="p-4 text-center text-gray-500">Berichten laden...</div>}>
+        <MessageList />
+      </Suspense>
+
       <Decoration />
 
       <TwoColumn>

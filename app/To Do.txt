@@ -1,21 +1,21 @@
-Over mij aparte pageina - OK
-Nieuwe photo home pagina 
-Messaging board
+Over mij aparte pagina - OK
+Nieuwe photo home pagina -> Louise
+Messaging board - OK, dummy msg
 Over Mij / twee colom, kleinere foto , tekst bullets groter, vinkje bullet groene bol - OK
 Stukjes tekst in vet - OK
 Knop naar therapie weg - OK
 Knop boek een afspraak aanpassen - OK
-Gegevens email, naam, voornaam, telefoonr, adres, 
+Gegevens email, naam, voornaam, telefoonr, adres,
 Nieuwe afspraak, hulpvraag
 
 Therapie :twee ongelijke kolommen, photocolom 1/4 3/' - OK
 
 Praktisch
-1. Foto praktijk, ongelijke kolommen, 3 bullets
-2. Betaling : Prijs - betaling - annulatie
+1. Foto praktijk, ongelijke kolommen, 3 bullets - OK
+2. Betaling : Prijs - betaling - annulatie - OK
 2. Kaartje google
 
-prijs kleiner
-lijntje onder titel
+prijs kleiner - OK
+lijntje onder titels - OK
 
-boek een afspaak / mail - telefonisch - websitte
+boek een afspaak / mail - telefonisch - website - OK

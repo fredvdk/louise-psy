@@ -1,9 +1,15 @@
+import { Reservation } from '@/types/reservatie';
 import { getAuthenticatedClient } from './authQueries';
+import { createClient } from './server';
 
 export async function getAlleAfsprakenVoorUser() {
 	try {
         const { client, userId } = await getAuthenticatedClient();
-        const { data, error } = await client.from('reservations').select('*').eq('reserved_for', userId)
+        const { data, error } = await client.from('reservations')
+			.select('*').eq('reserved_for', userId)
+			.in('status', ['confirmed', 'pending'])
+			.order('date', { ascending: false })
+
         if (error) throw error;
         return { success: true, data: data, error: null }
 	} catch (error) {
@@ -17,3 +23,10 @@ export async function getAlleAfsprakenVoorUser() {
 }
 
 export function getAllPendingAfspraken() {}
+
+export async function getAllFreeAfspraken(){
+	const client = await createClient();
+	const { data, error } = await client.from('reservations').select("*").eq('status', 'free');
+	if (error) throw error;
+	return (data as Reservation[])
+}
