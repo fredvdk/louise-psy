@@ -77,6 +77,7 @@ export async function updateReservationToPending(
 
 		if (error) throw error;
 
+		revalidatePath('/protected/afspraken');
 		return { success: true, error: null };
 	} catch (error) {
 		console.log(error);

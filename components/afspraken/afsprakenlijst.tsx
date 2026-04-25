@@ -1,4 +1,4 @@
-import AfspraakCard from "./afspraak";
+import AfspraakCard from "./afspraakCard";
 import { Reservation } from "@/types/reservatie";
 import { getAlleAfsprakenVoorUser } from "@/lib/supabase/afsprakenQueries";
 
@@ -22,12 +22,12 @@ export default async function AfsprakenLijst() {
     }
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4 md:w-1/2 mx-auto">
             {afspraken.map((afspraak) => (
                 <AfspraakCard
                     key={afspraak.id}
                     reservatie={afspraak}
-                    purpose = 'delete'
+                    purpose='delete'
                 />
             ))}
         </div>

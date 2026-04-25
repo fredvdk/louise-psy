@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "./navbar";
-import ReservatieLijst from "./afsprakenlijst";
+import ReservatieLijst from "./afspraken/afsprakenlijst";
 
 
 async function UserData() {
@@ -24,7 +24,7 @@ async function UserData() {
             <Navbar />
             <div className="h-full flex flex-col items-center justify-center">
                 <h1 className="text-2xl font-bold m-5">Admin data - Pending to be comfirmed</h1>
-                <ReservatieLijst  />
+                <ReservatieLijst />
             </div>
         </>
     );

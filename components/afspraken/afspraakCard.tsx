@@ -1,5 +1,6 @@
 import { Reservation } from "@/types/reservatie"
 import { ConfirmButton, DeleteButton } from "./afspraakButtons"
+import { formatDate } from "@/lib/utils";
 
 type AfspraakCardProps = {
     reservatie: Reservation,
@@ -12,15 +13,10 @@ export default function AfspraakCard({ reservatie, purpose }: AfspraakCardProps)
             {/* Header */}
             <div className="flex items-center justify-between mb-3">
                 <div className="text-lg font-semibold">
-                    {new Date(reservatie.date).toLocaleDateString("nl-NL", {
-                        weekday: "long",
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                    })}
+                    {formatDate(new Date(reservatie.date))}
                 </div>
                 <div className="text-lg font-semibold mb-3">
-                    ⏰ {reservatie.time.slice(0, 5)}
+                    ⏰ {reservatie.time.slice(0, -3)}
                 </div>
 
                 <span

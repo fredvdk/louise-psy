@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import AfspraakCard from './afspraak';
+import AfspraakCard from './afspraakCard';
 import * as utils from '@/lib/utils';
 import { Reservation } from '@/types/reservatie';
 
