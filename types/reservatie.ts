@@ -1,12 +1,12 @@
-export type Reservation = {
+export type Afspraak = {
 	id: string;
 	date: string;
 	time: string;
-	status: "confirmed" | "pending" | "free";
+	status: 'confirmed' | 'pending' | 'free';
 	updated_at: string;
 	reserved_for: string | null;
 	notes?: string | null;
-	client_email?: { email:string };
+	client_email: { email: string };
 };
 
 export type CalendarEvent = {
@@ -37,6 +37,5 @@ export type SetupProps = {
 export type User = {
 	id: string;
 	email?: string;
-	full_name?: string
-}
-
+	full_name?: string;
+};

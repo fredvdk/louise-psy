@@ -9,15 +9,13 @@ export default function OverMij() {
             <Decoration />
 
             <TwoColumn>
-                <Container className="w-1/4">
+                <Container className="md:w-1/4">
                     <PageImage
                         src="/images/Louise_Lilly.jpg"
                         alt="Louise"
-                        width={350}
-                        height={350}
                     />
                 </Container>
-                <Container className="w-3/4">
+                <Container className="md:w-3/4">
                     <Title text="Over mij" />
 
                     <Paragraph>Met jarenlange ervaring en expertise help ik cliënten hun mentale gezondheid te verbeteren. Als gediplomeerd psychologe en therapeut bied ik een veilige en ondersteunende omgeving voor persoonlijke groei.</Paragraph>

@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import AfspraakCard from './afspraakCard';
 import * as utils from '@/lib/utils';
-import { Reservation } from '@/types/reservatie';
+import { Afspraak } from '@/types/reservatie';
 
 
 vi.mock('@/lib/afspraken');
@@ -11,7 +11,7 @@ vi.mock('@/lib/utils', async (importOriginal) => {
     return { ...actual, isWithin14Days: vi.fn() };
 });
 
-const mockReservatie: Reservation = {
+const mockReservatie: Afspraak = {
     id: 'abc-123',
     date: '2026-05-10',
     time: '10:30:00',

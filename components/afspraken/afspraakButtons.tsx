@@ -2,12 +2,13 @@
 
 import { updateAfspraakStatus } from "@/actions/afspraken"
 import { Button } from "../ui/button"
-import { Reservation } from "../../types/reservatie"
+import { Afspraak } from "../../types/reservatie"
 import { isWithin14Days } from "@/lib/utils"
 
 
-export function DeleteButton({ reservatie }: { reservatie: Reservation }) {
+export function DeleteButton({ reservatie }: { reservatie: Afspraak }) {
     const noDeleteBtn = isWithin14Days(new Date(reservatie.date)) ? true : false;
+
     return (!noDeleteBtn &&
         <Button
             variant="destructive"
@@ -19,7 +20,7 @@ export function DeleteButton({ reservatie }: { reservatie: Reservation }) {
 }
 
 
-export function ConfirmButton({ reservatie }: { reservatie: Reservation }) {
+export function ConfirmButton({ reservatie }: { reservatie: Afspraak }) {
     return (
         <Button
             variant="default"

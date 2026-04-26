@@ -1,6 +1,6 @@
 import CalendarComponent from "@/components/calendar";
 import { createClient } from "@/lib/supabase/server";
-import { CalendarEvent, Reservation } from "@/types/reservatie";
+import { CalendarEvent, Afspraak } from "@/types/reservatie";
 
 export async function CalendarSection() {
     const supabase = await createClient();
@@ -13,7 +13,7 @@ export async function CalendarSection() {
     if (error) {
         return <p>Failed to load calendar events. {error.message}</p>;
     }
-    const reservations: Reservation[] = data ?? [];
+    const reservations: Afspraak[] = data ?? [];
 
     const calendarEvents: CalendarEvent[] = reservations.map(reservation => ({
         id: reservation.id,

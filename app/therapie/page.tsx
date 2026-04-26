@@ -9,29 +9,27 @@ export default function TherapiePage() {
             <Navbar />
 
             <TwoColumn>
-                <Container className="w-3/4">
+                <Container className="md:w-3/4">
                     <Title text="Integratieve therapie" />
                     <Paragraph>In mijn praktijk werk ik vanuit de visie van de <span className="font-bold text-primary">Interactionele Vormgeving (I.V.)</span>. Dit is een integratieve vorm van psychotherapie die de mens in zijn geheel probeert te begrijpen. Het vertrekt vanuit het idee dat een mens voortdurend in wisselwerking staat met zijn omgeving, zijn verleden en zichzelf.
 
                     </Paragraph>
                 </Container>
 
-                <Container className="w-1/4">
+                <Container className="md:w-1/4">
                     <PageImage src="/images/hero.jpg"
                         alt="therapie"
-                        width={350}
-                        height={350}
                     />
                 </Container>
             </TwoColumn>
 
             <TwoColumn>
-                <Container className="w-1/2">
+                <Container className="md:w-1/2">
                     <Title text="Een integratieve blik" level={2} />
                     <Paragraph>Iedere hulpvraag is uniek en vraagt om een eigen benadering. In plaats van vast te houden aan één methodiek, combineer ik inzichten uit verschillende therapeutische stromingen. Dit stelt ons in staat om te kijken naar wat voor jou op dit moment helpend is:
                     </Paragraph>
                 </Container>
-                <Container className="w-1/2">
+                <Container className="md:w-1/2">
                     <div className="flex flex-col">
                         <Bullet name="Patronen uit het verleden" description="Soms ligt het accent op het begrijpen van patronen uit je verleden." />
                         <Bullet name="Lichaamsgericht werk" description="Soms is het nodig om stil te staan bij wat je lichaam vertelt." />

@@ -1,17 +1,16 @@
 import AfspraakCard from "./afspraakCard";
-import { Reservation } from "@/types/reservatie";
+import { Afspraak } from "@/types/reservatie";
 import { getAlleAfsprakenVoorUser } from "@/lib/supabase/afsprakenQueries";
 
 
-export default async function AfsprakenLijst() {
+export default async function AfsprakenLijstVoorCurrentUser() {
     const { success, data, error } = await getAlleAfsprakenVoorUser();
 
     if (!success) {
         return <p>Probleem om afspraken op te halen. {error}</p>;
     }
 
-    const afspraken = data as Reservation[] | null;
-    // console.log("reservations : ", reservations);
+    const afspraken = data as Afspraak[] | null;
 
     if (!afspraken || afspraken.length === 0) {
         return (

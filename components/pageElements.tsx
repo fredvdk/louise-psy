@@ -11,8 +11,6 @@ interface ButtonProps {
 interface PageImageProps {
     src: string;
     alt: string;
-    width: number;
-    height: number
 }
 
 interface BulletProps {
@@ -85,15 +83,14 @@ function Decoration() {
     )
 }
 
-function PageImage({ src, alt, width, height }: PageImageProps) {
+function PageImage({ src, alt }: PageImageProps) {
     return (
-        <div className="border rounded overflow-hidden shadow-lg">
+        <div className="relative border rounded overflow-hidden shadow-lg h-full w-full aspect-square">
             <Image
                 src={src}
                 alt={alt}
-                width={width}
-                height={height}
-                className="w-full h-auto object-cover"
+                fill={true}
+                className="object-cover"
             />
         </div>
     )

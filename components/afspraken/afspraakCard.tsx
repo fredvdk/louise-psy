@@ -1,9 +1,9 @@
-import { Reservation } from "@/types/reservatie"
+import { Afspraak } from "@/types/reservatie"
 import { ConfirmButton, DeleteButton } from "./afspraakButtons"
 import { formatDate } from "@/lib/utils";
 
 type AfspraakCardProps = {
-    reservatie: Reservation,
+    reservatie: Afspraak,
     purpose: 'delete' | 'confirm'
 }
 
