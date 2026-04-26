@@ -1,16 +1,24 @@
-import { DeleteButton } from "./afspraakButtons"
-import { Reservation } from "../types/reservatie"
+
 import { describe, it, expect, vi, afterEach } from "vitest"
 import { render, screen } from "@testing-library/react"
+import { Afspraak } from "@/types/reservatie"
+import { DeleteButton } from "./afspraakButtons"
 
-const mockReservatie: Reservation = {
+const mockReservatie: Afspraak = {
     id: '1',
     date: "2026/05/01",
     time: '13:00',
     status: 'pending',
     updated_at: '',
-    reserved_for: "1"
-}
+    reserved_for: "1",
+    client_email: {
+        email: ''
+    },
+    profiles: {
+            full_name: 'Jan',
+            email: 'test@test.be'
+        }
+    }
 
 
 describe('Test buttons', () => {

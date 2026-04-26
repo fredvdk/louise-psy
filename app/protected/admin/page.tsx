@@ -5,10 +5,10 @@ async function AdminPage() {
     return (
         <div className="w-full mx-auto">
             <Suspense fallback={<div>Checking admin rights...</div>}>
-            <AdminData />
-        </Suspense>
+                <AdminData />
+            </Suspense>
         </div>
-        
+
     );
 }
 
