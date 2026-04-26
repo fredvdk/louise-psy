@@ -22,7 +22,7 @@ export async function AdminData() {
     }
 
     const {data, error } = await getAllAfsprakenVoorAdmin();
-    if (error) return (<div>error</div>);
+    if (error) return (<div>error {error}</div>);
 
     return (
         <>

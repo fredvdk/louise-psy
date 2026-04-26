@@ -24,8 +24,6 @@ export async function getAlleAfsprakenVoorUser() {
 	}
 }
 
-export function getAllPendingAfspraken() {}
-
 export async function getAllFreeAfspraken() {
 	const client = await createClient();
 	try {
@@ -50,9 +48,9 @@ export async function getAllAfsprakenVoorAdmin() {
 	try {
 		const { data, error } = await client
 			.from('reservations')
-			.select('*')
+			.select('*, profiles!reservations_reserved_for_fkey(email, full_name)')
 			.order('date');
-		if (error) throw error;
+		if (error) console.log(error);
 		return { success: true, data: data as Afspraak[], error: null };
 	} catch (error) {
 		return {

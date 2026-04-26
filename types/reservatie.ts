@@ -7,6 +7,7 @@ export type Afspraak = {
 	reserved_for: string | null;
 	notes?: string | null;
 	client_email: { email: string };
+	profiles: { email: string; full_name: string } | null;
 };
 
 export type CalendarEvent = {

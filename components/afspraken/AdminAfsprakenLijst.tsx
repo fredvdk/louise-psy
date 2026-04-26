@@ -33,7 +33,7 @@ const AdminAfsprakenLijst = ({afspraken = []}: {afspraken?: Afspraak[]}) => {
                             <th style={{ padding: '1rem', fontSize: '0.85rem', color: '#334155' }}>Client</th>
                             <th style={{ padding: '1rem', fontSize: '0.85rem', color: '#334155' }}>Datum / Tijd</th>
                             <th style={{ padding: '1rem', fontSize: '0.85rem', color: '#334155' }}>Status</th>
-                            <th style={{ padding: '1rem', fontSize: '0.85rem', color: '#334155' }}>Opmerkingen</th>
+                            <th style={{ padding: '1rem', fontSize: '0.85rem', color: '#334155' }}>Hulpvraag</th>
                             <th style={{ padding: '1rem', fontSize: '0.85rem', color: '#334155' }}>Acties</th>
                         </tr>
                     </thead>
@@ -47,7 +47,7 @@ const AdminAfsprakenLijst = ({afspraken = []}: {afspraken?: Afspraak[]}) => {
                         ) : (
                             afspraken.map((afspraak) => (
                                 <tr key={afspraak.id} style={{ borderBottom: '1px solid #e2e8f0' }}>
-                                    <td style={{ padding: '1rem', verticalAlign: 'top', fontWeight: 600 }}>Klant</td>
+                                    <td style={{ padding: '1rem', verticalAlign: 'top', fontWeight: 600 }}>{afspraak.profiles?.full_name || afspraak.client_email?.email || '-'}</td>
                                     <td style={{ padding: '1rem', verticalAlign: 'top' }}>
                                         <div>{formatDate(new Date(afspraak.date))}</div>
                                         <div style={{ marginTop: '0.25rem', color: '#64748b' }}>{afspraak.time}</div>
@@ -83,6 +83,17 @@ const AdminAfsprakenLijst = ({afspraken = []}: {afspraken?: Afspraak[]}) => {
                                             }}
                                         >
                                             Verwijder
+                                        </button>
+                                        <button style={{
+                                            padding: '0.55rem 0.9rem',
+                                            border: '1px solid #e2e8f0',
+                                            borderRadius: '0.65rem',
+                                            backgroundColor: '#fff',
+                                            color: '#111827',
+                                            cursor: 'pointer',
+                                            fontWeight: 600,
+                                        }}>
+                                            Confirm
                                         </button>
                                     </td>
                                 </tr>
