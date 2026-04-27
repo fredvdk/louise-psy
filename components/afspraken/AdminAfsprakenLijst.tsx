@@ -4,7 +4,28 @@ import { useState, useMemo } from 'react';
 import { formatDate } from '@/lib/utils';
 import { Afspraak } from '@/types/reservatie';
 import { Button } from '../ui/button';
+import { ConfirmButton, DeleteButton } from './afspraakButtons';
 
+
+const getStatusStyles = (status: string) => {
+    const baseStyles = {
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '0.35rem',
+        padding: '0.35rem 0.75rem',
+        borderRadius: '999px',
+        fontSize: '0.85rem',
+        fontWeight: 600,
+    };
+
+    const statusStyles: Record<string, Record<string, string>> = {
+        free: { backgroundColor: '#dcfce7', color: '#166534' },
+        pending: { backgroundColor: '#fef3c7', color: '#92400e' },
+        confirmed: { backgroundColor: '#dbeafe', color: '#0c4a6e' },
+    };
+
+    return { ...baseStyles, ...(statusStyles[status] || { backgroundColor: '#f1f5f9', color: '#334155' }) };
+};
 
 const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -160,37 +181,18 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
                                     <td style={{ padding: '1rem', verticalAlign: 'top', fontWeight: 600 }}>{afspraak.profiles?.full_name || afspraak.client_email?.email || '-'}</td>
                                     <td style={{ padding: '1rem', verticalAlign: 'top' }}>
                                         <div>{formatDate(new Date(afspraak.date))}</div>
-                                        <div style={{ marginTop: '0.25rem', color: '#64748b' }}>{afspraak.time}</div>
+                                        <div style={{ marginTop: '0.25rem', color: '#64748b' }}>{afspraak.time.slice(0,-3)}</div>
                                     </td>
                                     <td style={{ padding: '1rem', verticalAlign: 'top' }}>
-                                        <span
-                                            style={{
-                                                display: 'inline-flex',
-                                                alignItems: 'center',
-                                                gap: '0.35rem',
-                                                padding: '0.35rem 0.75rem',
-                                                borderRadius: '999px',
-                                                fontSize: '0.85rem',
-                                                fontWeight: 600,
-                                            }}
-                                        >
+                                        <span style={getStatusStyles(afspraak.status)}>
                                             {afspraak.status}
                                         </span>
                                     </td>
                                     <td style={{ padding: '1rem', verticalAlign: 'top', color: '#334155' }}>{afspraak.notes || '-'}</td>
                                     <td style={{ padding: '1rem', verticalAlign: 'top' }}>
-                                        <Button
-                                            variant="secondary"
-                                            onClick={() => (console.log("clicked"))}
-                                            className='m-2'
-                                        >
-                                            Verwijder
-                                        </Button>
-                                        {afspraak.status == 'pending' && <Button
-                                            variant="default"
-                                            onClick={() => { console.log("click") }}>
-                                            Confirm
-                                        </Button>}
+                                        <DeleteButton reservatie={afspraak} admin= {true} />
+                                        {afspraak.status == 'pending' && 
+                                        <ConfirmButton reservatie={afspraak} />}
                                     </td>
                                 </tr>
                             ))

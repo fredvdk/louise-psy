@@ -4,21 +4,64 @@ import { getAuthenticatedClient } from '@/lib/supabase/authQueries';
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 
-export async function updateAfspraakStatus(id: string, newStatus: string) {
+export async function setAfspraakToFree(id: string) {
 	try {
 		const { client, userId } = await getAuthenticatedClient();
+
 		const { data, error } = await client
 			.from('reservations')
 			.update({
-				status: newStatus,
+				status: 'free',
+				updated_by: userId,
+				updated_at: new Date().toISOString(),
+				reserved_for: null,
+				notes: null,
+			})
+			.eq('id', id)
+			.select();
+
+		if (error) {
+			console.log('Error details:', error);
+			throw error;
+		}
+
+		revalidatePath('/protected/reservaties');
+		revalidatePath('/protected/admin');
+		return { success: true, data: data, error: null };
+	} catch (error) {
+		console.log('Catch block error:', error);
+		return {
+			success: false,
+			data: null,
+			error:
+				error instanceof Error ? error.message : 'An unknown error occurred',
+		};
+	}
+}
+
+export async function confirmAfspraak(id: string) {
+	try {
+		const { client, userId } = await getAuthenticatedClient();
+
+		const { data, error } = await client
+			.from('reservations')
+			.update({
+				status: 'confirmed',
 				updated_by: userId,
 				updated_at: new Date().toISOString(),
 			})
-			.eq('id', id);
-		if (error) throw error;
-		revalidatePath('/protected/reservaties');
+			.eq('id', id)
+			.select();
+
+		if (error) {
+			console.log('Error details:', error);
+			throw error;
+		}
+
+		revalidatePath('/protected/admin');
 		return { success: true, data: data, error: null };
 	} catch (error) {
+		console.log('Catch block error:', error);
 		return {
 			success: false,
 			data: null,
@@ -51,16 +94,28 @@ export async function createFreeAfspraak(date: Date) {
 }
 
 export async function deleteAfspraak(id: string) {
-	const client = await createClient();
-	const { error } = await client.from('reservations').delete().eq('id', id);
-	if (error) {
-		console.log('Error while deleting : ', error);
+	try {
+		const { client } = await getAuthenticatedClient();
+
+		const { error } = await client.from('reservations').delete().eq('id', id);
+
+		if (error) throw error;
+
+		revalidatePath('/protected/admin');
+		return { success: true, error: null };
+	} catch (error) {
+		console.log('Catch block error:', error);
+		return {
+			success: false,
+			error:
+				error instanceof Error ? error.message : 'An unknown error occurred',
+		};
 	}
 }
 
-export async function updateReservationToPending(
+export async function updateAfspraakToPending(
 	reservationId: string,
-	hulpvraag: string
+	hulpvraag: string,
 ) {
 	try {
 		const { client, userId } = await getAuthenticatedClient();
@@ -88,4 +143,3 @@ export async function updateReservationToPending(
 		};
 	}
 }
-
