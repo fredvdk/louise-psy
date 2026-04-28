@@ -1,18 +1,12 @@
-import { createClient } from "@/lib/supabase/server";
 import { Message } from "./messageLine";
+import { getAllMessagesForToday } from "@/lib/supabase/messagesQueries";
 
-async function MessageList(){
-    const client = await createClient();
-    const today = new Date().toISOString().split('T')[0];
-    const response = await client.from("messages").select("*")
-        .lte("valid_from", today)
-        .gte("valid_till", today);
-    const messages = response.data;
-    console.log(messages);
+async function MessageList() {
+    const response = await getAllMessagesForToday();
 
     return (
-        messages?.map(msg => <Message key={msg.id} date={msg.valid_from} text={msg.message} />
-    )
+        response?.messages?.map(msg => <Message key={msg.id} date={msg.valid_from} text={msg.message} />
+        )
     )
 }
 

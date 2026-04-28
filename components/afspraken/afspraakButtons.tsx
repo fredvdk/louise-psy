@@ -8,7 +8,7 @@ import { isWithin14Days } from "@/lib/utils"
 
 
 
-export function DeleteButton({ reservatie, admin = false }: { reservatie: Afspraak, admin?: boolean }) {
+export function DeleteAfspraakButton({ reservatie, admin = false }: { reservatie: Afspraak, admin?: boolean }) {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
 

@@ -1,5 +1,5 @@
 import { Afspraak } from "@/types/reservatie"
-import { ConfirmButton, DeleteButton } from "./afspraakButtons"
+import { ConfirmButton, DeleteAfspraakButton } from "./afspraakButtons"
 import { formatDate } from "@/lib/utils";
 
 type AfspraakCardProps = {
@@ -36,7 +36,7 @@ export default function AfspraakCard({ reservatie, purpose }: AfspraakCardProps)
             <div className="text-sm flex justify-between items-center">
                 <div>{reservatie.client_email?.email}</div>
                 <div className="ml-auto">
-                    {purpose == "delete" ? <DeleteButton reservatie={reservatie} /> : <ConfirmButton reservatie={reservatie} />}
+                    {purpose == "delete" ? <DeleteAfspraakButton reservatie={reservatie} /> : <ConfirmButton reservatie={reservatie} />}
                 </div>
             </div>
 

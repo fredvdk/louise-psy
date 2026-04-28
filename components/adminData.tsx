@@ -2,6 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "./navbar";
 import AdminAfsprakenLijst from "./afspraken/AdminAfsprakenLijst";
 import { getAllAfsprakenVoorAdmin } from "@/lib/supabase/afsprakenQueries";
+import { getAllMessages } from "@/lib/supabase/messagesQueries";
+import AdminMessagesLijst from "./afspraken/AdminMessagesLijst";
 
 
 export async function AdminData() {
@@ -21,15 +23,21 @@ export async function AdminData() {
         )
     }
 
-    const {data, error } = await getAllAfsprakenVoorAdmin();
-    if (error) return (<div>error {error}</div>);
+    const { data, error: afsprakenError } = await getAllAfsprakenVoorAdmin();
+    if (afsprakenError) return (<div>Error getting afspraken, {afsprakenError}</div>);
+    const afspraken = data;
+
+    const { messages, error: messagesError } = await getAllMessages();
+    if (messagesError) return (<div>Error getting messages, {messagesError}</div>);
 
     return (
         <>
             <Navbar />
             <div className="h-full flex flex-col items-center justify-center">
-                <h1 className="text-2xl font-bold m-5">Admin data</h1>
-                <AdminAfsprakenLijst afspraken={data ?? undefined} />
+                <h1 className="text-2xl font-bold m-5">Afspraken</h1>
+                <AdminAfsprakenLijst afspraken={afspraken ?? undefined} />
+                <h1 className="text-2xl font-bold m-5">Messages</h1>
+                <AdminMessagesLijst messages={messages ?? undefined} />
             </div>
         </>
     );

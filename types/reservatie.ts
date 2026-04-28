@@ -40,3 +40,11 @@ export type User = {
 	email?: string;
 	full_name?: string;
 };
+
+export type Message = {
+	id: string;
+	message: string;
+	valid_from : Date;
+	valid_till : Date;
+	created_at : Date;
+}

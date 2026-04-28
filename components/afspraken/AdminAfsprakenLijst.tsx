@@ -4,27 +4,19 @@ import { useState, useMemo } from 'react';
 import { formatDate } from '@/lib/utils';
 import { Afspraak } from '@/types/reservatie';
 import { Button } from '../ui/button';
-import { ConfirmButton, DeleteButton } from './afspraakButtons';
+import { ConfirmButton, DeleteAfspraakButton } from './afspraakButtons';
 
 
-const getStatusStyles = (status: string) => {
-    const baseStyles = {
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '0.35rem',
-        padding: '0.35rem 0.75rem',
-        borderRadius: '999px',
-        fontSize: '0.85rem',
-        fontWeight: 600,
+const getStatusClasses = (status: string) => {
+    const baseClasses = 'inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold';
+
+    const statusClasses: Record<string, string> = {
+        free: 'bg-green-100 text-green-800',
+        pending: 'bg-yellow-100 text-yellow-900',
+        confirmed: 'bg-blue-100 text-blue-900',
     };
 
-    const statusStyles: Record<string, Record<string, string>> = {
-        free: { backgroundColor: '#dcfce7', color: '#166534' },
-        pending: { backgroundColor: '#fef3c7', color: '#92400e' },
-        confirmed: { backgroundColor: '#dbeafe', color: '#0c4a6e' },
-    };
-
-    return { ...baseStyles, ...(statusStyles[status] || { backgroundColor: '#f1f5f9', color: '#334155' }) };
+    return `${baseClasses} ${statusClasses[status] || 'bg-slate-100 text-slate-700'}`;
 };
 
 const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => {
@@ -86,18 +78,9 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
     };
 
     return (
-        <section style={{ padding: '1rem', fontFamily: 'Inter, system-ui, sans-serif', color: '#111' }}>
-            <div
-                style={{
-                    marginBottom: '1rem',
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: '1rem',
-                }}
-            >
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <section className="p-4 text-gray-900">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
+                <div className="flex gap-2">
                     <Button>
                         Bevestig alle pending afspraken
                     </Button>
@@ -107,31 +90,18 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
                 </div>
             </div>
 
-            <div style={{ marginBottom: '1.5rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            <div className="mb-6 flex flex-wrap gap-4">
                 <input
                     type="text"
                     placeholder="Zoeken op client of hulpvraag..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    style={{
-                        flex: '1',
-                        minWidth: '200px',
-                        padding: '0.5rem 0.75rem',
-                        border: '1px solid #e2e8f0',
-                        borderRadius: '0.5rem',
-                        fontSize: '0.875rem',
-                    }}
+                    className="flex-1 min-w-[200px] px-3 py-2 border border-slate-200 rounded text-sm"
                 />
                 <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    style={{
-                        padding: '0.5rem 0.75rem',
-                        border: '1px solid #e2e8f0',
-                        borderRadius: '0.5rem',
-                        fontSize: '0.875rem',
-                        backgroundColor: '#fff',
-                    }}
+                    className="px-3 py-2 border border-slate-200 rounded text-sm bg-white"
                 >
                     <option value="">Alle statussen</option>
                     {statuses.map((status) => (
@@ -142,57 +112,57 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
                 </select>
             </div>
 
-            <div style={{ overflowX: 'auto', backgroundColor: '#fff', border: '1px solid #e2e8f0', borderRadius: '0.75rem' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '760px' }}>
+            <div className="overflow-x-auto bg-white border border-slate-200 rounded-lg">
+                <table className="w-full border-collapse min-w-[760px]">
                     <thead>
-                        <tr style={{ backgroundColor: '#f8fafc', textAlign: 'left', borderBottom: '1px solid #e2e8f0' }}>
+                        <tr className="bg-slate-50 text-left border-b border-slate-200">
                             <th
-                                style={{ padding: '1rem', fontSize: '0.85rem', color: '#334155', cursor: 'pointer', userSelect: 'none' }}
+                                className="p-4 text-xs text-slate-700 cursor-pointer select-none"
                                 onClick={() => toggleSort('client')}
                             >
                                 Client {sortBy === 'client' && (sortOrder === 'asc' ? '↑' : '↓')}
                             </th>
                             <th
-                                style={{ padding: '1rem', fontSize: '0.85rem', color: '#334155', cursor: 'pointer', userSelect: 'none' }}
+                                className="p-4 text-xs text-slate-700 cursor-pointer select-none"
                                 onClick={() => toggleSort('date')}
                             >
                                 Datum / Tijd {sortBy === 'date' && (sortOrder === 'asc' ? '↑' : '↓')}
                             </th>
                             <th
-                                style={{ padding: '1rem', fontSize: '0.85rem', color: '#334155', cursor: 'pointer', userSelect: 'none' }}
+                                className="p-4 text-xs text-slate-700 cursor-pointer select-none"
                                 onClick={() => toggleSort('status')}
                             >
                                 Status {sortBy === 'status' && (sortOrder === 'asc' ? '↑' : '↓')}
                             </th>
-                            <th style={{ padding: '1rem', fontSize: '0.85rem', color: '#334155' }}>Hulpvraag</th>
-                            <th style={{ padding: '1rem', fontSize: '0.85rem', color: '#334155' }}>Acties</th>
+                            <th className="p-4 text-xs text-slate-700">Hulpvraag</th>
+                            <th className="p-4 text-xs text-slate-700">Acties</th>
                         </tr>
                     </thead>
                     <tbody>
                         {filteredAndSorted.length === 0 ? (
                             <tr>
-                                <td colSpan={5} style={{ padding: '1.5rem', textAlign: 'center', color: '#64748b' }}>
+                                <td colSpan={5} className="p-6 text-center text-slate-500">
                                     Geen afspraken gevonden.
                                 </td>
                             </tr>
                         ) : (
                             filteredAndSorted.map((afspraak) => (
-                                <tr key={afspraak.id} style={{ borderBottom: '1px solid #e2e8f0' }}>
-                                    <td style={{ padding: '1rem', verticalAlign: 'top', fontWeight: 600 }}>{afspraak.profiles?.full_name || afspraak.client_email?.email || '-'}</td>
-                                    <td style={{ padding: '1rem', verticalAlign: 'top' }}>
+                                <tr key={afspraak.id} className="border-b border-slate-200">
+                                    <td className="p-4 align-top font-semibold">{afspraak.profiles?.full_name || afspraak.client_email?.email || '-'}</td>
+                                    <td className="p-4 align-top">
                                         <div>{formatDate(new Date(afspraak.date))}</div>
-                                        <div style={{ marginTop: '0.25rem', color: '#64748b' }}>{afspraak.time.slice(0,-3)}</div>
+                                        <div className="mt-1 text-slate-500">{afspraak.time.slice(0, -3)}</div>
                                     </td>
-                                    <td style={{ padding: '1rem', verticalAlign: 'top' }}>
-                                        <span style={getStatusStyles(afspraak.status)}>
+                                    <td className="p-4 align-top">
+                                        <span className={getStatusClasses(afspraak.status)}>
                                             {afspraak.status}
                                         </span>
                                     </td>
-                                    <td style={{ padding: '1rem', verticalAlign: 'top', color: '#334155' }}>{afspraak.notes || '-'}</td>
-                                    <td style={{ padding: '1rem', verticalAlign: 'top' }}>
-                                        <DeleteButton reservatie={afspraak} admin= {true} />
-                                        {afspraak.status == 'pending' && 
-                                        <ConfirmButton reservatie={afspraak} />}
+                                    <td className="p-4 align-top text-slate-700">{afspraak.notes || '-'}</td>
+                                    <td className="p-4 align-top">
+                                        <DeleteAfspraakButton reservatie={afspraak} admin={true} />
+                                        {afspraak.status == 'pending' &&
+                                            <ConfirmButton reservatie={afspraak} />}
                                     </td>
                                 </tr>
                             ))

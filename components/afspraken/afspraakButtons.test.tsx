@@ -2,7 +2,7 @@
 import { describe, it, expect, vi, afterEach } from "vitest"
 import { render, screen } from "@testing-library/react"
 import { Afspraak } from "@/types/reservatie"
-import { DeleteButton } from "./afspraakButtons"
+import { DeleteAfspraakButton } from "./afspraakButtons"
 
 const mockReservatie: Afspraak = {
     id: '1',
@@ -15,10 +15,10 @@ const mockReservatie: Afspraak = {
         email: ''
     },
     profiles: {
-            full_name: 'Jan',
-            email: 'test@test.be'
-        }
+        full_name: 'Jan',
+        email: 'test@test.be'
     }
+}
 
 
 describe('Test buttons', () => {
@@ -27,13 +27,13 @@ describe('Test buttons', () => {
     })
     it('Show delete button is disabled', () => {
         vi.setSystemTime("2026/04/30");
-        render(<DeleteButton reservatie={mockReservatie} />);
+        render(<DeleteAfspraakButton reservatie={mockReservatie} />);
         expect(screen.getByRole('button')).toBeDisabled()
     });
 
-    it('Show delete button is enabled', ()=>{
+    it('Show delete button is enabled', () => {
         vi.setSystemTime("2026/04/01")
-        render(<DeleteButton reservatie={mockReservatie} />);
+        render(<DeleteAfspraakButton reservatie={mockReservatie} />);
         expect(screen.getByRole('button')).toBeEnabled()
     })
 })

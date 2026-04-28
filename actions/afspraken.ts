@@ -1,7 +1,6 @@
 'use server';
 
 import { getAuthenticatedClient } from '@/lib/supabase/authQueries';
-import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 
 export async function setAfspraakToFree(id: string) {
