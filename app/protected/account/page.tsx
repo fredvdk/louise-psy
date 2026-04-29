@@ -1,6 +1,6 @@
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
-import { AccountForm } from "@/components/account-form";
+import { AccountForm } from "@/components/account/account-form";
 
 export default function AccountPage() {
     return (

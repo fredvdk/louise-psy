@@ -1,6 +1,6 @@
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
-import { SignUpForm } from "@/components/sign-up-form";
+import { SignUpForm } from "@/components/account/sign-up-form";
 
 export default function Page() {
   return (

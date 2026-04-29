@@ -1,5 +1,5 @@
 import { Footer } from "@/components/footer";
-import { LoginForm } from "@/components/login-form";
+import { LoginForm } from "@/components/account/login-form";
 import { Navbar } from "@/components/navbar";
 
 export default function Page() {
