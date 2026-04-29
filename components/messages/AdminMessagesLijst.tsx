@@ -1,15 +1,25 @@
 'use client'
 
+import { useState } from "react";
 import { formatDate } from "@/lib/utils";
 import { Message } from "@/types/reservatie";
 import { Button } from "../ui/button";
+import { deleteMessageAction } from "@/actions/messages";
+import { NewMessageForm } from "./NewMessageForm";
 
 export default function AdminMessagesLijst({ messages }: { messages?: Message[] }) {
+    const [isFormOpen, setIsFormOpen] = useState(false);
+
+    const handleSuccess = () => {
+        window.location.reload();
+    };
+
     return (
         <section>
-            <Button className="m-2">
+            <Button className="m-2" onClick={() => setIsFormOpen(true)}>
                 Nieuwe message
             </Button>
+            <NewMessageForm open={isFormOpen} onOpenChange={setIsFormOpen} onSuccess={handleSuccess} />
             <div className="overflow-x-auto bg-white border border-slate-200 rounded-lg">
 
                 <div className="flex gap-2">
@@ -42,7 +52,7 @@ export default function AdminMessagesLijst({ messages }: { messages?: Message[] 
                                 </td>
                             </tr>
                         ) : (
-                            messages?.map((msg) => (
+                            messages?.map((msg: Message) => (
                                 <tr key={msg.id} className="border-b border-slate-200">
                                     <td className="p-4 align-top">
                                         {formatDate(new Date(msg.valid_from))}
@@ -52,7 +62,14 @@ export default function AdminMessagesLijst({ messages }: { messages?: Message[] 
                                     </td>
                                     <td className="p-4 align-top text-slate-700">{msg.message}</td>
                                     <td className="p-4 align-top">
-                                        <Button variant="destructive">
+                                        <Button
+                                            variant="destructive"
+                                            onClick={() => {
+                                                if (confirm('Are you sure you want to delete this message?')) {
+                                                    deleteMessageAction(msg.id)
+                                                }
+                                            }}
+                                        >
                                             Delete
                                         </Button>
                                     </td>

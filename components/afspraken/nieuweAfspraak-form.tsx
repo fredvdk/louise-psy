@@ -1,4 +1,4 @@
-import { getAllFreeAfspraken } from "@/lib/supabase/afsprakenQueries";
+import { getAllFreeAfspraken } from "@/lib/supabase/afsprakenDb";
 import { NieuweAfspraak } from "./nieuweAfspraak";
 import { formatDate } from "@/lib/utils";
 

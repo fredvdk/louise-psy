@@ -47,4 +47,5 @@ export type Message = {
 	valid_from : Date;
 	valid_till : Date;
 	created_at : Date;
+	created_by : string
 }

@@ -1,5 +1,4 @@
-import { AuthButton } from "@/components/auth-button";
-import { ThemeSwitcher } from "@/components/theme-switcher";
+import { AuthButton } from "@/components/account/auth-button";
 import Link from "next/link";
 import { Suspense } from "react";
 import { Menu } from "./menu";
@@ -38,8 +37,6 @@ export function Navbar({showMenu = true}) {
           <Suspense fallback={<div className="w-20 h-8" />}>
             <AuthButton />
           </Suspense>
-
-          <ThemeSwitcher />
 
           {/* Mobile menu */}
           <div className="md:hidden">

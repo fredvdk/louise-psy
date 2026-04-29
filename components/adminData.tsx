@@ -1,9 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "./navbar";
 import AdminAfsprakenLijst from "./afspraken/AdminAfsprakenLijst";
-import { getAllAfsprakenVoorAdmin } from "@/lib/supabase/afsprakenQueries";
-import { getAllMessages } from "@/lib/supabase/messagesQueries";
-import AdminMessagesLijst from "./afspraken/AdminMessagesLijst";
+import { getAllAfsprakenVoorAdmin } from "@/lib/supabase/afsprakenDb";
+import { getAllMessages } from "@/lib/supabase/messagesDb";
+import AdminMessagesLijst from "./messages/AdminMessagesLijst";
 
 
 export async function AdminData() {
@@ -27,7 +27,7 @@ export async function AdminData() {
     if (afsprakenError) return (<div>Error getting afspraken, {afsprakenError}</div>);
     const afspraken = data;
 
-    const { messages, error: messagesError } = await getAllMessages();
+    const { data: messages, error: messagesError } = await getAllMessages();
     if (messagesError) return (<div>Error getting messages, {messagesError}</div>);
 
     return (

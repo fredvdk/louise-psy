@@ -1,5 +1,5 @@
 import { Footer } from "@/components/footer";
-import MessageList from "@/components/messageList";
+import MessageList from "@/components/messages/messageList";
 import { Navbar } from "@/components/navbar";
 import { Button, Container, Decoration, PageImage, Paragraph, Title, TwoColumn } from "@/components/pageElements";
 import { Suspense } from "react";

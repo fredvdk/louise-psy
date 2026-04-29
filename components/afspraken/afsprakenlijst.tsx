@@ -1,6 +1,6 @@
 import AfspraakCard from "./afspraakCard";
 import { Afspraak } from "@/types/reservatie";
-import { getAlleAfsprakenVoorUser } from "@/lib/supabase/afsprakenQueries";
+import { getAlleAfsprakenVoorUser } from "@/lib/supabase/afsprakenDb";
 
 
 export default async function AfsprakenLijstVoorCurrentUser() {

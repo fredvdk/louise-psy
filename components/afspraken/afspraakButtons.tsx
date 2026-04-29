@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { confirmAfspraak, setAfspraakToFree, deleteAfspraak } from "@/actions/afspraken"
+import { confirmAfspraakAction, setAfspraakToFreeAction, deleteAfspraakAction } from "@/actions/afspraken"
 import { Button } from "../ui/button"
 import { Afspraak } from "../../types/reservatie"
 import { isWithin14Days } from "@/lib/utils"
@@ -25,9 +25,9 @@ export function DeleteAfspraakButton({ reservatie, admin = false }: { reservatie
 
         try {
             if (reservatie.status === 'free') {
-                await deleteAfspraak(id)
+                await deleteAfspraakAction(id)
             } else {
-                await setAfspraakToFree(id)
+                await setAfspraakToFreeAction(id)
             }
         } catch (err) {
             const message = err instanceof Error ? err.message : 'Failed to delete reservation'
@@ -59,7 +59,7 @@ export function ConfirmButton({ reservatie }: { reservatie: Afspraak }) {
         <div className="m-1">
             <Button
                 variant="default"
-                onClick={() => confirmAfspraak(reservatie.id)}
+                onClick={() => confirmAfspraakAction(reservatie.id)}
             >
                 Confirm
             </Button>
