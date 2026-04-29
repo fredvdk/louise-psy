@@ -17,7 +17,7 @@ export default function AdminMessagesLijst({ messages }: { messages?: Message[] 
     return (
         <section>
             <Button className="m-2" onClick={() => setIsFormOpen(true)}>
-                Nieuwe message
+                Nieuw bericht
             </Button>
             <NewMessageForm open={isFormOpen} onOpenChange={setIsFormOpen} onSuccess={handleSuccess} />
             <div className="overflow-x-auto bg-white border border-slate-200 rounded-lg">

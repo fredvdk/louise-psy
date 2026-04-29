@@ -47,7 +47,7 @@ export function NewMessageForm({ open, onOpenChange, onSuccess }: NewMessageForm
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Nieuwe Message</DialogTitle>
+          <DialogTitle>Nieuw bericht</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -55,7 +55,7 @@ export function NewMessageForm({ open, onOpenChange, onSuccess }: NewMessageForm
             <Label htmlFor="validFrom">Valid from</Label>
             <Input
               id="validFrom"
-              type="datetime-local"
+              type="date"
               value={validFrom}
               onChange={(e) => setValidFrom(e.target.value)}
               required
@@ -66,7 +66,7 @@ export function NewMessageForm({ open, onOpenChange, onSuccess }: NewMessageForm
             <Label htmlFor="validTill">Valid until</Label>
             <Input
               id="validTill"
-              type="datetime-local"
+              type="date"
               value={validTill}
               onChange={(e) => setValidTill(e.target.value)}
               required

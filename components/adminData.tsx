@@ -36,7 +36,7 @@ export async function AdminData() {
             <div className="h-full flex flex-col items-center justify-center">
                 <h1 className="text-2xl font-bold m-5">Afspraken</h1>
                 <AdminAfsprakenLijst afspraken={afspraken ?? undefined} />
-                <h1 className="text-2xl font-bold m-5">Messages</h1>
+                <h1 className="text-2xl font-bold m-5">Berichten</h1>
                 <AdminMessagesLijst messages={messages ?? undefined} />
             </div>
         </>

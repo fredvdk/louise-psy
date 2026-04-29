@@ -3,6 +3,7 @@ import { getAuthenticatedClient } from './authDb';
 import { createClient } from './server';
 
 function handleError(error: unknown): string {
+	console.log(error)
 	return error instanceof Error ? error.message : 'An unknown error occurred';
 }
 
@@ -48,10 +49,12 @@ export async function getAllFreeAfspraken() {
 export async function getAllAfsprakenVoorAdmin() {
 	const client = await createClient();
 	try {
+		const today = new Date().toISOString().split('T')[0];
 		const { data, error } = await client
 			.from('reservations')
 			.select('*, profiles!reservations_reserved_for_fkey(email, full_name)')
-			.order('date');
+			.gte('date', today)
+			.order('date', { ascending: true });
 		if (error) throw error;
 		return { success: true, data: data as Afspraak[], error: null };
 	} catch (error) {
@@ -111,8 +114,8 @@ export async function createFreeAfspraak(date: Date) {
 	try {
 		const { client, userId } = await getAuthenticatedClient();
 		const { data, error } = await client.from('reservations').insert({
-			date: date.getDate().toString(),
-			time: date.getTime().toString(),
+			date: date.toISOString().split('T')[0], // "YYYY-MM-DD"
+			time: date.toTimeString().split(' ')[0],
 			status: 'free',
 			updated_by: userId,
 			updated_at: new Date().toISOString(),

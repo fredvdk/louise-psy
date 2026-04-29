@@ -5,6 +5,8 @@ import { formatDate } from '@/lib/utils';
 import { Afspraak } from '@/types/reservatie';
 import { Button } from '../ui/button';
 import { ConfirmButton, DeleteAfspraakButton } from './afspraakButtons';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '../ui/dialog';
+import { createFreeAfspraakAction, confirmAllPendingAction } from '@/actions/afspraken';
 
 
 const getStatusClasses = (status: string) => {
@@ -24,6 +26,12 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
     const [statusFilter, setStatusFilter] = useState<string>('');
     const [sortBy, setSortBy] = useState<'date' | 'client' | 'status'>('date');
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+    const [openAddSlot, setOpenAddSlot] = useState(false);
+    const [selectedDate, setSelectedDate] = useState('');
+    const [selectedTime, setSelectedTime] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [isConfirmingAll, setIsConfirmingAll] = useState(false);
 
     const filteredAndSorted = useMemo(() => {
         let result = [...afspraken];
@@ -77,14 +85,54 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
         }
     };
 
+    const handleAddFreeSlot = async () => {
+        if (!selectedDate || !selectedTime) {
+            setError('Please select both date and time');
+            return;
+        }
+
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            const dateTime = new Date(`${selectedDate}T${selectedTime}`);
+            await createFreeAfspraakAction(dateTime);
+            setOpenAddSlot(false);
+            setSelectedDate('');
+            setSelectedTime('');
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'Failed to add free slot';
+            setError(message);
+            console.error('Add free slot failed:', err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleConfirmAllPending = async () => {
+        if (!confirm('Are you sure you want to confirm all pending afspraken?')) {
+            return;
+        }
+
+        setIsConfirmingAll(true);
+
+        try {
+            await confirmAllPendingAction();
+        } catch (err) {
+            console.error('Confirm all failed:', err);
+        } finally {
+            setIsConfirmingAll(false);
+        }
+    };
+
     return (
         <section className="p-4 text-gray-900">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
                 <div className="flex gap-2">
-                    <Button>
-                        Bevestig alle pending afspraken
+                    <Button onClick={handleConfirmAllPending} disabled={isConfirmingAll}>
+                        {isConfirmingAll ? 'Bevestigen...' : 'Bevestig alle pending afspraken'}
                     </Button>
-                    <Button>
+                    <Button onClick={() => setOpenAddSlot(true)}>
                         Free slots toevoegen
                     </Button>
                 </div>
@@ -170,6 +218,51 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
                     </tbody>
                 </table>
             </div>
+
+            <Dialog open={openAddSlot} onOpenChange={setOpenAddSlot}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Free slot toevoegen</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                        <div>
+                            <label className="block text-sm font-medium mb-2">Datum</label>
+                            <input
+                                type="date"
+                                value={selectedDate}
+                                onChange={(e) => setSelectedDate(e.target.value)}
+                                min={new Date().toISOString().split('T')[0]}
+                                className="w-full px-3 py-2 border border-slate-200 rounded"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium mb-2">Tijd</label>
+                            <input
+                                type="time"
+                                value={selectedTime}
+                                step={900}
+                                onChange={(e) => setSelectedTime(e.target.value)}
+                                className="w-full px-3 py-2 border border-slate-200 rounded"
+                            />
+                        </div>
+                        {error && <p className="text-red-500 text-sm">{error}</p>}
+                    </div>
+                    <DialogFooter>
+                        <Button
+                            variant="outline"
+                            onClick={() => setOpenAddSlot(false)}
+                        >
+                            Annuleren
+                        </Button>
+                        <Button
+                            onClick={handleAddFreeSlot}
+                            disabled={isLoading}
+                        >
+                            {isLoading ? 'Toevoegen...' : 'Toevoegen'}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </section>
     );
 };
