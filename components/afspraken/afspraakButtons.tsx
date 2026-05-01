@@ -59,7 +59,7 @@ export function ConfirmButton({ reservatie }: { reservatie: Afspraak }) {
         <div className="m-1">
             <Button
                 variant="default"
-                onClick={() => confirmAfspraakAction(reservatie.id)}
+                onClick={() => confirmAfspraakAction(reservatie)}
             >
                 Confirm
             </Button>

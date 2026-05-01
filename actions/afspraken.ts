@@ -1,5 +1,7 @@
 'use server';
 
+import { sendMailVoorAfspraak } from '@/lib/mailer';
+import { Afspraak } from '@/types/reservatie';
 import {
 	setAfspraakToFree,
 	confirmAfspraak,
@@ -19,10 +21,15 @@ export async function setAfspraakToFreeAction(id: string) {
 	return result;
 }
 
-export async function confirmAfspraakAction(id: string) {
-	const result = await confirmAfspraak(id);
+export async function confirmAfspraakAction(afspraak: Afspraak) {
+	const result = await confirmAfspraak(afspraak.id);
 	if (result.success) {
 		revalidatePath('/protected/admin');
+		sendMailVoorAfspraak({
+			text: 'Je afspraak is geconfirmeerd ',
+			email: 'email',
+			subject: 'test',
+		});
 	}
 	return result;
 }
@@ -50,6 +57,11 @@ export async function updateAfspraakToPendingAction(
 	const result = await updateAfspraakToPending(reservationId, hulpvraag);
 	if (result.success) {
 		revalidatePath('/protected/afspraken');
+		sendMailVoorAfspraak({
+			text: 'Je afspraak is geregistreerd.. ',
+			email: 'email',
+			subject: 'test',
+		});
 	}
 	return result;
 }
@@ -63,7 +75,7 @@ export async function confirmAllPendingAction() {
 		.eq('status', 'pending');
 
 	if (!pending || pending.length === 0) {
-		console.log("No pending afspraken")
+		console.log('No pending afspraken');
 		return { success: true, count: 0 };
 	}
 

@@ -4,14 +4,29 @@ import { useState } from "react";
 import { formatDate } from "@/lib/utils";
 import { Message } from "@/types/reservatie";
 import { Button } from "../ui/button";
+import { ConfirmationModal } from "../ui/confirmation-modal";
 import { deleteMessageAction } from "@/actions/messages";
 import { NewMessageForm } from "./NewMessageForm";
 
 export default function AdminMessagesLijst({ messages }: { messages?: Message[] }) {
     const [isFormOpen, setIsFormOpen] = useState(false);
+    const [deleteConfirm, setDeleteConfirm] = useState<{ open: boolean; messageId?: string }>({ open: false });
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const handleSuccess = () => {
         window.location.reload();
+    };
+
+    const handleDelete = async () => {
+        if (!deleteConfirm.messageId) return;
+        setIsDeleting(true);
+        try {
+            await deleteMessageAction(deleteConfirm.messageId);
+            setDeleteConfirm({ open: false });
+            handleSuccess();
+        } finally {
+            setIsDeleting(false);
+        }
     };
 
     return (
@@ -20,6 +35,17 @@ export default function AdminMessagesLijst({ messages }: { messages?: Message[] 
                 Nieuw bericht
             </Button>
             <NewMessageForm open={isFormOpen} onOpenChange={setIsFormOpen} onSuccess={handleSuccess} />
+            <ConfirmationModal
+                open={deleteConfirm.open}
+                onOpenChange={(open) => setDeleteConfirm({ ...deleteConfirm, open })}
+                title="Delete Message"
+                description="Are you sure you want to delete this message? This action cannot be undone."
+                confirmText="Delete"
+                cancelText="Cancel"
+                onConfirm={handleDelete}
+                isLoading={isDeleting}
+                isDangerous
+            />
             <div className="overflow-x-auto bg-white border border-slate-200 rounded-lg">
 
                 <div className="flex gap-2">
@@ -64,11 +90,7 @@ export default function AdminMessagesLijst({ messages }: { messages?: Message[] 
                                     <td className="p-4 align-top">
                                         <Button
                                             variant="destructive"
-                                            onClick={() => {
-                                                if (confirm('Are you sure you want to delete this message?')) {
-                                                    deleteMessageAction(msg.id)
-                                                }
-                                            }}
+                                            onClick={() => setDeleteConfirm({ open: true, messageId: msg.id })}
                                         >
                                             Delete
                                         </Button>

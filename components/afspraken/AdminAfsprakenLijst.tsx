@@ -5,6 +5,7 @@ import { formatDate } from '@/lib/utils';
 import { Afspraak } from '@/types/reservatie';
 import { Button } from '../ui/button';
 import { ConfirmButton, DeleteAfspraakButton } from './afspraakButtons';
+import { ConfirmationModal } from '../ui/confirmation-modal';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '../ui/dialog';
 import { createFreeAfspraakAction, confirmAllPendingAction } from '@/actions/afspraken';
 
@@ -32,6 +33,7 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isConfirmingAll, setIsConfirmingAll] = useState(false);
+    const [showConfirmAllModal, setShowConfirmAllModal] = useState(false);
 
     const filteredAndSorted = useMemo(() => {
         let result = [...afspraken];
@@ -110,10 +112,6 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
     };
 
     const handleConfirmAllPending = async () => {
-        if (!confirm('Are you sure you want to confirm all pending afspraken?')) {
-            return;
-        }
-
         setIsConfirmingAll(true);
 
         try {
@@ -129,7 +127,7 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
         <section className="p-4 text-gray-900">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
                 <div className="flex gap-2">
-                    <Button onClick={handleConfirmAllPending} disabled={isConfirmingAll}>
+                    <Button onClick={() => setShowConfirmAllModal(true)} disabled={isConfirmingAll}>
                         {isConfirmingAll ? 'Bevestigen...' : 'Bevestig alle pending afspraken'}
                     </Button>
                     <Button onClick={() => setOpenAddSlot(true)}>
@@ -218,6 +216,17 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
                     </tbody>
                 </table>
             </div>
+
+            <ConfirmationModal
+                open={showConfirmAllModal}
+                onOpenChange={setShowConfirmAllModal}
+                title="Confirm All Pending"
+                description="Are you sure you want to confirm all pending afspraken? This action cannot be undone."
+                confirmText="Confirm All"
+                cancelText="Cancel"
+                onConfirm={handleConfirmAllPending}
+                isLoading={isConfirmingAll}
+            />
 
             <Dialog open={openAddSlot} onOpenChange={setOpenAddSlot}>
                 <DialogContent>
