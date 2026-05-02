@@ -31,10 +31,13 @@ export async function getAlleAfsprakenVoorUser() {
 export async function getAllFreeAfspraken() {
 	const client = await createClient();
 	try {
+		const today = new Date().toISOString().split('T')[0];
 		const { data, error } = await client
 			.from('reservations')
 			.select('*')
-			.eq('status', 'free');
+			.eq('status', 'free')
+			.gte('date', today)
+			.order('date', { ascending: true });
 		if (error) throw error;
 		return { success: true, data: data as Afspraak[], error: null };
 	} catch (error) {

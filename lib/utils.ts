@@ -1,3 +1,4 @@
+import { Afspraak } from '@/types/reservatie';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -31,4 +32,8 @@ export function formatDate(date: Date) {
 		month: 'long',
 		year: 'numeric',
 	});
+}
+
+export function getAfspraakDateTime(afspraak: Afspraak | null): string |null {
+	return afspraak ? `${afspraak.date} - ${afspraak.time}` : null;
 }

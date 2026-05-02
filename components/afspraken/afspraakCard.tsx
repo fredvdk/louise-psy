@@ -36,7 +36,7 @@ export default function AfspraakCard({ reservatie, purpose }: AfspraakCardProps)
             <div className="text-sm flex justify-between items-center">
                 <div>{reservatie.client_email?.email}</div>
                 <div className="ml-auto">
-                    {purpose == "delete" ? <DeleteAfspraakButton reservatie={reservatie} /> : <ConfirmButton reservatie={reservatie} />}
+                    {purpose == "delete" ? <DeleteAfspraakButton afspraak={reservatie} /> : <ConfirmButton afspraak={reservatie} />}
                 </div>
             </div>
 

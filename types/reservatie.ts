@@ -10,6 +10,11 @@ export type Afspraak = {
 	profiles: { email: string; full_name: string } | null;
 };
 
+export function afspraakToString(afspraak: Afspraak): string {
+	const name = afspraak.profiles?.full_name || afspraak.client_email.email;
+	return `${name} - ${afspraak.date} at ${afspraak.time} (${afspraak.status})`;
+}
+
 export type CalendarEvent = {
 	id: string;
 	date: string;

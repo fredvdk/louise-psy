@@ -7,12 +7,12 @@ import { ConfirmationModal } from "../ui/confirmation-modal"
 import { Afspraak } from "../../types/reservatie"
 import { isWithin14Days } from "@/lib/utils"
 
-export function DeleteAfspraakButton({ reservatie, admin = false }: { reservatie: Afspraak, admin?: boolean }) {
+export function DeleteAfspraakButton({ afspraak, admin = false }: { afspraak: Afspraak, admin?: boolean }) {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [showConfirm, setShowConfirm] = useState(false)
 
-    const hideDeleteBtn = isWithin14Days(new Date(reservatie.date)) ? true : false;
+    const hideDeleteBtn = isWithin14Days(new Date(afspraak.date)) ? true : false;
     if (!admin && hideDeleteBtn) return null;
 
     async function handleDelete() {
@@ -20,10 +20,10 @@ export function DeleteAfspraakButton({ reservatie, admin = false }: { reservatie
         setError(null)
 
         try {
-            if (reservatie.status === 'free') {
-                await deleteAfspraakAction(reservatie.id)
+            if (afspraak.status === 'free') {
+                await deleteAfspraakAction(afspraak)
             } else {
-                await setAfspraakToFreeAction(reservatie.id)
+                await setAfspraakToFreeAction(afspraak.id)
             }
         } catch (err) {
             const message = err instanceof Error ? err.message : 'Kan afspraak niet verwijderen'
@@ -63,12 +63,12 @@ export function DeleteAfspraakButton({ reservatie, admin = false }: { reservatie
 }
 
 
-export function ConfirmButton({ reservatie }: { reservatie: Afspraak }) {
+export function ConfirmButton({ afspraak }: { afspraak: Afspraak }) {
     return (
         <div className="m-1">
             <Button
                 variant="default"
-                onClick={() => confirmAfspraakAction(reservatie)}
+                onClick={() => confirmAfspraakAction(afspraak)}
             >
                 Bevestigen
             </Button>

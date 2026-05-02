@@ -25,11 +25,10 @@ export async function confirmAfspraakAction(afspraak: Afspraak) {
 	const result = await confirmAfspraak(afspraak.id);
 	if (result.success) {
 		revalidatePath('/protected/admin');
-		sendMailVoorAfspraak({
-			text: 'Je afspraak is geconfirmeerd ',
-			email: 'email',
-			subject: 'test',
-		});
+		const emailResult = await sendMailVoorAfspraak(afspraak);
+		if (!emailResult.success) {
+			console.error('Failed to send confirmation email:', emailResult.error);
+		}
 	}
 	return result;
 }
@@ -42,26 +41,27 @@ export async function createFreeAfspraakAction(date: Date) {
 	return result;
 }
 
-export async function deleteAfspraakAction(id: string) {
-	const result = await deleteAfspraak(id);
+export async function deleteAfspraakAction(afspraak: Afspraak) {
+	const result = await deleteAfspraak(afspraak.id);
 	if (result.success) {
+		sendMailVoorAfspraak(afspraak);
 		revalidatePath('/protected/admin');
 	}
 	return result;
 }
 
 export async function updateAfspraakToPendingAction(
-	reservationId: string,
+	afspraakId: string,
 	hulpvraag: string,
 ) {
-	const result = await updateAfspraakToPending(reservationId, hulpvraag);
-	if (result.success) {
+	const result = await updateAfspraakToPending(afspraakId, hulpvraag);
+	if (result.success && result.data && result.data.length > 0) {
 		revalidatePath('/protected/afspraken');
-		sendMailVoorAfspraak({
-			text: 'Je afspraak is geregistreerd.. ',
-			email: 'email',
-			subject: 'test',
-		});
+		const afspraak = result.data[0] as Afspraak;
+		const emailResult = await sendMailVoorAfspraak(afspraak);
+		if (!emailResult.success) {
+			console.error('Failed to send pending appointment email:', emailResult.error);
+		}
 	}
 	return result;
 }

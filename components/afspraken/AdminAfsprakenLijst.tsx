@@ -206,9 +206,9 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
                                     </td>
                                     <td className="p-4 align-top text-slate-700">{afspraak.notes || '-'}</td>
                                     <td className="p-4 align-top">
-                                        <DeleteAfspraakButton reservatie={afspraak} admin={true} />
+                                        <DeleteAfspraakButton afspraak={afspraak} admin={true} />
                                         {afspraak.status == 'pending' &&
-                                            <ConfirmButton reservatie={afspraak} />}
+                                            <ConfirmButton afspraak={afspraak} />}
                                     </td>
                                 </tr>
                             ))

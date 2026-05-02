@@ -1,14 +1,24 @@
 import { getAllFreeAfspraken } from "@/lib/supabase/afsprakenDb";
 import { NieuweAfspraak } from "./nieuweAfspraak";
-import { formatDate } from "@/lib/utils";
+
 
 export async function NieuweAfspraakForm() {
     const freeSlots = await getAllFreeAfspraken();
-    const list = freeSlots.data?.map((slot) => ({ text: formatDate(new Date(slot.date)) + ' - ' + slot.time.slice(0, -3), id: slot.id }))
+
+    if (!freeSlots.success || !freeSlots.data) {
+        return (
+            <div className="my-6 md:w-1/2 mx-auto">
+                <div className="p-4 bg-red-50 border border-red-200 rounded-md">
+                    <p className="text-red-800">Er is een fout opgetreden bij het laden van beschikbare afspraken.</p>
+                    {freeSlots.error && <p className="text-sm text-red-600 mt-1">{freeSlots.error}</p>}
+                </div>
+            </div>
+        )
+    }
 
     return (
         <div className="my-6 md:w-1/2 mx-auto">
-            <NieuweAfspraak slots={list ? list : [{ text: "Geen beschikbare slots", id: '0' }]} />
+            <NieuweAfspraak afspraken={freeSlots.data} />
         </div>
     )
 }

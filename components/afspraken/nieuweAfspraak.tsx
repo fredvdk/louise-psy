@@ -5,10 +5,12 @@ import { Button } from "../ui/button"
 import { Textarea } from "../ui/textarea"
 import { Combobox, ComboboxInput, ComboboxContent, ComboboxList, ComboboxItem } from "../ui/combobox"
 import { updateAfspraakToPendingAction } from "@/actions/afspraken"
+import { Afspraak } from "@/types/reservatie"
+import { getAfspraakDateTime } from "@/lib/utils"
 
-export function NieuweAfspraak({ slots }: { slots: { text: string, id: string }[] }) {
+export function NieuweAfspraak({ afspraken }: { afspraken: Afspraak[] }) {
     const [hulpvraag, setHulpvraag] = useState("")
-    const [slot, setSlot] = useState<{ text: string, id: string } | null>(null)
+    const [slot, setSlot] = useState<Afspraak | null>(null)
     const [isLoading, setIsLoading] = useState(false)
 
     const handleSubmit = async () => {
@@ -32,16 +34,16 @@ export function NieuweAfspraak({ slots }: { slots: { text: string, id: string }[
                 onChange={(event) => setHulpvraag(event.target.value)}
                 className="min-h-[120px]"
             />
-            <Combobox value={slot?.text || ""} onOpenChange={(open) => open} onValueChange={(value) => {
-                const selected = slots.find(s => s.text === value)
+            <Combobox value={getAfspraakDateTime(slot) || ""} onOpenChange={(open) => open} onValueChange={(value) => {
+                const selected = afspraken.find(a => getAfspraakDateTime(a) === value)
                 if (selected) setSlot(selected)
             }}>
                 <ComboboxInput placeholder="Selecteer een afspraak..." />
                 <ComboboxContent>
                     <ComboboxList>
-                        {slots.map((item) => (
-                            <ComboboxItem key={item.id} value={item.text}>
-                                {item.text}
+                        {afspraken.map((afspraak) => (
+                            <ComboboxItem key={afspraak.id} value={getAfspraakDateTime(afspraak)}>
+                                {getAfspraakDateTime(afspraak)}
                             </ComboboxItem>
                         )
                         )}
