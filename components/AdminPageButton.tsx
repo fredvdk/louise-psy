@@ -7,10 +7,10 @@ export async function AdminPageBtn() {
     const role = await client.from("profiles").select("role").eq("id", user.data.user?.id).single();
 
     return (
-        (role.data?.role === 'admin') && 
+        (role.data?.role === 'admin') &&
         <div className="flex justify-center py-4">
-             <Button link='/protected/admin' text='Goto Admin page' level='secondary' />
+             <Button link='/protected/admin' text='Ga naar beheerpagina' level='secondary' />
         </div>
-       
+
     )
 }

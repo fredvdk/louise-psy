@@ -4,7 +4,7 @@ import { Suspense } from "react";
 async function AdminPage() {
     return (
         <div className="w-full mx-auto">
-            <Suspense fallback={<div>Checking admin rights...</div>}>
+            <Suspense fallback={<div>Beheerdersrechten controleren...</div>}>
                 <AdminData />
             </Suspense>
         </div>

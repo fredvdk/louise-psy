@@ -38,10 +38,10 @@ export default function AdminMessagesLijst({ messages }: { messages?: Message[] 
             <ConfirmationModal
                 open={deleteConfirm.open}
                 onOpenChange={(open) => setDeleteConfirm({ ...deleteConfirm, open })}
-                title="Delete Message"
-                description="Are you sure you want to delete this message? This action cannot be undone."
-                confirmText="Delete"
-                cancelText="Cancel"
+                title="Bericht verwijderen"
+                description="Weet u zeker dat u dit bericht wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt."
+                confirmText="Verwijderen"
+                cancelText="Annuleren"
                 onConfirm={handleDelete}
                 isLoading={isDeleting}
                 isDangerous
@@ -56,17 +56,17 @@ export default function AdminMessagesLijst({ messages }: { messages?: Message[] 
                             <th
                                 className="p-4 text-xs text-slate-700 cursor-pointer select-none"
                             >
-                                Valid from
+                                Geldig vanaf
                             </th>
                             <th
                                 className="p-4 text-xs text-slate-700 cursor-pointer select-none"
                             >
-                                Valid until
+                                Geldig tot
                             </th>
                             <th
                                 className="p-4 text-xs text-slate-700 cursor-pointer select-none"
                             >
-                                Text
+                                Tekst
                             </th>
                         </tr>
                     </thead>
@@ -74,7 +74,7 @@ export default function AdminMessagesLijst({ messages }: { messages?: Message[] 
                         {messages?.length === 0 ? (
                             <tr>
                                 <td colSpan={5} className="p-6 text-center text-slate-500">
-                                    Geen afspraken gevonden.
+                                    Geen berichten gevonden.
                                 </td>
                             </tr>
                         ) : (
@@ -92,7 +92,7 @@ export default function AdminMessagesLijst({ messages }: { messages?: Message[] 
                                             variant="destructive"
                                             onClick={() => setDeleteConfirm({ open: true, messageId: msg.id })}
                                         >
-                                            Delete
+                                            Verwijderen
                                         </Button>
                                     </td>
                                 </tr>

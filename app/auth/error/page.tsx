@@ -12,11 +12,11 @@ async function ErrorContent({
     <>
       {params?.error ? (
         <p className="text-sm text-muted-foreground">
-          Code error: {params.error}
+          Foutcode: {params.error}
         </p>
       ) : (
         <p className="text-sm text-muted-foreground">
-          An unspecified error occurred.
+          Er is een onbekende fout opgetreden.
         </p>
       )}
     </>
@@ -35,7 +35,7 @@ export default function Page({
           <Card>
             <CardHeader>
               <CardTitle className="text-2xl">
-                Sorry, something went wrong.
+                Het spijt ons, er is iets misgegaan.
               </CardTitle>
             </CardHeader>
             <CardContent>

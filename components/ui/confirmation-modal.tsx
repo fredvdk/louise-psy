@@ -21,8 +21,8 @@ export function ConfirmationModal({
   onOpenChange,
   title,
   description,
-  confirmText = 'Confirm',
-  cancelText = 'Cancel',
+  confirmText = 'Bevestigen',
+  cancelText = 'Annuleren',
   onConfirm,
   isLoading = false,
   isDangerous = false,
@@ -52,7 +52,7 @@ export function ConfirmationModal({
             onClick={handleConfirm}
             disabled={isLoading}
           >
-            {isLoading ? 'Loading...' : confirmText}
+            {isLoading ? 'Laden...' : confirmText}
           </Button>
         </DialogFooter>
       </DialogContent>

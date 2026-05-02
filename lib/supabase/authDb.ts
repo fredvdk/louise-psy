@@ -1,4 +1,4 @@
-import { createClient} from './server'
+import { createClient } from './server';
 
 export async function getAuthenticatedClient() {
 	const client = await createClient();
@@ -7,7 +7,7 @@ export async function getAuthenticatedClient() {
 		throw new Error('Unauthorized: User not authenticated');
 	}
 
-    const role = await client
+	const role = await client
 		.from('profiles')
 		.select('role')
 		.eq('id', user.data.user?.id);
@@ -30,5 +30,70 @@ export async function getUserDetails(userId: string) {
 		const message =
 			error instanceof Error ? error.message : 'An unknown error occurred';
 		return { success: false, data: null, error: message };
+	}
+}
+
+export async function getUserProfile() {
+	try {
+		const client = await createClient();
+		const { data: { user }, error: authError } = await client.auth.getUser();
+
+		if (authError) throw authError;
+		if (!user) throw new Error('No user found');
+
+		const { data, error: profileError } = await client
+			.from('profiles')
+			.select('full_name, mobile, address')
+			.eq('id', user.id)
+			.single();
+
+		if (profileError && profileError.code !== 'PGRST116') {
+			throw profileError;
+		}
+
+		return {
+			success: true,
+			data: {
+				email: user.email || '',
+				full_name: data?.full_name || '',
+				mobile: data?.mobile || '',
+				address: data?.address || '',
+			},
+			error: null,
+		};
+	} catch (error) {
+		const message =
+			error instanceof Error ? error.message : 'Failed to load user data';
+		return { success: false, data: null, error: message };
+	}
+}
+
+export async function updateUserProfile(
+	full_name: string,
+	mobile: string,
+	address: string
+) {
+	try {
+		const client = await createClient();
+		const { data: { user }, error: authError } = await client.auth.getUser();
+
+		if (authError) throw authError;
+		if (!user) throw new Error('No user found');
+
+		const { error: updateError } = await client
+			.from('profiles')
+			.upsert({
+				id: user.id,
+				full_name,
+				mobile,
+				address,
+			});
+
+		if (updateError) throw updateError;
+		return { success: true, error: null };
+	} catch (error) {
+		const message =
+			error instanceof Error ? error.message : 'An error occurred';
+		return { success: false, error: message };
 	}
 }

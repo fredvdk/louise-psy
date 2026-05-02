@@ -52,7 +52,7 @@ export function NewMessageForm({ open, onOpenChange, onSuccess }: NewMessageForm
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="validFrom">Valid from</Label>
+            <Label htmlFor="validFrom">Geldig vanaf</Label>
             <Input
               id="validFrom"
               type="date"
@@ -63,7 +63,7 @@ export function NewMessageForm({ open, onOpenChange, onSuccess }: NewMessageForm
           </div>
 
           <div>
-            <Label htmlFor="validTill">Valid until</Label>
+            <Label htmlFor="validTill">Geldig tot</Label>
             <Input
               id="validTill"
               type="date"
@@ -74,12 +74,12 @@ export function NewMessageForm({ open, onOpenChange, onSuccess }: NewMessageForm
           </div>
 
           <div>
-            <Label htmlFor="message">Message</Label>
+            <Label htmlFor="message">Bericht</Label>
             <Textarea
               id="message"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder="Enter your message here..."
+              placeholder="Voer hier uw bericht in..."
               required
               rows={4}
             />
@@ -92,10 +92,10 @@ export function NewMessageForm({ open, onOpenChange, onSuccess }: NewMessageForm
               onClick={() => onOpenChange(false)}
               disabled={isLoading}
             >
-              Cancel
+              Annuleren
             </Button>
             <Button type="submit" disabled={isLoading}>
-              {isLoading ? 'Creating...' : 'Create'}
+              {isLoading ? 'Bezig met aanmaken...' : 'Aanmaken'}
             </Button>
           </DialogFooter>
         </form>

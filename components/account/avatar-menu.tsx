@@ -75,14 +75,14 @@ export default function AvatarMenu({ avatarUrl, email }: Props) {
                         onClick={goAccount}
                         className="block w-full text-left px-4 py-2 hover:bg-gray-100"
                     >
-                        Account Settings
+                        Accountinstellingen
                     </button>
 
                     <button
                         onClick={logout}
                         className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
                     >
-                        Logout
+                        Afmelden
                     </button>
                 </div>
             )}

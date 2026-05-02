@@ -8,7 +8,7 @@ export async function NieuweAfspraakForm() {
 
     return (
         <div className="my-6 md:w-1/2 mx-auto">
-            <NieuweAfspraak slots={list ? list : [{ text: "No slots", id: '0' }]} />
+            <NieuweAfspraak slots={list ? list : [{ text: "Geen beschikbare slots", id: '0' }]} />
         </div>
     )
 }

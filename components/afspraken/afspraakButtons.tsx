@@ -26,7 +26,7 @@ export function DeleteAfspraakButton({ reservatie, admin = false }: { reservatie
                 await setAfspraakToFreeAction(reservatie.id)
             }
         } catch (err) {
-            const message = err instanceof Error ? err.message : 'Failed to delete reservation'
+            const message = err instanceof Error ? err.message : 'Kan afspraak niet verwijderen'
             setError(message)
             console.error('Delete failed:', err)
         } finally {
@@ -43,17 +43,17 @@ export function DeleteAfspraakButton({ reservatie, admin = false }: { reservatie
                     disabled={isLoading}
                     className="w-full"
                 >
-                    {isLoading ? 'Deleting...' : 'Delete'}
+                    {isLoading ? 'Bezig met verwijderen...' : 'Verwijderen'}
                 </Button>
                 {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
             </div>
             <ConfirmationModal
                 open={showConfirm}
                 onOpenChange={setShowConfirm}
-                title="Delete Reservation"
-                description="Are you sure you want to delete this reservation? This action cannot be undone."
-                confirmText="Delete"
-                cancelText="Cancel"
+                title="Afspraak verwijderen"
+                description="Weet u zeker dat u deze afspraak wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt."
+                confirmText="Verwijderen"
+                cancelText="Annuleren"
                 onConfirm={handleDelete}
                 isLoading={isLoading}
                 isDangerous
@@ -70,7 +70,7 @@ export function ConfirmButton({ reservatie }: { reservatie: Afspraak }) {
                 variant="default"
                 onClick={() => confirmAfspraakAction(reservatie)}
             >
-                Confirm
+                Bevestigen
             </Button>
         </div>
     )

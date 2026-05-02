@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
+import { getUserProfileAction, updateAccountAction } from "@/actions/account";
 
 export function AccountForm({
   className,
@@ -30,35 +30,17 @@ export function AccountForm({
   useEffect(() => {
     const loadUserData = async () => {
       try {
-        const supabase = createClient();
-        const {
-          data: { user },
-          error: authError,
-        } = await supabase.auth.getUser();
+        const result = await getUserProfileAction();
 
-        if (authError) throw authError;
-        if (!user) throw new Error("No user found");
+        if (!result.success) throw new Error(result.error || "Kan gebruikersgegevens niet laden");
 
-        setEmail(user.email || "");
-
-        const { data, error: profileError } = await supabase
-          .from("profiles")
-          .select("full_name, mobile, address")
-          .eq("id", user.id)
-          .single();
-
-        if (profileError && profileError.code !== "PGRST116") {
-          throw profileError;
-        }
-
-        if (data) {
-          setNaam(data.full_name || "");
-          setMobile(data.mobile || "");
-          setAddress(data.address || "");
-        }
+        setEmail(result.data?.email || "");
+        setNaam(result.data?.full_name || "");
+        setMobile(result.data?.mobile || "");
+        setAddress(result.data?.address || "");
       } catch (error: unknown) {
         setError(
-          error instanceof Error ? error.message : "Failed to load user data"
+          error instanceof Error ? error.message : "Kan gebruikersgegevens niet laden"
         );
       } finally {
         setIsLoadingUser(false);
@@ -70,34 +52,17 @@ export function AccountForm({
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
-    const supabase = createClient();
     setIsLoading(true);
     setError(null);
     setSuccess(null);
 
     try {
-      const {
-        data: { user },
-        error: authError,
-      } = await supabase.auth.getUser();
+      const result = await updateAccountAction(naam, mobile, address);
 
-      if (authError) throw authError;
-      if (!user) throw new Error("No user found");
-
-      const { error: updateError } = await supabase
-        .from("profiles")
-        .upsert({
-          id: user.id,
-          full_name: naam,
-          mobile : mobile,
-          address: address
-        //  updated_at: new Date().toISOString(),
-        });
-
-      if (updateError) throw updateError;
-      setSuccess("Account updated successfully!");
+      if (!result.success) throw new Error(result.error || "Er is een fout opgetreden");
+      setSuccess("Account succesvol bijgewerkt!");
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+      setError(error instanceof Error ? error.message : "Er is een fout opgetreden");
     } finally {
       setIsLoading(false);
     }
@@ -108,7 +73,7 @@ export function AccountForm({
       <div className={cn("flex flex-col gap-6", className)} {...props}>
         <Card>
           <CardContent className="pt-6">
-            <p className="text-center text-sm text-gray-500">Loading...</p>
+            <p className="text-center text-sm text-gray-500">Laden...</p>
           </CardContent>
         </Card>
       </div>

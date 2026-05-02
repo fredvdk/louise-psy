@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Frederick\\\\Documents\\\\louise-psy\" -Directory)",
+      "Bash(Select-Object Name)"
+    ]
+  }
+}

@@ -89,7 +89,7 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
 
     const handleAddFreeSlot = async () => {
         if (!selectedDate || !selectedTime) {
-            setError('Please select both date and time');
+            setError('Selecteer zowel datum als tijd');
             return;
         }
 
@@ -103,7 +103,7 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
             setSelectedDate('');
             setSelectedTime('');
         } catch (err) {
-            const message = err instanceof Error ? err.message : 'Failed to add free slot';
+            const message = err instanceof Error ? err.message : 'Kan beschikbare slot niet toevoegen';
             setError(message);
             console.error('Add free slot failed:', err);
         } finally {
@@ -220,10 +220,10 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
             <ConfirmationModal
                 open={showConfirmAllModal}
                 onOpenChange={setShowConfirmAllModal}
-                title="Confirm All Pending"
-                description="Are you sure you want to confirm all pending afspraken? This action cannot be undone."
-                confirmText="Confirm All"
-                cancelText="Cancel"
+                title="Alle afspraken bevestigen"
+                description="Weet u zeker dat u alle openstaande afspraken wilt bevestigen? Deze actie kan niet ongedaan worden gemaakt."
+                confirmText="Alles bevestigen"
+                cancelText="Annuleren"
                 onConfirm={handleConfirmAllPending}
                 isLoading={isConfirmingAll}
             />

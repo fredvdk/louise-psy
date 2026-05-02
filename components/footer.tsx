@@ -12,11 +12,11 @@ export function Footer() {
                 </p>
             </div>
             <div className="hidden md:block flex-1 mx-auto text-center">
-                &copy; 2026 Louise Psy. All rights reserved.
+                &copy; 2026 Louise Psy. Alle rechten voorbehouden.
             </div>
             <div className="flex-1 text-right">
                 <Link href="/privacy-policy" className="underline">
-                    Privacy Policy
+                    Privacybeleid
                 </Link>
             </div>
         </footer>

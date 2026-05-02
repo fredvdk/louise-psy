@@ -17,7 +17,7 @@ export async function AdminData() {
             <>
                 <Navbar />
                 <div className="h-full flex items-center justify-center">
-                    <h1 className="text-2xl font-bold">You do not have access to this page.</h1>
+                    <h1 className="text-2xl font-bold">U hebt geen toegang tot deze pagina.</h1>
                 </div>
             </>
         )
