@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Lato } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import { CookieConsent } from "@/components/cookieConsent";
 import "./globals.css";
 
 const defaultUrl = process.env.VERCEL_URL
@@ -37,6 +38,7 @@ export default function RootLayout({
           <div className="bg-background h-screen flex flex-col m-4">
             {children}
           </div>
+          <CookieConsent />
         </ThemeProvider>
       </body>
     </html>
