@@ -25,9 +25,11 @@ export async function confirmAfspraakAction(afspraak: Afspraak) {
 	const result = await confirmAfspraak(afspraak.id);
 	if (result.success) {
 		revalidatePath('/protected/admin');
-		const emailResult = await sendMailVoorAfspraak(afspraak);
-		if (!emailResult.success) {
-			console.error('Failed to send confirmation email:', emailResult.error);
+		if (result.data && result.data.length > 0) {
+			const emailResult = await sendMailVoorAfspraak(result.data[0]);
+			if (!emailResult.success) {
+				console.error('Failed to send confirmation email:', emailResult.error);
+			}
 		}
 	}
 	return result;
@@ -57,6 +59,7 @@ export async function updateAfspraakToPendingAction(
 	const result = await updateAfspraakToPending(afspraakId, hulpvraag);
 	if (result.success && result.data && result.data.length > 0) {
 		revalidatePath('/protected/afspraken');
+		console.log(result.data[0].profiles);
 		const afspraak = result.data[0] as Afspraak;
 		const emailResult = await sendMailVoorAfspraak(afspraak);
 		if (!emailResult.success) {

@@ -6,12 +6,11 @@ export type Afspraak = {
 	updated_at: string;
 	reserved_for: string | null;
 	notes?: string | null;
-	client_email: { email: string };
-	profiles: { email: string; full_name: string } | null;
+	profiles: { email: string; full_name?: string } | null;
 };
 
 export function afspraakToString(afspraak: Afspraak): string {
-	const name = afspraak.profiles?.full_name || afspraak.client_email.email;
+	const name = afspraak.profiles?.full_name || afspraak.profiles?.email;
 	return `${name} - ${afspraak.date} at ${afspraak.time} (${afspraak.status})`;
 }
 

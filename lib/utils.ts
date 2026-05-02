@@ -35,5 +35,5 @@ export function formatDate(date: Date) {
 }
 
 export function getAfspraakDateTime(afspraak: Afspraak | null): string |null {
-	return afspraak ? `${afspraak.date} - ${afspraak.time}` : null;
+	return afspraak ? `${formatDate(new Date(afspraak.date))} - ${afspraak.time.slice(0,-3)}` : null;
 }

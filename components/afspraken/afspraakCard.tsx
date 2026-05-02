@@ -13,7 +13,7 @@ export default function AfspraakCard({ reservatie, purpose }: AfspraakCardProps)
             {/* Header */}
             <div className="flex items-center justify-between mb-3">
                 <div className="text-lg font-semibold">
-                    {formatDate(new Date(reservatie.date))}
+                    📅 {formatDate(new Date(reservatie.date))}
                 </div>
                 <div className="text-lg font-semibold mb-3">
                     ⏰ {reservatie.time.slice(0, -3)}

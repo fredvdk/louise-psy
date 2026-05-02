@@ -10,25 +10,24 @@ const transporter = nodemailer.createTransport({
 	},
 });
 
-
-
 export async function sendMailVoorAfspraak(afspraak: Afspraak): Promise<{ success: boolean; error?: string }> {
 	try {
 		if (!process.env.NEXT_EMAIL_USER || !process.env.NEXT_EMAIL_PASS) {
 			return { success: false, error: 'Email configuration missing' };
 		}
 
-		if (!afspraak.client_email?.email) {
+		if (!afspraak.profiles?.email) {
 			return { success: false, error: 'Client email not provided' };
 		}
 
 		const htmlContent = generateAfspraakEmailHTML(afspraak);
+		const subject = 'Notificatie - ' + getStatusText(afspraak.status);
 
 		const result = await transporter.sendMail({
-			from: '"INFO PSY LOUISE" <info@psycholooglouise.be>',
-			to: afspraak.client_email.email,
+			from: process.env.NEXT_EMAIL_FROM,
+			to: afspraak.profiles.email,
 			bcc: 'frederick.vdkerckhove@telenet.be',
-			subject: 'Notificatie afspraak bij psycholoog Louise',
+			subject: subject,
 			html: htmlContent,
 		});
 
@@ -42,7 +41,7 @@ export async function sendMailVoorAfspraak(afspraak: Afspraak): Promise<{ succes
 }
 
 export function generateAfspraakEmailHTML(afspraak: Afspraak): string {
-	const clientName = afspraak.profiles?.full_name || afspraak.client_email.email;
+	const clientName = afspraak.profiles?.full_name || afspraak.profiles?.email;
 	const formattedDate = formatDate(new Date(afspraak.date))
 
 	const baseHTML = `
@@ -149,7 +148,7 @@ export function generateAfspraakEmailHTML(afspraak: Afspraak): string {
 			<div class="container">
 				${getHeaderByStatus(afspraak.status)}
 				<div class="content">
-					${getContentByStatus(afspraak, clientName, formattedDate)}
+					${getContentByStatus(afspraak, clientName || '', formattedDate)}
 				</div>
 				<div class="footer">
 					<p><strong>Psy Louise</strong></p>
@@ -186,7 +185,7 @@ function getContentByStatus(
 			</div>
 			<div class="detail-item">
 				<span class="detail-label">Tijd:</span>
-				<span class="detail-value">${afspraak.time}</span>
+				<span class="detail-value">${afspraak.time.slice(0,-3)}</span>
 			</div>
 			<div class="detail-item">
 				<span class="detail-label">Status:</span>
@@ -199,19 +198,19 @@ function getContentByStatus(
 		confirmed: `
 			<div class="greeting">
 				<p>Hallo ${clientName},</p>
-				<p>Goed nieuws! Uw afspraak met Psy Louise is bevestigd. We kijken ernaar uit om u te zien!</p>
+				<p>Goed nieuws! Uw afspraak met Psy Louise is bevestigd. Ik kijk ernaar uit om u te zien!</p>
 			</div>
 			${baseDetails}
-			<p>Als u vragen hebt of de afspraak moet verplaatsen, kunt u ons bereiken via email of telefoon.</p>
+			<p>Als u vragen hebt of de afspraak moet verplaatsen, kunt u mij bereiken via email of telefoon.</p>
 			<p>Tot ziens!</p>
 		`,
 		pending: `
 			<div class="greeting">
 				<p>Hallo ${clientName},</p>
-				<p>Dank u wel voor uw afspraakverzoek. We hebben uw aanvraag ontvangen en zullen deze zo spoedig mogelijk beoordelen.</p>
+				<p>Dank u wel voor uw afspraakverzoek. Ik heb uw aanvraag ontvangen en zal deze zo spoedig mogelijk beoordelen.</p>
 			</div>
 			${baseDetails}
-			<p>U ontvangt binnenkort een bevestigingsmail wanneer uw afspraak is goedgekeurd. Bedankt voor uw geduld!</p>
+			<p>U ontvangt binnenkort een bevestigingsmail wanneer uw afspraak is bevestigd. Bedankt voor uw geduld!</p>
 			<p>Met vriendelijke groeten,<br>Psy Louise</p>
 		`,
 		free: `
@@ -220,7 +219,7 @@ function getContentByStatus(
 				<p>Uw afspraak is geannuleerd. Deze afspraakslot is nu weer beschikbaar voor anderen.</p>
 			</div>
 			${baseDetails}
-			<p>Mocht u later opnieuw een afspraak willen maken, kunt u terug op ons platform boeken.</p>
+			<p>Mocht u later opnieuw een afspraak willen maken, kunt u terug op dit platform boeken.</p>
 			<p>Met vriendelijke groeten,<br>Psy Louise</p>
 		`,
 	};
@@ -231,7 +230,7 @@ function getContentByStatus(
 function getStatusText(status: 'confirmed' | 'pending' | 'free'): string {
 	const statusTexts = {
 		confirmed: 'Bevestigd',
-		pending: 'In afwachting van goedkeuring',
+		pending: 'In afwachting van bevestiging',
 		free: 'Geannuleerd',
 	};
 	return statusTexts[status];

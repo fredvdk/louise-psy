@@ -12,13 +12,13 @@ export async function getAlleAfsprakenVoorUser() {
 		const { client, userId } = await getAuthenticatedClient();
 		const { data, error } = await client
 			.from('reservations')
-			.select('*')
+			.select('*, profiles!reservations_reserved_for_fkey(email, full_name)')
 			.eq('reserved_for', userId)
 			.in('status', ['confirmed', 'pending'])
 			.order('date', { ascending: false });
 
 		if (error) throw error;
-		return { success: true, data, error: null };
+		return { success: true, data: data as Afspraak[], error: null };
 	} catch (error) {
 		return {
 			success: false,
@@ -92,10 +92,10 @@ async function updateAfspraakStatus(
 			.from('reservations')
 			.update(updates)
 			.eq('id', id)
-			.select();
+			.select('*, profiles!reservations_reserved_for_fkey(email, full_name)');
 
 		if (error) throw error;
-		return { success: true, data, error: null };
+		return { success: true, data : data as Afspraak[], error: null };
 	} catch (error) {
 		return {
 			success: false,
