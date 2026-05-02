@@ -43,7 +43,7 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
             const term = searchTerm.toLowerCase();
             result = result.filter((a) =>
                 (a.profiles?.full_name || '').toLowerCase().includes(term) ||
-                (a.client_email?.email || '').toLowerCase().includes(term) ||
+                (a.profiles?.email || '').toLowerCase().includes(term) ||
                 (a.notes || '').toLowerCase().includes(term)
             );
         }
@@ -59,8 +59,8 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
             let bVal: string | number;
 
             if (sortBy === 'client') {
-                aVal = (a.profiles?.full_name || a.client_email?.email || '').toLowerCase();
-                bVal = (b.profiles?.full_name || b.client_email?.email || '').toLowerCase();
+                aVal = (a.profiles?.full_name || a.profiles?.email || '').toLowerCase();
+                bVal = (b.profiles?.full_name || b.profiles?.email || '').toLowerCase();
             } else if (sortBy === 'status') {
                 aVal = a.status.toLowerCase();
                 bVal = b.status.toLowerCase();
@@ -194,7 +194,7 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
                         ) : (
                             filteredAndSorted.map((afspraak) => (
                                 <tr key={afspraak.id} className="border-b border-slate-200">
-                                    <td className="p-4 align-top font-semibold">{afspraak.profiles?.full_name || afspraak.client_email?.email || '-'}</td>
+                                    <td className="p-4 align-top font-semibold">{afspraak.profiles?.full_name || afspraak.profiles?.email || '-'}</td>
                                     <td className="p-4 align-top">
                                         <div>{formatDate(new Date(afspraak.date))}</div>
                                         <div className="mt-1 text-slate-500">{afspraak.time.slice(0, -3)}</div>

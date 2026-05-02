@@ -93,7 +93,6 @@ public/               # Static files and assets
 - `time`: Time string
 - `status`: 'confirmed' | 'pending' | 'free'
 - `reserved_for`: User ID or null
-- `client_email`: Email of person who booked
 - `profiles`: User profile (name, email)
 - `notes`: Optional notes
 

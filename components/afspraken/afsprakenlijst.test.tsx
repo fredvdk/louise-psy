@@ -12,7 +12,6 @@ const mockReservatie = {
     updated_at: '2026-03-01T00:00:00Z',
     reserved_for: 'user-1',
     notes: null,
-    client_email: { email: 'client@example.com' },
 };
 
 const mockReservatie2 = {
