@@ -49,6 +49,26 @@ export async function getAllFreeAfspraken() {
 	}
 }
 
+export async function getAllPendingAfspraken() {
+	const client = await createClient();
+	try{
+		const { data, error } = await client
+		.from('reservations')
+		.select('*, profiles!reservations_reserved_for_fkey(email, full_name)')
+		.eq('status', 'pending');
+
+		if (error) throw error;
+		return {success: true, data: data as Afspraak[], error: null }
+	}
+	catch(error){
+		return({
+			success: false,
+			data: null,
+			error: handleError(error)
+		})
+	}
+}
+
 export async function getAllAfsprakenVoorAdmin() {
 	const client = await createClient();
 	try {

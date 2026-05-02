@@ -23,7 +23,7 @@ export function DeleteAfspraakButton({ afspraak, admin = false }: { afspraak: Af
             if (afspraak.status === 'free') {
                 await deleteAfspraakAction(afspraak)
             } else {
-                await setAfspraakToFreeAction(afspraak.id)
+                await setAfspraakToFreeAction(afspraak)
             }
         } catch (err) {
             const message = err instanceof Error ? err.message : 'Kan afspraak niet verwijderen'

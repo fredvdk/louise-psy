@@ -8,15 +8,23 @@ import {
 	createFreeAfspraak,
 	deleteAfspraak,
 	updateAfspraakToPending,
+	getAllPendingAfspraken,
 } from '@/lib/supabase/afsprakenDb';
-import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 
-export async function setAfspraakToFreeAction(id: string) {
-	const result = await setAfspraakToFree(id);
+export async function setAfspraakToFreeAction(afspraak: Afspraak) {
+	const result = await setAfspraakToFree(afspraak.id);
 	if (result.success) {
 		revalidatePath('/protected/reservaties');
 		revalidatePath('/protected/admin');
+		if (result.data && result.data.length > 0) {
+			const temp_afspraak = afspraak;
+			temp_afspraak.status = "free";
+			const emailResult = await sendMailVoorAfspraak(temp_afspraak);
+			if (!emailResult.success) {
+				console.error('Failed to send confirmation email:', emailResult.error);
+			}
+		}
 	}
 	return result;
 }
@@ -46,7 +54,6 @@ export async function createFreeAfspraakAction(date: Date) {
 export async function deleteAfspraakAction(afspraak: Afspraak) {
 	const result = await deleteAfspraak(afspraak.id);
 	if (result.success) {
-		sendMailVoorAfspraak(afspraak);
 		revalidatePath('/protected/admin');
 	}
 	return result;
@@ -59,33 +66,26 @@ export async function updateAfspraakToPendingAction(
 	const result = await updateAfspraakToPending(afspraakId, hulpvraag);
 	if (result.success && result.data && result.data.length > 0) {
 		revalidatePath('/protected/afspraken');
-		console.log(result.data[0].profiles);
 		const afspraak = result.data[0] as Afspraak;
 		const emailResult = await sendMailVoorAfspraak(afspraak);
 		if (!emailResult.success) {
-			console.error('Failed to send pending appointment email:', emailResult.error);
+			console.error(
+				'Failed to send pending appointment email:',
+				emailResult.error,
+			);
 		}
 	}
 	return result;
 }
 
 export async function confirmAllPendingAction() {
-	const client = await createClient();
-
-	const { data: pending } = await client
-		.from('reservations')
-		.select('id')
-		.eq('status', 'pending');
-
-	if (!pending || pending.length === 0) {
-		console.log('No pending afspraken');
-		return { success: true, count: 0 };
+	const result = await getAllPendingAfspraken();
+	if (result.success && result.data != null) {
+		for (const afspraak of result.data) {
+			await confirmAfspraakAction(afspraak);
+		}
+		revalidatePath('/protected/admin');
+		return { success: true };
 	}
-
-	for (const afspraak of pending) {
-		await confirmAfspraak(afspraak.id);
-	}
-
-	revalidatePath('/protected/admin');
-	return { success: true, count: pending.length };
+	return result;
 }

@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { deleteAfspraak } from './afspraken';
+import { deleteAfspraak } from './supabase/afsprakenDb';
 
 const mockFetch = vi.fn();
 vi.stubGlobal('fetch', mockFetch);
