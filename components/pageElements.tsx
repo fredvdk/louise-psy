@@ -55,7 +55,7 @@ function Container({ children, className }: { children: ReactNode, className?: s
 function ColumnLayout({ children }: { children: ReactNode }) {
 
     return (
-        <div className="flex flex-col lg:flex-row gap-12">
+        <div className="flex flex-col md:flex-row gap-12">
             {children}
         </div>
     )
