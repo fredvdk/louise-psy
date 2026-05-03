@@ -1,7 +1,9 @@
 import { Footer } from "@/components/footer";
+import ImageSlider from "@/components/imagesSlider/imageSlider";
 import { Navbar } from "@/components/navbar";
-import { Bullet, Container, Decoration, PageImage, Paragraph, TwoColumn } from "@/components/pageElements";
+import { Bullet, Container, Decoration, Paragraph, TwoColumn } from "@/components/pageElements";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export default function PraktischPage() {
     return (
@@ -11,7 +13,12 @@ export default function PraktischPage() {
 
             <TwoColumn>
                 <Container className="md:w-1/3">
-                    <PageImage src="/image/praktijk.jpg" alt="praktijk" />
+                    <Suspense>
+                        <ImageSlider images={['/images/praktijk_1.jpg', "/images/praktijk_2.jpg", "/images/praktijk_3.jpg",
+                            "/images/praktijk_4.jpg", "/images/praktijk_5.jpg", "/images/praktijk_6.jpg"]
+                        } />
+                    </Suspense>
+
                 </Container>
 
                 <Container className="md:w-3/4">

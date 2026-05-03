@@ -1,0 +1,12 @@
+/* MySlider.module.css */
+
+:global(.swiper-pagination-bullet) {
+  background-color: #cccccc !important;
+  opacity: 1; /* Overrides default transparency */
+}
+
+/* Only the active dot */
+:global(.swiper-pagination-bullet-active) {
+  background-color: hsl(var(--primary)) !important;
+  transform: scale(1.2); /* Makes the active dot slightly larger */
+}
