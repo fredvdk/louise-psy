@@ -1,7 +1,7 @@
 import { Footer } from "@/components/footer";
 import ImageSlider from "@/components/imagesSlider/imageSlider";
 import { Navbar } from "@/components/navbar";
-import { Bullet, Container, Decoration, Paragraph, TwoColumn } from "@/components/pageElements";
+import { Bullet, Container, Decoration, Paragraph, Title, TwoColumn } from "@/components/pageElements";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -22,15 +22,19 @@ export default function PraktischPage() {
                 </Container>
 
                 <Container className="md:w-3/4">
-                    <Bullet name="In de praktijk" description="Louis Leynstraat 1, 8800 Rumbeke. De praktijkruimte is rustig en huiselijk ingericht, zonder klinische sfeer. Je vindt me op de eerste verdieping." />
-                    <Bullet name="In beweging" description="Wanneer gewenst en als de weersomstandigheden het toelaten, kunnen sessies ook al wandelend plaatsvinden.Wandelend door Rumbeke" />
-                    <Bullet name="Online" description="Voor mensen met mobiliteitsproblemen of praktische omstandigheden is online therapie mogelijk. De voorkeur gaat uit naar sessies in de praktijk." />
+                    <Title text="Praktisch" />
+                    <Paragraph>
+                        De sessies gaan door op de eerste verdieping van mijn woning in de <span className="font-bold text-primary">Louis Leynstraat 1, 8800 Rumbeke </span>. De praktijkruimte is rustig en huiselijk ingericht, zonder klinische sfeer.
+                        Wanneer gewenst en als de weersomstandigheden het toelaten, kunnen sessies ook al wandelend plaatsvinden.
+                    </Paragraph>
+                    <Paragraph>
+                        Voor mensen die omwille van mobiliteitsproblemen, praktische omstandigheden of andere redenen niet in de praktijk kunnen geraken, is <span className="font-bold text-primary">online therapie</span> mogelijk. Waar het kan, gaat de voorkeur uit naar sessies in de praktijk, omdat dit doorgaans de beste omstandigheden biedt voor het therapeutisch proces.
+                    </Paragraph>
                 </Container>
             </TwoColumn>
 
             <TwoColumn>
                 <Container className="md:w-1/3">
-                    <Paragraph> In een therapeutisch proces is continuïteit belangrijk. Regelmatige afspraken helpen om het proces op te bouwen en te verdiepen.</Paragraph>
                     <div className="w-full p-8 rounded-lg bg-primary/5 border border-primary/20">
                         <div className="text-3xl font-serif text-primary mb-2 text-center">€75</div>
                         <p className="text-foreground/70 text-center">per sessie van 50 minuten</p>
