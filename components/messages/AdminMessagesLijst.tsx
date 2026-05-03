@@ -31,9 +31,12 @@ export default function AdminMessagesLijst({ messages }: { messages?: Message[] 
 
     return (
         <section>
-            <Button className="m-2" onClick={() => setIsFormOpen(true)}>
+            <div className="flex justify-center">
+                <Button className="m-2" onClick={() => setIsFormOpen(true)}>
                 Nieuw bericht
             </Button>
+            </div>
+           
             <NewMessageForm open={isFormOpen} onOpenChange={setIsFormOpen} onSuccess={handleSuccess} />
             <ConfirmationModal
                 open={deleteConfirm.open}
@@ -48,8 +51,6 @@ export default function AdminMessagesLijst({ messages }: { messages?: Message[] 
             />
             <div className="overflow-x-auto bg-white border border-slate-200 rounded-lg">
 
-                <div className="flex gap-2">
-                </div>
                 <table className="w-full border-collapse min-w-[760px]">
                     <thead>
                         <tr className="bg-slate-50 text-left border-b border-slate-200">

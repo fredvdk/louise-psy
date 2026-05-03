@@ -46,7 +46,7 @@ function Paragraph({ children }: { children: ReactNode }) {
 
 function Container({ children, className }: { children: ReactNode, className?: string }) {
     return (
-        <div className={`space-y-8 text-left p-10 ${className || ''}`}>
+        <div className={`space-y-8 text-justify p-5 md:p-10 ${className || ''}`}>
             {children}
         </div>
     )
@@ -98,7 +98,7 @@ function PageImage({ src, alt }: PageImageProps) {
 
 function Bullet({ name, description }: BulletProps) {
     return (
-        <div className="flex items-start gap-5 p-5 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+        <div className="flex items-start gap-5 p-5 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors text-left">
             <div className="h-5 w-5 rounded-full bg-primary flex items-center justify-center flex-shrink-0 mt-0.5 text-white">
                 -
             </div>

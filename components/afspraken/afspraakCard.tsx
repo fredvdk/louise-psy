@@ -9,13 +9,13 @@ type AfspraakCardProps = {
 
 export default function AfspraakCard({ reservatie, purpose }: AfspraakCardProps) {
     return (
-        <div className="border rounded-xl p-5 shadow-sm bg-background hover:shadow-md transition">
+        <div className="border text-sm lg:text-lg rounded-xl p-5 shadow-sm bg-background hover:shadow-md transition">
             {/* Header */}
             <div className="flex items-center justify-between mb-3">
-                <div className="text-lg font-semibold">
+                <div className="font-semibold">
                     📅 {formatDate(new Date(reservatie.date))}
                 </div>
-                <div className="text-lg font-semibold mb-3">
+                <div className="font-semibold">
                     ⏰ {reservatie.time.slice(0, -3)}
                 </div>
 
@@ -34,7 +34,7 @@ export default function AfspraakCard({ reservatie, purpose }: AfspraakCardProps)
 
             {/* Actions */}
             <div className="text-sm flex justify-between items-center">
-                <div>{reservatie.profiles?.email}</div>
+                <div>{reservatie.profiles?.full_name ? reservatie.profiles?.full_name : reservatie.profiles?.email}</div>
                 <div className="ml-auto">
                     {purpose == "delete" ? <DeleteAfspraakButton afspraak={reservatie} /> : <ConfirmButton afspraak={reservatie} />}
                 </div>

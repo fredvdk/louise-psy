@@ -124,25 +124,24 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
     };
 
     return (
-        <section className="p-4 text-gray-900">
-            <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
-                <div className="flex gap-2">
+        <section className="text-gray-900">
+            <div className="mb-4 flex justify-center gap-2">
                     <Button onClick={() => setShowConfirmAllModal(true)} disabled={isConfirmingAll}>
                         {isConfirmingAll ? 'Bevestigen...' : 'Bevestig alle pending afspraken'}
                     </Button>
                     <Button onClick={() => setOpenAddSlot(true)}>
                         Free slots toevoegen
                     </Button>
-                </div>
+
             </div>
 
-            <div className="mb-6 flex flex-wrap gap-4">
+            <div className="mb-6 flex md:gap-4">
                 <input
                     type="text"
                     placeholder="Zoeken op client of hulpvraag..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="flex-1 min-w-[200px] px-3 py-2 border border-slate-200 rounded text-sm"
+                    className="flex-1 px-3 py-2 border border-slate-200 rounded text-sm"
                 />
                 <select
                     value={statusFilter}
@@ -158,10 +157,10 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
                 </select>
             </div>
 
-            <div className="overflow-x-auto bg-white border border-slate-200 rounded-lg">
-                <table className="w-full border-collapse min-w-[760px]">
+            <div className="bg-white border border-slate-200 rounded-lg overflow-x-auto">
+                <table className="w-full text-sm md:text-base min-w-max md:min-w-full">
                     <thead>
-                        <tr className="bg-slate-50 text-left border-b border-slate-200">
+                        <tr className="bg-slate-50 border-b border-slate-200">
                             <th
                                 className="p-4 text-xs text-slate-700 cursor-pointer select-none"
                                 onClick={() => toggleSort('client')}
@@ -205,7 +204,7 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
                                         </span>
                                     </td>
                                     <td className="p-4 align-top text-slate-700">{afspraak.notes || '-'}</td>
-                                    <td className="p-4 align-top">
+                                    <td className="p-4 align-top flex flex-col items-center">
                                         <DeleteAfspraakButton afspraak={afspraak} admin={true} />
                                         {afspraak.status == 'pending' &&
                                             <ConfirmButton afspraak={afspraak} />}

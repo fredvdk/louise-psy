@@ -4,6 +4,7 @@ import AdminAfsprakenLijst from "./afspraken/AdminAfsprakenLijst";
 import { getAllAfsprakenVoorAdmin } from "@/lib/supabase/afsprakenDb";
 import { getAllMessages } from "@/lib/supabase/messagesDb";
 import AdminMessagesLijst from "./messages/AdminMessagesLijst";
+import { Container, Title } from "./pageElements";
 
 
 export async function AdminData() {
@@ -33,11 +34,14 @@ export async function AdminData() {
     return (
         <>
             <Navbar />
-            <div className="h-full flex flex-col items-center justify-center">
-                <h1 className="text-2xl font-bold m-5">Afspraken</h1>
-                <AdminAfsprakenLijst afspraken={afspraken ?? undefined} />
-                <h1 className="text-2xl font-bold m-5">Berichten</h1>
-                <AdminMessagesLijst messages={messages ?? undefined} />
+            <div className="h-full flex flex-col w-full">
+                <Container>
+                    <Title text="Afspraken" />
+                    <AdminAfsprakenLijst afspraken={afspraken ?? undefined} />
+                    <Title text="Berichten" />
+                    <AdminMessagesLijst messages={messages ?? undefined} />
+                </Container>
+
             </div>
         </>
     );
