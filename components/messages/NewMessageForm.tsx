@@ -7,6 +7,7 @@ import { Textarea } from '../ui/textarea'
 import { Label } from '../ui/label'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '../ui/dialog'
 import { createMessageAction } from '@/actions/messages'
+import { toast } from 'sonner'
 
 interface NewMessageFormProps {
   open: boolean
@@ -32,12 +33,17 @@ export function NewMessageForm({ open, onOpenChange, onSuccess }: NewMessageForm
       })
 
       if (result.success) {
+        toast.success('Bericht succesvol aangemaakt!');
         setValidFrom('')
         setValidTill('')
         setMessage('')
         onOpenChange(false)
         onSuccess?.()
+      } else {
+        toast.error(result.error || 'Er is iets misgegaan');
       }
+    } catch (err) {
+      toast.error('Netwerkfout bij aanmaken bericht');
     } finally {
       setIsLoading(false)
     }
@@ -95,7 +101,7 @@ export function NewMessageForm({ open, onOpenChange, onSuccess }: NewMessageForm
               Annuleren
             </Button>
             <Button type="submit" disabled={isLoading}>
-              {isLoading ? 'Bezig met aanmaken...' : 'Aanmaken'}
+              {isLoading ? 'Bezig...' : 'Aanmaken'}
             </Button>
           </DialogFooter>
         </form>

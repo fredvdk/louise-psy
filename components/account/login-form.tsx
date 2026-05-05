@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export function LoginForm({
   className,
@@ -22,7 +23,6 @@ export function LoginForm({
 }: React.ComponentPropsWithoutRef<"div">) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -30,7 +30,6 @@ export function LoginForm({
     e.preventDefault();
     const supabase = createClient();
     setIsLoading(true);
-    setError(null);
 
     try {
       const { error } = await supabase.auth.signInWithPassword({
@@ -38,10 +37,11 @@ export function LoginForm({
         password,
       });
       if (error) throw error;
-      // Update this route to redirect to an authenticated route. The user already has an active session.
+      
+      toast.success("Succesvol ingelogd!");
       router.push("/");
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "Er is een fout opgetreden");
+    } catch (error: any) {
+      toast.error(error.message || "Inloggen mislukt");
     } finally {
       setIsLoading(false);
     }
@@ -88,7 +88,6 @@ export function LoginForm({
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
-              {error && <p className="text-sm text-red-500">{error}</p>}
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? "Bezig met inloggen..." : "Inloggen"}
               </Button>

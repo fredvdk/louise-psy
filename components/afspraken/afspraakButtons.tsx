@@ -6,10 +6,10 @@ import { Button } from "../ui/button"
 import { ConfirmationModal } from "../ui/confirmation-modal"
 import { Afspraak } from "../../types/reservatie"
 import { isWithin14Days } from "@/lib/utils"
+import { toast } from 'sonner';
 
 export function DeleteAfspraakButton({ afspraak, admin = false }: { afspraak: Afspraak, admin?: boolean }) {
     const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState<string | null>(null)
     const [showConfirm, setShowConfirm] = useState(false)
 
     const hideDeleteBtn = isWithin14Days(new Date(afspraak.date)) ? true : false;
@@ -17,7 +17,6 @@ export function DeleteAfspraakButton({ afspraak, admin = false }: { afspraak: Af
 
     async function handleDelete() {
         setIsLoading(true)
-        setError(null)
 
         try {
             if (afspraak.status === 'free') {
@@ -25,12 +24,16 @@ export function DeleteAfspraakButton({ afspraak, admin = false }: { afspraak: Af
             } else {
                 await setAfspraakToFreeAction(afspraak)
             }
+            // Success feedback
+            toast.success('Afspraak succesvol verwijderd');
         } catch (err) {
             const message = err instanceof Error ? err.message : 'Kan afspraak niet verwijderen'
-            setError(message)
+            // Toast handles the visual hierarchy and prominence
+            toast.error(message);
             console.error('Delete failed:', err)
         } finally {
             setIsLoading(false)
+            setShowConfirm(false)
         }
     }
 
@@ -45,7 +48,7 @@ export function DeleteAfspraakButton({ afspraak, admin = false }: { afspraak: Af
                 >
                     {isLoading ? 'Bezig met verwijderen...' : 'Verwijderen'}
                 </Button>
-                {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+                {/* REMOVED: {error && <p className="...">} as per issue requirement */}
             </div>
             <ConfirmationModal
                 open={showConfirm}
@@ -62,15 +65,29 @@ export function DeleteAfspraakButton({ afspraak, admin = false }: { afspraak: Af
     )
 }
 
-
 export function ConfirmButton({ afspraak }: { afspraak: Afspraak }) {
+    const [isLoading, setIsLoading] = useState(false);
+
+    async function handleConfirm() {
+        setIsLoading(true);
+        try {
+            await confirmAfspraakAction(afspraak);
+            toast.success('Afspraak succesvol bevestigd!');
+        } catch (err) {
+            toast.error('Bevestigen mislukt. Probeer het opnieuw.');
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
     return (
         <div className="m-1">
             <Button
                 variant="default"
-                onClick={() => confirmAfspraakAction(afspraak)}
+                onClick={handleConfirm}
+                disabled={isLoading}
             >
-                Bevestigen
+                {isLoading ? 'Bezig...' : 'Bevestigen'}
             </Button>
         </div>
     )
