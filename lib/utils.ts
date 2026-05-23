@@ -34,6 +34,13 @@ export function formatDate(date: Date) {
 	});
 }
 
-export function getAfspraakDateTime(afspraak: Afspraak | null): string |null {
-	return afspraak ? `${formatDate(new Date(afspraak.date))} - ${afspraak.time.slice(0,-3)}` : null;
+export function getAfspraakDateTime(afspraak: Afspraak | null): string | null {
+	return afspraak
+		? `${formatDate(new Date(afspraak.date))} - ${afspraak.time.slice(0, -3)}`
+		: null;
+}
+
+export function handleError(error: unknown): string {
+	console.log(error);
+	return error instanceof Error ? error.message : 'An unknown error occurred';
 }

@@ -1,11 +1,9 @@
 import { Afspraak } from '@/types/reservatie';
 import { getAuthenticatedClient } from './authDb';
 import { createClient } from './server';
+import { handleError } from '../utils';
 
-function handleError(error: unknown): string {
-	console.log(error)
-	return error instanceof Error ? error.message : 'An unknown error occurred';
-}
+
 
 export async function getAlleAfsprakenVoorUser() {
 	try {

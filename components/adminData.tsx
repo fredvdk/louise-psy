@@ -5,6 +5,8 @@ import { getAllAfsprakenVoorAdmin } from "@/lib/supabase/afsprakenDb";
 import { getAllMessages } from "@/lib/supabase/messagesDb";
 import AdminMessagesLijst from "./messages/AdminMessagesLijst";
 import { Container, Title } from "./pageElements";
+import { getAllClients } from "@/lib/supabase/clientenDb";
+import ClientsList from "./clients/clientenLijst";
 
 
 export async function AdminData() {
@@ -31,6 +33,9 @@ export async function AdminData() {
     const { data: messages, error: messagesError } = await getAllMessages();
     if (messagesError) return (<div>Error getting messages, {messagesError}</div>);
 
+    const { data: clients, error: clientsError } = await getAllClients();
+    if (clientsError) return (<div>Error getting clients, {clientsError}</div>);
+
     return (
         <>
             <Navbar />
@@ -40,6 +45,8 @@ export async function AdminData() {
                     <AdminAfsprakenLijst afspraken={afspraken ?? undefined} />
                     <Title text="Berichten" />
                     <AdminMessagesLijst messages={messages ?? undefined} />
+                    <Title text="Clienten" />
+                    <ClientsList clients={clients ?? undefined} />
                 </Container>
 
             </div>

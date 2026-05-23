@@ -50,7 +50,6 @@ export default function AdminMessagesLijst({ messages }: { messages?: Message[] 
                 isDangerous
             />
             <div className="overflow-x-auto bg-white border border-slate-200 rounded-lg">
-
                 <table className="w-full border-collapse min-w-[760px]">
                     <thead>
                         <tr className="bg-slate-50 text-left border-b border-slate-200">
