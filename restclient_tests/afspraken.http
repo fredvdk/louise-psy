@@ -2,12 +2,12 @@
 
 //Admin can see all reservations
 //User can only see their own reservations
-GET {{supabaseUrl}}/reservations
+GET {{supabaseUrl}}/afspraken
 Content-Type: application/json
 ###
 
 //Admin can create a reservation
-POST {{supabaseUrl}}/reservations
+POST {{supabaseUrl}}/afspraken
 Content-Type: application/json
 
 {
@@ -16,7 +16,7 @@ Content-Type: application/json
 }
 ###
 
-POST {{supabaseUrl}}/reservations/seed
+POST {{supabaseUrl}}/afspraken
 Content-Type: application/json
 
 //set the status to free, only possible for own 

@@ -1,5 +1,5 @@
-import { createClient } from '@/lib/supabase/server';
 import { jsonResponse } from '@/lib/utils';
+import { loginAdminWithEmailPassword } from '@/lib/supabase/authDb';
 
 export async function POST(request: Request) {
 	try {
@@ -7,24 +7,30 @@ export async function POST(request: Request) {
 		const { email, password } = body;
 
 		if (!email || !password) {
-			return jsonResponse({ error: 'Email and password are required' }, 400);
+			return jsonResponse(
+				{ success: false, jwt: null, error: 'Email and password are required' },
+				400,
+			);
 		}
 
-		const supabase = await createClient();
-		const { data, error } = await supabase.auth.signInWithPassword({
+		const { success, token, error } = await loginAdminWithEmailPassword(
 			email,
 			password,
-		});
+		);
 
-		if (error) {
-			return jsonResponse({ error: error.message }, 401);
+		if (!success) {
+			return jsonResponse({ success: false, jwt: null, error }, 401);
 		}
 
-		return jsonResponse(data, 200);
+		return jsonResponse({ success: true, jwt: token, error: null }, 200);
 	} catch (err) {
 		return jsonResponse(
-			{ error: err instanceof Error ? err.message : 'Invalid request' },
-			400
+			{
+				success: false,
+				jwt: null,
+				error: err instanceof Error ? err.message : 'Invalid request',
+			},
+			400,
 		);
 	}
 }

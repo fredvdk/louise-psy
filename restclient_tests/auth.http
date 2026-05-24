@@ -10,7 +10,17 @@ Content-Type: application/json
 }
 ###
 
-//Login as user
+//Login as test user, no admin, should fail
+POST {{supabaseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@test.be",
+  "password": "kinkhoorn"
+}
+###
+
+//Login as not existing user
 POST {{supabaseUrl}}/auth/login
 Content-Type: application/json
 
@@ -24,6 +34,7 @@ Content-Type: application/json
 POST {{supabaseUrl}}/auth/logout
 ###
 
+//Register does not exist
 POST {{supabaseUrl}}/auth/register
 Content-Type: application/json
 

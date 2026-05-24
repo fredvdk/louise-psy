@@ -97,3 +97,33 @@ export async function updateUserProfile(
 		return { success: false, error: message };
 	}
 }
+
+export async function loginAdminWithEmailPassword(email: string, password: string) {
+	try {
+		const client = await createClient();
+		const { data: { user, session }, error: authError } = await client.auth.signInWithPassword({
+			email,
+			password,
+		});
+
+		if (authError) throw authError;
+		if (!user) throw new Error('Authentication failed');
+
+		const { data: profile, error: profileError } = await client
+			.from('profiles')
+			.select('role')
+			.eq('id', user.id)
+			.single();
+
+		if (profileError) throw profileError;
+		if (profile?.role !== 'admin') throw new Error('Unauthorized: Admin access required');
+
+		if (!session?.access_token) throw new Error('No session token available');
+
+		return { success: true, token: session.access_token, error: null };
+	} catch (error) {
+		const message =
+			error instanceof Error ? error.message : 'Login failed';
+		return { success: false, token: null, error: message };
+	}
+}
