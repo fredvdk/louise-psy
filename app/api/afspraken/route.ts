@@ -1,6 +1,6 @@
 import { jsonResponse } from "@/lib/utils";
-import { getAllAfsprakenVoorAdmin } from '@/lib/supabase/afsprakenDb';
 import { verifyJWTToken } from '@/lib/supabase/jwtAuth';
+import { createAuthenticatedClientFromJWT } from '@/lib/supabase/server';
 import { headers } from 'next/headers';
 
 export async function GET() {
@@ -8,31 +8,26 @@ export async function GET() {
 		const headersList = await headers();
 		const authHeader = headersList.get('Authorization');
 
-		let email: string | undefined;
-
-		if (authHeader?.startsWith('Bearer ')) {
-			// JWT token from Flutter app
-			const token = authHeader.substring(7);
-			const payload = verifyJWTToken(token);
-			email = payload.email || '';
-			console.log('User email:', email);
-		} else {
-			return jsonResponse(
-				{ error: 'Unauthorized: No valid authentication provided' },
-				401,
-			);
-		}
-	
-
-		const result = await getAllAfsprakenVoorAdmin();
-
-		if (!result.success) {
-			return jsonResponse({ error: result.error }, 500);
+		if (!authHeader?.startsWith('Bearer ')) {
+			return jsonResponse({ error: 'Unauthorized' }, 401);
 		}
 
-		return jsonResponse({ success: true, afspraken: result.data }, 200);
+		const token = authHeader.substring(7);
+		await verifyJWTToken(token);
+
+		const supabase = await createAuthenticatedClientFromJWT(token);
+		const { data, error } = await supabase
+			.from('reservations')
+			.select('*, profiles!reservations_reserved_for_fkey(email, full_name)')
+			.order('date', { ascending: false });
+
+		if (error) {
+			return jsonResponse({ error: error.message }, 500);
+		}
+
+		return jsonResponse({ success: true, afspraken: data }, 200);
 	} catch (error) {
-		const message = error instanceof Error ? error.message : 'An unknown error occurred';
+		const message = error instanceof Error ? error.message : 'Unauthorized';
 		return jsonResponse({ error: message }, 401);
 	}
 }

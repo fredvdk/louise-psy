@@ -1,10 +1,10 @@
 import { handleError } from '../utils';
-import { getAuthenticatedClient } from './authDb';
+import { createClient } from './server';
 
 
 export async function getAllClients() {
 	try {
-		const { client } = await getAuthenticatedClient();
+		const client = await createClient();
 		const { data, error } = await client.from('profiles_with_auth').select('*');
         if (error) throw error;
         return { success: true, data: data, error: null };

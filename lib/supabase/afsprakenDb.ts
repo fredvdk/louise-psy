@@ -73,10 +73,12 @@ export async function getAllAfsprakenVoorAdmin() {
 		const today = new Date().toISOString().split('T')[0];
 		const { data, error } = await client
 			.from('reservations')
+			.select('*')
 			.select('*, profiles!reservations_reserved_for_fkey(email, full_name)')
 			.gte('date', today)
 			.order('date', { ascending: true });
 		if (error) throw error;
+		console.log('Retrieved afspraken for admin:', data);
 		return { success: true, data: data as Afspraak[], error: null };
 	} catch (error) {
 		return {
