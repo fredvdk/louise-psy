@@ -23,6 +23,7 @@ export async function getCalendarEvents() {
             maxResults: 2500,
             singleEvents: true,
             orderBy: 'startTime',
+            timeMin: new Date().toISOString(),
             pageToken,
         });
 
