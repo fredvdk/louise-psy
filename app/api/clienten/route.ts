@@ -1,27 +1,39 @@
-import { jsonResponse } from "@/lib/utils";
-import { getAuthenticatedClient } from "@/lib/supabase/authDb";
-import { getAllClients } from "@/lib/supabase/clientenDb";
+import { jsonResponse } from '@/lib/utils';
+import { getAllClients } from '@/lib/supabase/clientenDb';
+import { verifyJWTToken } from '@/lib/supabase/jwtAuth';
+import { headers } from 'next/headers';
 
 export async function GET() {
-  try {
-    // Get authenticated client and check role
-    const { role } = await getAuthenticatedClient();
+	try {
+		const headersList = await headers();
+		const authHeader = headersList.get('Authorization');
 
-    // Check if user is admin
-    if (!role.data || role.data.length === 0 || role.data[0]?.role !== "admin") {
-      return jsonResponse({ error: "Unauthorized: Admin access required" }, 403);
-    }
+		let email: string | undefined;
 
-    // Fetch all clients using clientenDb function
-    const result = await getAllClients();
+		if (authHeader?.startsWith('Bearer ')) {
+			// JWT token from Flutter app
+			const token = authHeader.substring(7);
+			const payload = await verifyJWTToken(token);
+			email = payload.email;
+      console.log('User email:', email);
+		} else {
+			return jsonResponse(
+				{ error: 'Unauthorized: No valid authentication provided' },
+				401,
+			);
+		}
 
-    if (!result.success) {
-      return jsonResponse({ error: result.error }, 500);
-    }
+		// Fetch all clients using clientenDb function
+		const result = await getAllClients();
 
-    return jsonResponse({ success: true, clienten: result.data }, 200);
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "An unknown error occurred";
-    return jsonResponse({ error: message }, 401);
-  }
+		if (!result.success) {
+			return jsonResponse({ error: result.error }, 500);
+		}
+
+		return jsonResponse({ success: true, clienten: result.data }, 200);
+	} catch (error) {
+		const message =
+			error instanceof Error ? error.message : 'An unknown error occurred';
+		return jsonResponse({ error: message }, 401);
+	}
 }
