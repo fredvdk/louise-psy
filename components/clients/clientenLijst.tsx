@@ -25,9 +25,7 @@ function ClientsList({ clients }: { clients: Client[] | undefined }) {
                             <th className="p-4 text-xs text-slate-700 cursor-pointer select-none">
                                 Aangemaakt
                             </th>
-                            <th className="p-4 text-xs text-slate-700 cursor-pointer select-none">
-                                Laatste inlog
-                            </th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -48,11 +46,7 @@ function ClientsList({ clients }: { clients: Client[] | undefined }) {
                                     <td className="p-4 align-top text-left text-slate-700 text-sm">
                                         {new Date(client.created_at).toLocaleDateString('nl-NL')}
                                     </td>
-                                    <td className="p-4 align-top text-left text-slate-700 text-sm">
-                                        {client.last_sign_in_at
-                                            ? new Date(client.last_sign_in_at).toLocaleDateString('nl-NL')
-                                            : '—'}
-                                    </td>
+                                
                                 </tr>
                             ))
                         )}
