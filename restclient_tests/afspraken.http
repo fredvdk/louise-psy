@@ -1,31 +1,69 @@
 @supabaseUrl = http://localhost:3000/api
 
-@jwtToken = "eyJhbGciOiJFUzI1NiIsImtpZCI6IjJhNjM1ODc3LTExNzAtNDRjYS1iMzVlLWFmNjUxZTU0YjlkYSIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2VudnRkc3hqbHJqYnNlZm9tcnpsLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiIyOTU3ZmY1MS02MTNjLTQwZjktYTRhZS1jMGUxOWYwNDhmNDgiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzc5NzQ1MTMyLCJpYXQiOjE3Nzk3NDE1MzIsImVtYWlsIjoiZnJlZGVyaWNrLnZka2VyY2tob3ZlQHRlbGVuZXQuYmUiLCJwaG9uZSI6IiIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6ImVtYWlsIiwicHJvdmlkZXJzIjpbImVtYWlsIl19LCJ1c2VyX21ldGFkYXRhIjp7ImVtYWlsIjoiZnJlZGVyaWNrLnZka2VyY2tob3ZlQHRlbGVuZXQuYmUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicGhvbmVfdmVyaWZpZWQiOmZhbHNlLCJzdWIiOiIyOTU3ZmY1MS02MTNjLTQwZjktYTRhZS1jMGUxOWYwNDhmNDgifSwicm9sZSI6ImF1dGhlbnRpY2F0ZWQiLCJhYWwiOiJhYWwxIiwiYW1yIjpbeyJtZXRob2QiOiJwYXNzd29yZCIsInRpbWVzdGFtcCI6MTc3OTc0MTUzMn1dLCJzZXNzaW9uX2lkIjoiZWI0MGY5YzUtMWM2ZC00YTg5LTlmMGEtOTA5NTdmM2ExZDY4IiwiaXNfYW5vbnltb3VzIjpmYWxzZX0.yN9kq9eiyaYV1yhi5Q65VldM_9I9xQ9s7BE3W60UKe0CdSlllAkfricBR0bVdjnfa_yNwwh6w6hrZ2pT2kAFIg"
+//Login and save JWT token
+# @name login
+POST {{supabaseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "frederick.vdkerckhove@telenet.be",
+  "password": "kinkhoorn"
+}
+###
+
 //Admin can see all reservations
 //User can only see their own reservations
 GET {{supabaseUrl}}/afspraken
-Authorization: Bearer {{jwtToken}}
+Authorization: Bearer {{login.response.body.jwt}}
 Content-Type: application/json
 ###
 
 //Admin can create a reservation
-POST {{supabaseUrl}}/afspraken
+POST {{supabaseUrl}}/afspraken/new
+Authorization: Bearer {{login.response.body.jwt}}
 Content-Type: application/json
 
 {
-  "date": "2024-07-01",
+  "date": "2026-07-01",
   "time": "10:00"
 }
 ###
 
-POST {{supabaseUrl}}/afspraken
+POST {{supabaseUrl}}/afspraken/confirm
+Authorization: Bearer {{login.response.body.jwt}}
 Content-Type: application/json
 
-//set the status to free, only possible for own 
-POST {{supabaseUrl}}/reservations/cancel
-
 {
-  "reservationId" : 5
+  "id": "44"
 }
 ###
+
+POST {{supabaseUrl}}/afspraken/cancel
+Authorization: Bearer {{login.response.body.jwt}}
+Content-Type: application/json
+
+{
+  "id": "44"
+}
+###
+
+POST {{supabaseUrl}}/afspraken/assign
+Authorization: Bearer {{login.response.body.jwt}}
+Content-Type: application/json
+
+{
+  "id": "44",
+  "reserved_for": "2957ff51-613c-40f9-a4ae-c0e19f048f48"
+}
+###
+
+POST {{supabaseUrl}}/afspraken/delete
+Authorization: Bearer {{login.response.body.jwt}}
+Content-Type: application/json
+
+{
+  "id": "44"
+}
+###
+
 

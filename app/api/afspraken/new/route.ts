@@ -7,15 +7,15 @@ import { NextRequest } from 'next/server';
 export async function POST(request: NextRequest) {
 	try {
 		const headersList = await headers();
-		const jwtcheckresult = await areHeadersFromAdmin(headersList);
+        const jwtcheckresult = await areHeadersFromAdmin(headersList);
 
 		if (jwtcheckresult !== false) {
 			const body = await request.json();
-			const { id } = body;
+			const { date, time } = body;
 
-			if (!id) {
+			if (!date || !time) {
 				return jsonResponse(
-					{ error: 'Missing required field: id' },
+					{ error: 'Missing required fields: date and time' },
 					400,
 				);
 			}
@@ -25,14 +25,13 @@ export async function POST(request: NextRequest) {
 			);
 			const { data, error } = await supabase
 				.from('reservations')
-				.update({
+				.insert({
+					date,
+					time,
 					status: 'free',
-					notes: null,
-					reserved_for: null,
 					updated_at: new Date().toISOString(),
-					updated_by: (jwtcheckresult as JWTPayload).sub,
+                    updated_by: (jwtcheckresult as JWTPayload).sub,
 				})
-				.eq('id', id)
 				.select();
 
 			if (error) {

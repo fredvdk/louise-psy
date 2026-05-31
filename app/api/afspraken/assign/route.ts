@@ -11,11 +11,11 @@ export async function POST(request: NextRequest) {
 
 		if (jwtcheckresult !== false) {
 			const body = await request.json();
-			const { id } = body;
+			const { id, reserved_for } = body;
 
-			if (!id) {
+			if (!id || !reserved_for) {
 				return jsonResponse(
-					{ error: 'Missing required field: id' },
+					{ error: 'Missing required fields: id and reserved_for' },
 					400,
 				);
 			}
@@ -26,9 +26,8 @@ export async function POST(request: NextRequest) {
 			const { data, error } = await supabase
 				.from('reservations')
 				.update({
-					status: 'free',
-					notes: null,
-					reserved_for: null,
+					status: 'confirmed',
+					reserved_for: reserved_for,
 					updated_at: new Date().toISOString(),
 					updated_by: (jwtcheckresult as JWTPayload).sub,
 				})

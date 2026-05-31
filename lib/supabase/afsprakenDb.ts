@@ -89,7 +89,7 @@ export async function getAllAfsprakenVoorAdmin() {
 	}
 }
 
-async function updateAfspraakStatus(
+export async function updateAfspraakStatus(
 	id: string,
 	status: 'free' | 'confirmed' | 'pending',
 	additionalUpdates?: Record<string, unknown>,

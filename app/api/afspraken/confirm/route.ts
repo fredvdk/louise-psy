@@ -1,66 +1,47 @@
-import { createClient } from '@/lib/supabase/server';
+import { areHeadersFromAdmin, JWTPayload } from '@/lib/supabase/jwtAuth';
+import { createAuthenticatedClientFromJWT } from '@/lib/supabase/server';
 import { jsonResponse } from '@/lib/utils';
+import { headers } from 'next/headers';
+import { NextRequest } from 'next/server';
 
-export async function POST(request: Request) {
-	//1. input validation
-	let reservatieId: string;
-
+export async function POST(request: NextRequest) {
 	try {
-		const { reservatieId: id } = await request.json();
-		reservatieId = id;
-	} catch (error: unknown) {
+		const headersList = await headers();
+		const jwtcheckresult = await areHeadersFromAdmin(headersList);
+
+		if (jwtcheckresult !== false) {
+			const body = await request.json();
+			const { id } = body;
+
+			if (!id) {
+				return jsonResponse(
+					{ error: 'Missing required field: id' },
+					400,
+				);
+			}
+
+			const supabase = await createAuthenticatedClientFromJWT(
+				headersList.get('Authorization')!.substring(7),
+			);
+			const { data, error } = await supabase
+				.from('reservations')
+				.update({
+					status: 'confirmed',
+					updated_at: new Date().toISOString(),
+					updated_by: (jwtcheckresult as JWTPayload).sub,
+				})
+				.eq('id', id)
+				.select();
+
+			if (error) {
+				return jsonResponse({ error: error.message }, 500);
+			}
+			return jsonResponse({ success: true, data }, 201);
+		} else {
+			return jsonResponse({ error: 'Unauthorized' }, 401);
+		}
+	} catch (error) {
 		const message = error instanceof Error ? error.message : 'Unknown error';
-		return jsonResponse({ error: 'Invalid input: ' + message }, 400);
+		return jsonResponse({ error: message }, 500);
 	}
-
-	if (!reservatieId || typeof reservatieId !== 'string') {
-		return jsonResponse(
-			{ error: 'Missing or invalid reservatieId' },
-			422,
-		);
-	}
-
-	//2. Auth
-	const supabase = await createClient();
-	const {
-		data: { user },
-		error: authError,
-	} = await supabase.auth.getUser();
-
-	if (!user || authError) {
-		return jsonResponse({ error: 'Unauthorized' }, 401);
-	}
-
-	const { data, error: supabaseError } = await supabase
-		.from('profiles')
-		.select('role')
-		.eq('id', user.id)
-		.single();
-
-	if (supabaseError || !data) {
-		return jsonResponse({ error: 'Failed to fetch user role' }, 500);
-	}
-
-	if (data.role !== 'admin') {
-		return jsonResponse(
-			{ error: 'Only administrators can confirm reservations' },
-			403,
-		);
-	}
-
-	//3. Confirm the reservation
-	const { error: updateError } = await supabase
-		.from('reservations')
-		.update({
-			status: 'confirmed',
-			updated_at: new Date().toISOString(),
-			updated_by: user.id,
-		})
-		.eq('id', reservatieId);
-
-	if (updateError) {
-		return jsonResponse({ error: 'Failed to confirm reservation' }, 500);
-	}
-
-	return jsonResponse({ message: 'Reservation confirmed successfully' }, 200);
 }
