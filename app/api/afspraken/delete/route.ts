@@ -1,4 +1,4 @@
-import { areHeadersFromAdmin, JWTPayload } from '@/lib/supabase/jwtAuth';
+import { areHeadersFromAdmin } from '@/lib/supabase/jwtAuth';
 import { createAuthenticatedClientFromJWT } from '@/lib/supabase/server';
 import { jsonResponse } from '@/lib/utils';
 import { headers } from 'next/headers';

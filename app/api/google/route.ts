@@ -1,19 +1,16 @@
 import { getCalendarEvents } from '@/lib/google/calendar';
-import { verifyJWTToken } from '@/lib/supabase/jwtAuth';
+import { areHeadersFromAdmin } from '@/lib/supabase/jwtAuth';
 import { NextResponse, NextRequest } from 'next/server';
 
 export async function GET(request: NextRequest) {
 	try {
-		const authHeader = request.headers.get('authorization');
-		if (!authHeader?.startsWith('Bearer ')) {
-			return NextResponse.json({ error: 'Missing or invalid authorization header' }, { status: 401 });
-		}
-
-		const token = authHeader.slice(7);
-		await verifyJWTToken(token);
+		if (await areHeadersFromAdmin(request.headers)) {
 
 		const events = await getCalendarEvents();
 		return NextResponse.json({ events });
+		} else {
+			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+		}
 	} catch (error) {
 		if (error instanceof Error && error.message.includes('Invalid or expired token')) {
 			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
