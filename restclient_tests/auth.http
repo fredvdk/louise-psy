@@ -1,4 +1,5 @@
-@supabaseUrl = http://localhost:3000/api
+# @supabaseUrl = http://localhost:3000/api
+@supabaseUrl = https://psycholooglouise.be/api
 
 //Login as admin
 POST {{supabaseUrl}}/auth/login

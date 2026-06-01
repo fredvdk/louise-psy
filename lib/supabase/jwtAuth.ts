@@ -1,5 +1,5 @@
 import { jwtVerify, createRemoteJWKSet } from 'jose';
-import { createClient } from './server';
+import { createAuthenticatedClientFromJWT } from './server';
 
 export interface JWTPayload {
 	sub: string;
@@ -27,7 +27,7 @@ export async function areHeadersFromAdmin(
 		return false;
 	}
 
-	const adminStatus = await isAdmin(payload.email);
+	const adminStatus = await isAdmin(payload, token);
 	if (!adminStatus) {
 		return false;
 	}
@@ -35,13 +35,14 @@ export async function areHeadersFromAdmin(
 	return payload;
 }
 
-async function isAdmin(email?: string): Promise<boolean> {
+async function isAdmin(jwtPayload?: JWTPayload, token?: string): Promise<boolean> {
+	const email = jwtPayload?.email;
 	if (!email) {
 		return false;
 	}
 
 	try {
-		const client = await createClient();
+		const client = await createAuthenticatedClientFromJWT(token!);
 		const { data, error } = await client
 			.from('profiles')
 			.select('*')

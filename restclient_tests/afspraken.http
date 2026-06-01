@@ -1,4 +1,5 @@
-@supabaseUrl = http://localhost:3000/api
+//@supabaseUrl = http://localhost:3000/api
+@supabaseUrl = https://psycholooglouise.be/api
 
 //Login and save JWT token
 # @name login
