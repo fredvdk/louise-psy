@@ -1,4 +1,4 @@
-//@supabaseUrl = http://localhost:3000/api
+#@supabaseUrl = http://localhost:3000/api
 @supabaseUrl = https://psycholooglouise.be/api
 
 //Login and save JWT token
@@ -11,6 +11,10 @@ Content-Type: application/json
   "password": "kinkhoorn"
 }
 ###
+//Get google calendar events
+GET {{supabaseUrl}}/google
+Authorization: Bearer {{login.response.body.jwt}}
+Content-Type: application/json
 
 //Admin can see all reservations
 //User can only see their own reservations

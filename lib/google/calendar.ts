@@ -12,6 +12,11 @@ export async function getCalendarEvents() {
     });
 
     const calendar = google.calendar({ version: 'v3', auth });
+    
+    console.log('====== Fetching calendar events =====');
+    console.log('Using calendar ID:', process.env.GOOGLE_CALENDAR_ID);
+    console.log(await calendar.calendarList.list());
+    console.log('======')
     const calendarId = process.env.GOOGLE_CALENDAR_ID ?? 'primary';
 
     const events: Array<unknown> = [];
@@ -20,7 +25,7 @@ export async function getCalendarEvents() {
     do {
         const response = await calendar.events.list({
             calendarId,
-            maxResults: 2500,
+            maxResults: 200,
             singleEvents: true,
             orderBy: 'startTime',
             timeMin: new Date().toISOString(),
