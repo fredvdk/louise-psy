@@ -20,10 +20,17 @@ export function DeleteAfspraakButton({ afspraak, admin = false }: { afspraak: Af
         setError(null)
 
         try {
+            let result
             if (afspraak.status === 'free') {
-                await deleteAfspraakAction(afspraak)
+                result = await deleteAfspraakAction(afspraak)
             } else {
-                await setAfspraakToFreeAction(afspraak)
+                result = await setAfspraakToFreeAction(afspraak)
+            }
+
+            if (!result.success) {
+                setError(result.error || 'Kan afspraak niet verwijderen')
+            } else {
+                setShowConfirm(false)
             }
         } catch (err) {
             const message = err instanceof Error ? err.message : 'Kan afspraak niet verwijderen'
@@ -64,14 +71,38 @@ export function DeleteAfspraakButton({ afspraak, admin = false }: { afspraak: Af
 
 
 export function ConfirmButton({ afspraak }: { afspraak: Afspraak }) {
+    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+
+    async function handleConfirm() {
+        setIsLoading(true)
+        setError(null)
+
+        try {
+            const result = await confirmAfspraakAction(afspraak)
+            if (!result.success) {
+                setError(result.error || 'Kan afspraak niet bevestigen')
+            }
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'Kan afspraak niet bevestigen'
+            setError(message)
+            console.error('Confirm failed:', err)
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
     return (
         <div className="m-1">
             <Button
                 variant="default"
-                onClick={() => confirmAfspraakAction(afspraak)}
+                onClick={handleConfirm}
+                disabled={isLoading}
+                className="w-full"
             >
-                Bevestigen
+                {isLoading ? 'Bezig met bevestigen...' : 'Bevestigen'}
             </Button>
+            {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
         </div>
     )
 }

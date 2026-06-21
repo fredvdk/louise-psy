@@ -10,7 +10,9 @@ const transporter = nodemailer.createTransport({
 	},
 });
 
-export async function sendMailVoorAfspraak(afspraak: Afspraak): Promise<{ success: boolean; error?: string }> {
+export async function sendMailVoorAfspraak(
+	afspraak: Afspraak,
+): Promise<{ success: boolean; error?: string }> {
 	try {
 		if (!process.env.NEXT_EMAIL_USER || !process.env.NEXT_EMAIL_PASS) {
 			return { success: false, error: 'Email configuration missing' };
@@ -34,7 +36,8 @@ export async function sendMailVoorAfspraak(afspraak: Afspraak): Promise<{ succes
 		console.log('Email sent successfully', result.messageId);
 		return { success: true };
 	} catch (error) {
-		const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+		const errorMessage =
+			error instanceof Error ? error.message : 'Unknown error occurred';
 		console.error('Email sending failed:', errorMessage);
 		return { success: false, error: errorMessage };
 	}
@@ -42,7 +45,7 @@ export async function sendMailVoorAfspraak(afspraak: Afspraak): Promise<{ succes
 
 export function generateAfspraakEmailHTML(afspraak: Afspraak): string {
 	const clientName = afspraak.profiles?.full_name || afspraak.profiles?.email;
-	const formattedDate = formatDate(new Date(afspraak.date))
+	const formattedDate = formatDate(new Date(afspraak.date));
 
 	const baseHTML = `
 		<!DOCTYPE html>
@@ -166,7 +169,8 @@ export function generateAfspraakEmailHTML(afspraak: Afspraak): string {
 function getHeaderByStatus(status: 'confirmed' | 'pending' | 'free'): string {
 	const headers = {
 		confirmed: '<div class="header"><h1>✓ Afspraak Bevestigd</h1></div>',
-		pending: '<div class="header"><h1>⏳ Afspraak Aanvraag Ontvangen</h1></div>',
+		pending:
+			'<div class="header"><h1>⏳ Afspraak Aanvraag Ontvangen</h1></div>',
 		free: '<div class="header"><h1>✕ Afspraak Geannuleerd</h1></div>',
 	};
 	return headers[status];
@@ -175,7 +179,7 @@ function getHeaderByStatus(status: 'confirmed' | 'pending' | 'free'): string {
 function getContentByStatus(
 	afspraak: Afspraak,
 	clientName: string,
-	formattedDate: string
+	formattedDate: string,
 ): string {
 	const baseDetails = `
 		<div class="details-box">
@@ -185,7 +189,7 @@ function getContentByStatus(
 			</div>
 			<div class="detail-item">
 				<span class="detail-label">Tijd:</span>
-				<span class="detail-value">${afspraak.time.slice(0,-3)}</span>
+				<span class="detail-value">${afspraak.starttime.slice(0, -3)}</span>
 			</div>
 			<div class="detail-item">
 				<span class="detail-label">Status:</span>

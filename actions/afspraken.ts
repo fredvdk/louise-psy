@@ -1,91 +1,80 @@
 'use server';
 
-import { sendMailVoorAfspraak } from '@/lib/mailer';
 import { Afspraak } from '@/types/reservatie';
-import {
-	setAfspraakToFree,
-	confirmAfspraak,
-	createFreeAfspraak,
-	deleteAfspraak,
-	updateAfspraakToPending,
-	getAllPendingAfspraken,
-} from '@/lib/supabase/afsprakenDb';
+import { createClient } from '@/lib/supabase/server';
+import { updateGoogleEvent } from '@/lib/google/calendar';
+import { sendMailVoorAfspraak } from '@/lib/mailer';
 import { revalidatePath } from 'next/cache';
 
-export async function setAfspraakToFreeAction(afspraak: Afspraak) {
-	const result = await setAfspraakToFree(afspraak.id);
-	if (result.success) {
-		revalidatePath('/protected/reservaties');
-		revalidatePath('/protected/admin');
-		if (result.data && result.data.length > 0) {
-			const temp_afspraak = afspraak;
-			temp_afspraak.status = "free";
-			const emailResult = await sendMailVoorAfspraak(temp_afspraak);
-			if (!emailResult.success) {
-				console.error('Failed to send confirmation email:', emailResult.error);
-			}
-		}
-	}
-	return result;
+
+export async function updateAfspraakWithUsernameAction(
+	afspraakId: string,
+	afspraak: Afspraak,
+) {
+	const supabase = await createClient();
+	const { data: { user } } = await supabase.auth.getUser();
+	const username = user?.email || user?.user_metadata?.full_name || 'Unknown';
+
+	return await updateGoogleEvent(afspraakId, afspraak, username);
 }
 
 export async function confirmAfspraakAction(afspraak: Afspraak) {
-	const result = await confirmAfspraak(afspraak.id);
-	if (result.success) {
-		revalidatePath('/protected/admin');
-		if (result.data && result.data.length > 0) {
-			const emailResult = await sendMailVoorAfspraak(result.data[0]);
-			if (!emailResult.success) {
-				console.error('Failed to send confirmation email:', emailResult.error);
-			}
+	try {
+		const updatedAfspraak = { ...afspraak, status: 'confirmed' as const };
+		const result = await updateGoogleEvent(afspraak.id, updatedAfspraak);
+
+		if (result.error) {
+			return { success: false, error: result.error };
 		}
+
+		await sendMailVoorAfspraak(updatedAfspraak);
+		revalidatePath('/protected/afspraken');
+
+		return { success: true };
+	} catch (err) {
+		const message = err instanceof Error ? err.message : 'Kan afspraak niet bevestigen';
+		console.error('confirmAfspraakAction error:', err);
+		return { success: false, error: message };
 	}
-	return result;
 }
 
-export async function createFreeAfspraakAction(date: Date) {
-	const result = await createFreeAfspraak(date);
-	if (result.success) {
-		revalidatePath('/protected/admin');
+export async function setAfspraakToFreeAction(afspraak: Afspraak) {
+	try {
+		const updatedAfspraak = { ...afspraak, status: 'free' as const, reserved_for: null };
+		const result = await updateGoogleEvent(afspraak.id, updatedAfspraak);
+
+		if (result.error) {
+			return { success: false, error: result.error };
+		}
+
+		await sendMailVoorAfspraak(updatedAfspraak);
+		revalidatePath('/protected/afspraken');
+
+		return { success: true };
+	} catch (err) {
+		const message = err instanceof Error ? err.message : 'Kan afspraak niet vrijmaken';
+		console.error('setAfspraakToFreeAction error:', err);
+		return { success: false, error: message };
 	}
-	return result;
 }
 
 export async function deleteAfspraakAction(afspraak: Afspraak) {
-	const result = await deleteAfspraak(afspraak.id);
-	if (result.success) {
-		revalidatePath('/protected/admin');
-	}
-	return result;
-}
+	try {
+		// For now, treat delete same as setting to free since we're using Google Calendar
+		// (permanent deletion would require using Google Calendar API deleteEvent)
+		const updatedAfspraak = { ...afspraak, status: 'free' as const, reserved_for: null };
+		const result = await updateGoogleEvent(afspraak.id, updatedAfspraak);
 
-export async function updateAfspraakToPendingAction(
-	afspraakId: string,
-	hulpvraag: string,
-) {
-	const result = await updateAfspraakToPending(afspraakId, hulpvraag);
-	if (result.success && result.data && result.data.length > 0) {
+		if (result.error) {
+			return { success: false, error: result.error };
+		}
+
 		revalidatePath('/protected/afspraken');
-		const afspraak = result.data[0] as Afspraak;
-		const emailResult = await sendMailVoorAfspraak(afspraak);
-		if (!emailResult.success) {
-			console.error(
-				'Failed to send pending appointment email:',
-				emailResult.error,
-			);
-		}
-	}
-	return result;
-}
 
-export async function confirmAllPendingAction() {
-	const result = await getAllPendingAfspraken();
-	if (result.success && result.data != null) {
-		for (const afspraak of result.data) {
-			await confirmAfspraakAction(afspraak);
-		}
-		revalidatePath('/protected/admin');
 		return { success: true };
+	} catch (err) {
+		const message = err instanceof Error ? err.message : 'Kan afspraak niet verwijderen';
+		console.error('deleteAfspraakAction error:', err);
+		return { success: false, error: message };
 	}
-	return result;
 }

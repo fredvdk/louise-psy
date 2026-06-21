@@ -25,8 +25,17 @@ export function jsonResponse(data: unknown, status: number = 200): Response {
 	});
 }
 
-export function formatDate(date: Date) {
-	return date.toLocaleDateString('nl-NL', {
+export function formatDate(date: Date | string) {
+	let dateObj: Date;
+
+	if (typeof date === 'string') {
+		const [year, month, day] = date.split('-').map(Number);
+		dateObj = new Date(year, month - 1, day);
+	} else {
+		dateObj = date;
+	}
+
+	return dateObj.toLocaleDateString('nl-NL', {
 		weekday: 'long',
 		day: 'numeric',
 		month: 'long',
@@ -36,7 +45,7 @@ export function formatDate(date: Date) {
 
 export function getAfspraakDateTime(afspraak: Afspraak | null): string | null {
 	return afspraak
-		? `${formatDate(new Date(afspraak.date))} - ${afspraak.time.slice(0, -3)}`
+		? `${formatDate(afspraak.date)} - ${afspraak.starttime}`
 		: null;
 }
 

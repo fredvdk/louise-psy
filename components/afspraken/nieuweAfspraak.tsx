@@ -4,9 +4,9 @@ import { useState } from "react"
 import { Button } from "../ui/button"
 import { Textarea } from "../ui/textarea"
 import { Combobox, ComboboxInput, ComboboxContent, ComboboxList, ComboboxItem } from "../ui/combobox"
-import { updateAfspraakToPendingAction } from "@/actions/afspraken"
 import { Afspraak } from "@/types/reservatie"
 import { getAfspraakDateTime } from "@/lib/utils"
+import { updateAfspraakWithUsernameAction } from "@/actions/afspraken"
 
 export function NieuweAfspraak({ afspraken }: { afspraken: Afspraak[] }) {
     const [hulpvraag, setHulpvraag] = useState("")
@@ -17,7 +17,7 @@ export function NieuweAfspraak({ afspraken }: { afspraken: Afspraak[] }) {
         if (!slot) return
         setIsLoading(true)
         try {
-            await updateAfspraakToPendingAction(slot.id, hulpvraag)
+            await updateAfspraakWithUsernameAction(slot.id, { ...slot, notes: hulpvraag })
             setHulpvraag("")
             setSlot(null)
         } finally {

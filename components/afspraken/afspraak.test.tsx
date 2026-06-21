@@ -14,7 +14,7 @@ vi.mock('@/lib/utils', async (importOriginal) => {
 const mockReservatie: Afspraak = {
     id: 'abc-123',
     date: '2026-05-10',
-    time: '10:30:00',
+    starttime: '10:30:00',
     status: 'confirmed' as const,
     updated_at: '2026-03-01T00:00:00Z',
     reserved_for: 'user-1',

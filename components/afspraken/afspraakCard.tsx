@@ -16,7 +16,7 @@ export default function AfspraakCard({ reservatie, purpose }: AfspraakCardProps)
                     📅 {formatDate(new Date(reservatie.date))}
                 </div>
                 <div className="font-semibold">
-                    ⏰ {reservatie.time.slice(0, -3)}
+                    ⏰ {reservatie.starttime.slice(0, -3)}
                 </div>
 
                 <span

@@ -1,16 +1,20 @@
 import { createClient } from "@/lib/supabase/server";
-import { Button } from "./pageElements";
+import Link from "next/link";
 
-export async function AdminPageBtn() {
+async function AdminPageBtn() {
     const client = await createClient();
     const user = await client.auth.getUser();
     const role = await client.from("profiles").select("role").eq("id", user.data.user?.id).single();
 
     return (
         (role.data?.role === 'admin') &&
-        <div className="flex justify-center py-4">
-             <Button link='/protected/admin' text='Ga naar beheerpagina' level='secondary' />
-        </div>
-
+        <Link
+            href="/protected/admin"
+            className="block text-base w-full text-left px-4 py-2 hover:text-red-500"
+        >
+            Admin
+        </Link>
     )
 }
+
+export default AdminPageBtn;

@@ -1,12 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "./navbar";
 import AdminAfsprakenLijst from "./afspraken/AdminAfsprakenLijst";
-import { getAllAfsprakenVoorAdmin } from "@/lib/supabase/afsprakenDb";
 import { getAllMessages } from "@/lib/supabase/messagesDb";
 import AdminMessagesLijst from "./messages/AdminMessagesLijst";
 import { Container, Title } from "./pageElements";
 import { getAllClients } from "@/lib/supabase/clientenDb";
 import ClientsList from "./clients/clientenLijst";
+import { getCalendarEvents } from "@/lib/google/calendar";
 
 
 export async function AdminData() {
@@ -26,8 +26,9 @@ export async function AdminData() {
         )
     }
 
-    const { data, error: afsprakenError } = await getAllAfsprakenVoorAdmin();
+    const { data, error: afsprakenError } = await getCalendarEvents(false, new Date().toISOString());
     if (afsprakenError) return (<div>Error getting afspraken, {afsprakenError}</div>);
+    console.log("Afspraken: ", data);
     const afspraken = data;
 
     const { data: messages, error: messagesError } = await getAllMessages();
@@ -36,13 +37,15 @@ export async function AdminData() {
     const { data: clients, error: clientsError } = await getAllClients();
     if (clientsError) return (<div>Error getting clients, {clientsError}</div>);
 
+    const minDate = new Date().toISOString().split('T')[0];
+
     return (
         <>
             <Navbar />
             <div className="h-full flex flex-col w-full">
                 <Container>
                     <Title text="Afspraken" />
-                    <AdminAfsprakenLijst afspraken={afspraken ?? undefined} />
+                    <AdminAfsprakenLijst afspraken={afspraken ?? undefined} minDate={minDate} />
                     <Title text="Berichten" />
                     <AdminMessagesLijst messages={messages ?? undefined} />
                     <Title text="Clienten" />

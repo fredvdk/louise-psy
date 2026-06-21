@@ -4,10 +4,9 @@ import { useState, useMemo } from 'react';
 import { formatDate } from '@/lib/utils';
 import { Afspraak } from '@/types/reservatie';
 import { Button } from '../ui/button';
-import { ConfirmButton, DeleteAfspraakButton } from './afspraakButtons';
+import { ConfirmButton } from './afspraakButtons';
 import { ConfirmationModal } from '../ui/confirmation-modal';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '../ui/dialog';
-import { createFreeAfspraakAction, confirmAllPendingAction } from '@/actions/afspraken';
 
 
 const getStatusClasses = (status: string) => {
@@ -22,11 +21,11 @@ const getStatusClasses = (status: string) => {
     return `${baseClasses} ${statusClasses[status] || 'bg-slate-100 text-slate-700'}`;
 };
 
-const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => {
+const AdminAfsprakenLijst = ({ afspraken = [], minDate = '' }: { afspraken?: Afspraak[], minDate?: string }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState<string>('');
     const [sortBy, setSortBy] = useState<'date' | 'client' | 'status'>('date');
-    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
     const [openAddSlot, setOpenAddSlot] = useState(false);
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
@@ -97,8 +96,8 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
         setError(null);
 
         try {
-            const dateTime = new Date(`${selectedDate}T${selectedTime}`);
-            await createFreeAfspraakAction(dateTime);
+          //  const dateTime = new Date(`${selectedDate}T${selectedTime}`);
+          //  await createFreeAfspraakAction(dateTime);
             setOpenAddSlot(false);
             setSelectedDate('');
             setSelectedTime('');
@@ -115,7 +114,7 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
         setIsConfirmingAll(true);
 
         try {
-            await confirmAllPendingAction();
+         //   await confirmAllPendingAction();
         } catch (err) {
             console.error('Confirm all failed:', err);
         } finally {
@@ -126,12 +125,12 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
     return (
         <section className="text-gray-900">
             <div className="mb-4 flex justify-center gap-2">
-                    <Button onClick={() => setShowConfirmAllModal(true)} disabled={isConfirmingAll}>
-                        {isConfirmingAll ? 'Bevestigen...' : 'Bevestig alle pending afspraken'}
-                    </Button>
-                    <Button onClick={() => setOpenAddSlot(true)}>
-                        Free slots toevoegen
-                    </Button>
+                <Button onClick={() => setShowConfirmAllModal(true)} disabled={isConfirmingAll}>
+                    {isConfirmingAll ? 'Bevestigen...' : 'Bevestig alle pending afspraken'}
+                </Button>
+                <Button onClick={() => setOpenAddSlot(true)}>
+                    Free slots toevoegen
+                </Button>
 
             </div>
 
@@ -193,10 +192,10 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
                         ) : (
                             filteredAndSorted.map((afspraak) => (
                                 <tr key={afspraak.id} className="border-b border-slate-200">
-                                    <td className="p-4 align-top font-semibold">{afspraak.profiles?.full_name || afspraak.profiles?.email || '-'}</td>
+                                    <td className="p-4 align-top font-semibold">{afspraak.reserved_for}</td>
                                     <td className="p-4 align-top">
-                                        <div>{formatDate(new Date(afspraak.date))}</div>
-                                        <div className="mt-1 text-slate-500">{afspraak.time.slice(0, -3)}</div>
+                                        <div>{formatDate(afspraak.date)}</div>
+                                        <div className="mt-1 text-slate-500">{afspraak.starttime } - {afspraak.endtime}</div>
                                     </td>
                                     <td className="p-4 align-top">
                                         <span className={getStatusClasses(afspraak.status)}>
@@ -205,7 +204,7 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
                                     </td>
                                     <td className="p-4 align-top text-slate-700">{afspraak.notes || '-'}</td>
                                     <td className="p-4 align-top flex flex-col items-center">
-                                        <DeleteAfspraakButton afspraak={afspraak} admin={true} />
+
                                         {afspraak.status == 'pending' &&
                                             <ConfirmButton afspraak={afspraak} />}
                                     </td>
@@ -239,7 +238,7 @@ const AdminAfsprakenLijst = ({ afspraken = [] }: { afspraken?: Afspraak[] }) => 
                                 type="date"
                                 value={selectedDate}
                                 onChange={(e) => setSelectedDate(e.target.value)}
-                                min={new Date().toISOString().split('T')[0]}
+                                min={minDate}
                                 className="w-full px-3 py-2 border border-slate-200 rounded"
                             />
                         </div>

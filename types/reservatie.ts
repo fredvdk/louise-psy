@@ -1,7 +1,9 @@
 export type Afspraak = {
 	id: string;
 	date: string;
-	time: string;
+	starttime: string;
+	endtime: string;
+	timezone: string;
 	status: 'confirmed' | 'pending' | 'free';
 	updated_at: string;
 	reserved_for: string | null;
@@ -11,7 +13,7 @@ export type Afspraak = {
 
 export function afspraakToString(afspraak: Afspraak): string {
 	const name = afspraak.profiles?.full_name || afspraak.profiles?.email;
-	return `${name} - ${afspraak.date} at ${afspraak.time} (${afspraak.status})`;
+	return `${name} - ${afspraak.date} at ${afspraak.starttime} (${afspraak.status})`;
 }
 
 export type CalendarEvent = {
@@ -52,4 +54,23 @@ export type Message = {
 	valid_till : Date;
 	created_at : Date;
 	created_by : string
+}
+
+export type GoogleEvent = {
+	id?: string;
+	summary?: string;
+	start?: {
+		dateTime?: string;
+		date?: string;
+		timeZone?: string;
+	};
+	end?: {
+		dateTime?: string;
+		date?: string;
+		timeZone?: string;
+	};
+	description?: string;
+	location?: string;
+	status?: string;
+	htmlLink?: string;
 }

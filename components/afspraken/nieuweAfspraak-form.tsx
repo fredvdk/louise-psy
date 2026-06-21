@@ -1,11 +1,13 @@
-import { getAllFreeAfspraken } from "@/lib/supabase/afsprakenDb";
 import { NieuweAfspraak } from "./nieuweAfspraak";
-
+import { getCalendarEvents } from "@/lib/google/calendar";
+import { headers } from "next/headers";
 
 export async function NieuweAfspraakForm() {
-    const freeSlots = await getAllFreeAfspraken();
+    await headers();
+    const timeMin = new Date().toISOString();
+    const freeSlots = await getCalendarEvents(true, timeMin);
 
-    if (!freeSlots.success || !freeSlots.data) {
+    if (freeSlots.error || !freeSlots.data) {
         return (
             <div className="my-6 md:w-1/2 mx-auto">
                 <div className="p-4 bg-red-50 border border-red-200 rounded-md">

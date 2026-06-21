@@ -18,7 +18,7 @@ export async function CalendarSection() {
     const calendarEvents: CalendarEvent[] = reservations.map(reservation => ({
         id: reservation.id,
         date: reservation.date,
-        start: reservation.date + 'T' + reservation.time,
+        start: reservation.date + 'T' + reservation.starttime,
         duration: "01:00",
         title: reservation.status,
         backgroundColor: reservation.status === "free" ? "green" : "orange",

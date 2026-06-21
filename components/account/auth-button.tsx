@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { createClient } from "@/lib/supabase/server";
 import AvatarMenu from "./avatar-menu";
+import AdminPageButton from "../AdminPageButton";
 
 export async function AuthButton() {
   const supabase = await createClient();
@@ -10,10 +11,12 @@ export async function AuthButton() {
   const { data } = await supabase.auth.getClaims();
 
   const user = data?.claims;
+
   //console.log(user)
 
   return user ? (
     <div className="flex items-center gap-4 text-xs">
+      <AdminPageButton />
       <AvatarMenu avatarUrl={user.avatar_url} email={user.email} />
     </div>
   ) : (
