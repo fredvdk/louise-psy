@@ -13,7 +13,7 @@ export default async function ReservationsPage() {
         <h1 className="text-4xl text-center mb-5">Mijn afspraken</h1>
         <Suspense fallback={<div className="text-center text-gray-500">Afspraken laden...</div>}>
           {/* <AfsprakenLijstVoorCurrentUser /> */}
-          <NieuweAfspraakForm />
+          <NieuweAfspraakForm geenAfspraken={true} />
         </Suspense>
       </div>
       <Footer />
